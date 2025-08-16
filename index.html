@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>TOTOBODY</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Glassmorphism Menu -->
+  <div id="sideMenu" class="side-menu">
+    <div class="glassmorphism-panel">
+      <button class="back-btn" id="menuBackBtn" style="display: none;">← Назад</button>
+      <h3 id="menuTitle">Меню</h3>
+      
+      <!-- Main Menu -->
+      <div id="mainMenu" class="menu-screen active">
+        <button class="glass-menu-item" data-action="workout-settings">
+          <span>🏋️‍♂️</span>
+          <div>Налаштування тренувань</div>
+        </button>
+        <button class="glass-menu-item" data-action="stats-settings">
+          <span>📊</span>
+          <div>Статистика</div>
+        </button>
+        <button class="glass-menu-item" data-action="goal-settings">
+          <span>🎯</span>
+          <div>Мета</div>
+        </button>
+        <button class="glass-menu-item" data-action="app-settings">
+          <span>⚙️</span>
+          <div>Налаштування додатку</div>
+        </button>
+        <button class="glass-menu-item" data-action="calendar">
+          <span>📅</span>
+          <div>Календар</div>
+        </button>
+        <button class="glass-menu-item" data-action="workout-history">
+          <span>📚</span>
+          <div>Історія тренувань</div>
+        </button>
+      </div>
+
+      <!-- Workout Settings -->
+      <div id="workoutSettingsMenu" class="menu-screen">
+        <div id="workoutProgramsList" class="programs-list">
+          <!-- Programs will be populated by JS -->
+        </div>
+      </div>
+
+      <!-- Individual Program Settings -->
+      <div id="programEditMenu" class="menu-screen">
+        <div class="program-edit-section">
+          <input type="text" id="programNameEdit" class="glass-input" placeholder="Назва програми">
+          <button id="saveProgramName" class="glass-btn">Зберегти назву</button>
+        </div>
+        
+        <div class="exercise-duration-section">
+          <h4>Тривалість вправ</h4>
+          <div class="duration-controls">
+            <input type="number" id="exerciseDuration" class="glass-input" placeholder="Секунди" value="30" min="5" max="300">
+            <button id="applyToAllExercises" class="glass-btn">Застосувати до всіх</button>
+          </div>
+        </div>
+
+        <div class="exercises-section">
+          <h4>Список вправ</h4>
+          <div id="exercisesList" class="exercises-list">
+            <!-- Exercises will be populated by JS -->
+          </div>
+          <button id="addExercise" class="glass-btn">+ Додати вправу</button>
+        </div>
+      </div>
+
+      <!-- Stats Settings -->
+      <div id="statsSettingsMenu" class="menu-screen">
+        <h4>Відстежувати статистику</h4>
+        <div class="stats-checkboxes">
+          <label class="glass-checkbox">
+            <input type="checkbox" checked> Спалені калорії
+          </label>
+          <label class="glass-checkbox">
+            <input type="checkbox" checked> Тривалість тренувань
+          </label>
+          <label class="glass-checkbox">
+            <input type="checkbox" checked> Кількість тренувань
+          </label>
+          <label class="glass-checkbox">
+            <input type="checkbox" checked> Улюблені програми
+          </label>
+          <label class="glass-checkbox">
+            <input type="checkbox" checked> Прогрес ваги
+          </label>
+        </div>
+      </div>
+
+      <!-- Goal Settings -->
+      <div id="goalSettingsMenu" class="menu-screen">
+        <div class="goal-option">
+          <label>Цільова вага (кг)</label>
+          <input type="number" id="targetWeight" class="glass-input" value="65" step="0.1">
+        </div>
+        <div class="goal-option">
+          <label>Тренувань на тиждень</label>
+          <input type="number" id="targetWorkouts" class="glass-input" value="3" min="1" max="7">
+        </div>
+        <div class="goal-option">
+          <label>Кроки на день</label>
+          <input type="number" id="targetSteps" class="glass-input" value="8000" step="500">
+        </div>
+        <button id="saveGoals" class="glass-btn">Зберегти цілі</button>
+      </div>
+
+      <!-- App Settings -->
+      <div id="appSettingsMenu" class="menu-screen">
+        <div class="setting-section">
+          <h4>Тема фону</h4>
+          <div class="theme-grid">
+            <button class="theme-option active" data-theme="default">
+              <div class="theme-preview default"></div>
+              <span>За замовчуванням</span>
+            </button>
+            <button class="theme-option" data-theme="sunset">
+              <div class="theme-preview sunset"></div>
+              <span>Захід сонця</span>
+            </button>
+            <button class="theme-option" data-theme="ocean">
+              <div class="theme-preview ocean"></div>
+              <span>Океан</span>
+            </button>
+            <button class="theme-option" data-theme="forest">
+              <div class="theme-preview forest"></div>
+              <span>Ліс</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="setting-section">
+          <h4>Шрифт</h4>
+          <select id="fontSelect" class="glass-select">
+            <option value="Inter">Inter (за замовчуванням)</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Montserrat">Montserrat</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="homeScreen" class="screen active">
+    <header class="app-header">
+      <button id="burgerBtn" class="icon-button">☰</button>
+      <h1>TOTOBODY</h1>
+      <div class="header-placeholder"></div>
+    </header>
+
+    <section class="carousel-section">
+      <h2>HIIT</h2>
+      <div class="carousel-track">
+        <button class="neumorphic-tile" data-program="HIIT BASIC">
+          <strong>HIIT</strong>
+          <span>BASIC</span>
+        </button>
+        <button class="neumorphic-tile" data-program="HIIT ULTRA">
+          <strong>HIIT</strong>
+          <span>ULTRA</span>
+        </button>
+        <button class="neumorphic-tile" data-program="HIIT PRO">
+          <strong>HIIT PRO</strong>
+        </button>
+        <button class="neumorphic-tile add-new" data-action="add-program">
+          <strong>+</strong>
+        </button>
+      </div>
+    </section>
+
+    <section class="carousel-section">
+      <h2>Різне</h2>
+      <div class="carousel-track">
+        <button class="neumorphic-tile" data-program="MIXED BASIC">
+          <strong>MIXED</strong>
+          <span>BASIC</span>
+        </button>
+        <button class="neumorphic-tile" data-program="ГАНТЕЛЬ">
+          <strong>ГАНТЕЛЬ</strong>
+        </button>
+        <button class="neumorphic-tile" data-program="ФІЗИЧНЕ">
+          <strong>ФІЗИЧНЕ</strong>
+        </button>
+      </div>
+    </section>
+
+    <section class="carousel-section">
+        <h2>Інструменти</h2>
+        <div class="carousel-track">
+          <button class="neumorphic-tile" data-action="show-dance">
+            <strong>DANCE</strong>
+          </button>
+          <button class="neumorphic-tile" data-action="show-stats">
+            <strong>STATS</strong>
+          </button>
+          <button class="neumorphic-tile" data-action="show-calendar">
+            <strong>КАЛЕНДАР</strong>
+          </button>
+          <button class="neumorphic-tile" data-action="show-records">
+            <strong>РЕКОРДИ</strong>
+          </button>
+          <button class="neumorphic-tile" data-action="show-weight">
+            <strong>ВАГА</strong>
+          </button>
+        </div>
+    </section>
+    
+    <button id="restDayBtn" class="fab" data-action="add-rest-day">+</button>
+    
+    <div id="goalProgress" class="goal-bar">
+        <span>Мета: Схуднути до 65 кг</span>
+        <div class="progress-line-bg">
+            <div class="progress-line-fg" style="width: 75%;"></div>
+        </div>
+    </div>
+  </main>
+  
+  <!-- Workout Confirmation Screen -->
+  <div id="workoutConfirmScreen" class="screen">
+    <div class="confirmation-content">
+      <button class="back-btn" onclick="showScreen('homeScreen')">← Назад</button>
+      <h2 id="confirmProgramName">HIIT BASIC</h2>
+      <div class="workout-preview">
+        <h3>Програма включає:</h3>
+        <div id="workoutPreviewList" class="preview-list">
+          <!-- Exercise preview will be populated by JS -->
+        </div>
+        <div class="workout-stats">
+          <div class="stat-item">
+            <span class="stat-label">Вправи:</span>
+            <span id="exerciseCount">10</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Орієнтовний час:</span>
+            <span id="estimatedTime">5 хв</span>
+          </div>
+        </div>
+      </div>
+      <button id="startWorkoutBtn" class="start-workout-btn">Почати тренування</button>
+    </div>
+  </div>
+
+  <div id="trainingScreen" class="screen">
+    <button class="back-btn training-back" onclick="confirmExitTraining()">← Назад</button>
+    <h2 id="trainingProgramName">HIIT BASIC</h2> 
+    
+    <div class="exercise-display">
+        <div class="marquee">
+            <span id="exerciseName">Присідання з гантелею</span>
+        </div>
+    </div>
+    
+    <div id="timer" class="timer-display">00:30</div>
+    
+    <div class="controls">
+      <button id="prevExercise" class="icon-button">↑</button>
+      <button id="pauseBtn" class="icon-button pause-button">⏸</button>
+      <button id="stopBtn" class="icon-button">⏹</button>
+      <button id="nextExercise" class="icon-button">↓</button>
+    </div>
+
+    <div id="completedExercises"></div>
+  </div>
+
+  <!-- Glassmorphism Modals -->
+  <div id="danceModal" class="glass-modal">
+    <div class="glassmorphism-panel modal-content">
+      <h3>DANCE</h3>
+      <div class="timer-buttons">
+        <button class="glass-timer-btn" data-time="5">5 хв</button>
+        <button class="glass-timer-btn" data-time="10">10 хв</button>
+        <button class="glass-timer-btn" data-time="15">15 хв</button>
+        <button class="glass-timer-btn" data-time="20">20 хв</button>
+        <button class="glass-timer-btn" data-time="30">30 хв</button>
+      </div>
+      <button class="close-modal">×</button>
+    </div>
+  </div>
+
+  <div id="weightModal" class="glass-modal">
+    <div class="glassmorphism-panel modal-content">
+      <h3>ВАГА</h3>
+      <div class="weight-input-section">
+        <input type="number" id="weightInput" placeholder="Введіть вагу (кг)" step="0.1">
+        <button id="saveWeight" class="glass-btn">Зберегти</button>
+      </div>
+      <div id="weightHistory" class="weight-history">
+        <!-- Weight history will be displayed here -->
+      </div>
+      <button class="close-modal">×</button>
+    </div>
+  </div>
+
+  <div id="restDayModal" class="glass-modal">
+    <div class="glassmorphism-panel modal-content">
+      <h3>День відпочинку</h3>
+      <div class="rest-day-form">
+        <textarea id="restDayNote" placeholder="Додайте нотатку про день відпочинку (необов'язково)"></textarea>
+        <button id="saveRestDay" class="glass-btn">Додати день відпочинку</button>
+      </div>
+      <button class="close-modal">×</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1053 @@
+/* ======================================== */
+/* ========= НАЛАШТУВАННЯ ТА ЗМІННІ ========= */
+/* ======================================== */
+
+:root {
+  --bg-color: #e0e5ec;
+  --text-color: #555a68;
+  --primary-color: #007aff;
+
+  /* Тіні для неоморфізму - дуже м'які як фізичні кнопочки */
+  --shadow-light: #ffffff;
+  --shadow-dark: #b8bcc2;
+  --shadow-distance: 2px;
+  --shadow-blur: 6px;
+  --border-soft: 1px solid rgba(184, 188, 194, 0.1);
+  
+  /* Заокруглення - м'які кути як ✴️ */
+  --border-radius-main: 24px;
+  --border-radius-small: 16px;
+
+  /* Шрифт */
+  --font-family: 'Inter', sans-serif;
+  
+  /* Glassmorphism кольори */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Градієнти для прогрес-бару */
+  --progress-red: #ff4757;
+  --progress-orange: #ffa502;
+  --progress-yellow: #ffb400;
+  --progress-green: #2ed573;
+}
+
+/* ======================================== */
+/* ========= ЗАГАЛЬНІ СТИЛІ ========= */
+/* ======================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  -webkit-tap-highlight-color: transparent; /* Прибираємо синю підсвітку при кліку на мобільних */
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+}
+
+.screen.active {
+  display: flex; /* Використовуємо flex для кращого контролю */
+  flex-direction: column;
+}
+
+h1, h2 {
+  font-weight: 700;
+  color: #333;
+}
+
+h2 {
+    margin: 0 0 10px 20px;
+    font-size: 1.2rem;
+}
+
+/* ======================================== */
+/* ========= ГОЛОВНИЙ ЕКРАН ========= */
+/* ======================================== */
+
+#homeScreen {
+  padding-bottom: 100px; /* Залишаємо місце для прогрес-бару */
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.icon-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  border: var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+  
+  /* Такі ж м'які тіні як у плиток */
+  box-shadow: 
+    var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+    calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  transition: all 0.15s ease-out;
+}
+
+/* Burger button specific styling - square with rounded corners */
+#burgerBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--border-radius-small);
+  font-size: 1.2rem;
+}
+
+.icon-button:hover {
+  transform: translateY(-0.5px);
+}
+
+.icon-button:active {
+  box-shadow: 
+    inset 1px 1px 3px var(--shadow-dark),
+    inset -1px -1px 3px var(--shadow-light);
+  transform: translateY(0.5px) scale(0.995);
+}
+
+/* Стан паузи - кнопка більш впукла всередину */
+.icon-button.paused {
+  box-shadow: 
+    inset 2px 2px 4px var(--shadow-dark),
+    inset -2px -2px 4px var(--shadow-light);
+  transform: translateY(1px);
+}
+.header-placeholder {
+    width: 2rem; /* Щоб заголовок був по центру */
+}
+
+/* --- Каруселі --- */
+.carousel-section {
+  margin-bottom: 25px;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 20px;
+  gap: 20px;
+  -webkit-overflow-scrolling: touch; /* Плавний скрол на iOS */
+  scrollbar-width: none; /* Ховаємо скролбар в Firefox */
+}
+.carousel-track::-webkit-scrollbar {
+  display: none; /* Ховаємо скролбар в Chrome/Safari */
+}
+
+/* --- Плитки (Neumorphism) - Дуже м'які фізичні кнопочки --- */
+.neumorphic-tile {
+  flex-shrink: 0;
+  width: 160px;
+  height: 160px;
+  background: var(--bg-color);
+  border: var(--border-soft);
+  border-radius: var(--border-radius-main);
+  
+  /* Дуже м'які тіні для фізичного відчуття */
+  box-shadow: 
+    var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+    calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  
+  transition: all 0.3s ease-out;
+  position: relative;
+}
+
+.neumorphic-tile:hover {
+  transform: translateY(-0.5px);
+}
+
+.neumorphic-tile:active {
+  /* М'яке втискання з більш глибоким ефектом */
+  box-shadow: 
+    inset 1px 1px 3px var(--shadow-dark),
+    inset -1px -1px 3px var(--shadow-light);
+  transform: translateY(0.5px) scale(0.995);
+}
+
+.neumorphic-tile strong {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.neumorphic-tile span {
+  font-size: 0.85rem;
+  font-weight: 400;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.neumorphic-tile.add-new strong {
+  font-size: 3.5rem;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+/* --- Кнопка FAB та Прогрес-бар --- */
+.fab {
+  position: fixed;
+  bottom: 110px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: var(--border-soft);
+  font-size: 1.5rem;
+  z-index: 10;
+  color: var(--text-color);
+  background: var(--bg-color);
+  box-shadow: 
+    var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+    calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  transition: all 0.15s ease-out;
+  cursor: pointer;
+}
+
+.fab:hover {
+  transform: translateY(-0.5px);
+}
+
+.fab:active {
+  box-shadow: 
+    inset 1px 1px 3px var(--shadow-dark),
+    inset -1px -1px 3px var(--shadow-light);
+  transform: scale(0.97);
+}
+
+.goal-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: var(--bg-color);
+    z-index: 5;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+.goal-bar span {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+}
+.progress-line-bg {
+    width: 100%;
+    height: 10px;
+    background: var(--bg-color);
+    border-radius: 5px;
+    box-shadow: 
+        inset 3px 3px 6px var(--shadow-dark),
+        inset -3px -3px 6px var(--shadow-light);
+}
+.progress-line-fg {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+
+/* ======================================== */
+/* ========= ЕКРАН ТРЕНУВАННЯ ========= */
+/* ======================================== */
+#trainingScreen {
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+#trainingProgramName {
+    font-size: 1rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 10px;
+}
+.exercise-display {
+    width: 90%;
+    overflow: hidden;
+    margin: 15px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: var(--border-radius-main);
+    backdrop-filter: blur(10px);
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+/* --- Бігуча строка (більша і читабельніша) --- */
+.marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 12s linear infinite;
+}
+.marquee span {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-color);
+    padding-left: 100%;
+    display: inline-block;
+    letter-spacing: 0px;
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- Таймер і Кнопки --- */
+.timer-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 15px 0;
+}
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.controls .icon-button {
+    font-size: 2rem;
+}
+.pause-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    font-size: 2rem;
+    background: var(--bg-color);
+    border: var(--border-soft);
+    color: var(--text-color);
+    
+    /* Такі ж м'які тіні як у всіх кнопок */
+    box-shadow: 
+      var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+      calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+    transition: all 0.15s ease-out;
+}
+
+.pause-button:hover {
+    transform: translateY(-0.5px);
+}
+
+.pause-button:active {
+    box-shadow: 
+      inset 1px 1px 3px var(--shadow-dark),
+      inset -1px -1px 3px var(--shadow-light);
+    transform: translateY(0.5px) scale(0.995);
+}
+
+/* --- Список виконаних вправ --- */
+#completedExercises {
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0 20px;
+}
+
+.completed-exercise {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.completed-exercise .check-icon {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* --- Missing Glass Styles --- */
+.glass-btn {
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.glass-timer-btn {
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+.glass-timer-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.timer-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.weight-input-section {
+  margin-bottom: 20px;
+}
+
+.weight-input-section input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin-bottom: 10px;
+}
+
+.rest-day-form textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  resize: vertical;
+  margin-bottom: 15px;
+}
+
+/* ======================================== */
+/* ========= EMOJI DECORATIONS AND IMPROVED GOAL BAR ========= */
+/* ======================================== */
+
+/* Emoji decoration for buttons */
+.neumorphic-tile .emoji-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+/* Improved Goal progress bar */
+.goal-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-main) var(--border-radius-main) 0 0;
+  padding: 15px 20px;
+  z-index: 100;
+}
+
+.goal-bar span {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.progress-line-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-line-fg {
+  height: 100%;
+  border-radius: 3px;
+  transition: all 0.5s ease-out;
+}
+
+/* Progress colors based on goal proximity */
+.progress-line-fg.progress-red { background: #ff4757; }
+.progress-line-fg.progress-orange { background: #ffa726; }
+.progress-line-fg.progress-yellow { background: #ffeb3b; }
+.progress-line-fg.progress-green { background: #4caf50; }
+
+/* ======================================== */
+/* ========= GLASSMORPHISM МЕНЮ ========= */
+/* ======================================== */
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  max-width: 350px;
+  height: 100vh;
+  z-index: 1000;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+}
+
+.side-menu.open {
+  left: 0;
+}
+
+.glassmorphism-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-main);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  padding: 30px 20px;
+  margin: 20px;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.glassmorphism-panel h3 {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.glass-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.glass-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.glass-menu-item span {
+  font-size: 1.2rem;
+}
+
+/* ======================================== */
+/* ========= GLASSMORPHISM МОДАЛКИ ========= */
+/* ======================================== */
+
+.glass-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(224, 229, 236, 0.3);
+  backdrop-filter: blur(15px) saturate(120%);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.glass-modal.show {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 80%;
+  min-width: 300px;
+  
+  /* Matte glass effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-main);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-color);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.close-modal:hover {
+  opacity: 1;
+}
+
+.timer-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.glass-timer-btn, .glass-btn {
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.glass-timer-btn:hover, .glass-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.weight-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+#weightInput, #restDayNote {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+#weightInput::placeholder, #restDayNote::placeholder {
+  color: rgba(85, 90, 104, 0.6);
+}
+
+#restDayNote {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.weight-history {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+
+/* ======================================== */
+/* ========= ДИНАМІЧНИЙ ПРОГРЕС-БАР ========= */
+/* ======================================== */
+
+.progress-line-fg {
+  height: 100%;
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-line-fg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.2) 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Кольори прогресу залежно від близькості до мети */
+.progress-red { background: var(--progress-red); }
+.progress-orange { background: var(--progress-orange); }
+.progress-yellow { background: var(--progress-yellow); }
+.progress-green { background: var(--progress-green); }
+
+/* ======================================== */
+/* ========= РОЗШИРЕНЕ GLASSMORPHISM МЕНЮ ========= */
+/* ======================================== */
+
+.menu-screen {
+  display: none;
+}
+
+.menu-screen.active {
+  display: block;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  padding: 8px 15px;
+  margin-bottom: 15px;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.programs-list, .exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.program-item, .exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.program-item:hover, .exercise-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.glass-input, .glass-select {
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-small);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.glass-input::placeholder {
+  color: rgba(85, 90, 104, 0.6);
+}
+
+.glass-input:focus, .glass-select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.glass-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.glass-checkbox input[type="checkbox"]:checked {
+  background: var(--primary-color);
+}
+
+.glass-checkbox input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.goal-option {
+  margin-bottom: 20px;
+}
+
+.goal-option label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.setting-section {
+  margin-bottom: 30px;
+}
+
+.setting-section h4 {
+  color: var(--text-color);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.theme-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-option.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary-color);
+}
+
+.theme-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-preview {
+  width: 60px;
+  height: 40px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.theme-preview.default {
+  background: linear-gradient(135deg, #e0e5ec, #c9d1d9);
+}
+
+.theme-preview.sunset {
+  background: linear-gradient(135deg, #ff9a9e, #fecfef, #fecfef);
+}
+
+.theme-preview.ocean {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+}
+
+.theme-preview.forest {
+  background: linear-gradient(135deg, #d299c2, #fef9d7);
+}
+
+/* ======================================== */
+/* ========= WORKOUT CONFIRMATION ========= */
+/* ======================================== */
+
+#workoutConfirmScreen {
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-content {
+  max-width: 400px;
+  width: 100%;
+}
+
+.workout-preview {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-main);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.preview-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 15px 0;
+}
+
+.preview-exercise {
+  padding: 8px 12px;
+  margin: 5px 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-small);
+  font-size: 0.9rem;
+}
+
+.workout-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.start-workout-btn {
+  width: 100%;
+  padding: 20px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-main);
+  font-family: var(--font-family);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 8px 25px rgba(0, 122, 255, 0.3);
+}
+
+.start-workout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 35px rgba(0, 122, 255, 0.4);
+}
+
+.start-workout-btn:active {
+  transform: translateY(0);
+}
+
+.training-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+/* ======================================== */
+/* ========= ТЕМИ ФОНУ ========= */
+/* ======================================== */
+
+body.theme-sunset {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+body.theme-ocean {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+body.theme-forest {
+  background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+}
+
+/* ======================================== */
+/* ========= АДАПТИВНІСТЬ ========= */
+/* ======================================== */
+
+@media (min-width: 768px) {
+  .neumorphic-tile {
+    width: 200px;
+    height: 200px;
+  }
+  .carousel-track {
+    justify-content: center;
+  }
+  .side-menu {
+    width: 400px;
+  }
+  .timer-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .theme-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
