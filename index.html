@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>TOTObody</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOTOBODY</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Головний екран -->
+  <div id="homeScreen" class="screen active">
+    <h1>TOTOBODY</h1>
+    <div class="tile-grid">
+      <button onclick="showScreen('workoutsScreen')">ТРЕНУВАННЯ</button>
+      <button onclick="showScreen('statsScreen')">СТАТИСТИКА</button>
+      <button onclick="showScreen('settingsScreen')">НАЛАШТУВАННЯ</button>
+    </div>
+  </div>
+
+  <!-- Список тренувань -->
+  <div id="workoutsScreen" class="screen">
+    <h2>Список тренувань</h2>
+    <button id="startHIITBtn">HIIT BASIC</button>
+    <button id="startMIXBtn">MIX BASIC</button>
+    <button onclick="showScreen('homeScreen')">Назад</button>
+  </div>
+
+  <!-- Екран тренування -->
+  <div id="trainingScreen" class="screen">
+    <div id="exerciseName" class="marquee">Назва вправи</div>
+    <div id="timer">00:00</div>
+    <div class="controls">
+      <button id="prevExercise">⤴️</button>
+      <button id="pauseBtn">⏸️</button>
+      <button id="stopBtn">⏹️</button>
+      <button id="nextExercise">⤵️</button>
+    </div>
+    <div id="completedExercises"></div>
+  </div>
+
+  <!-- Екран фінішу -->
+  <div id="finishScreen" class="screen">
+    <h2>Тренування завершено!</h2>
+    <label>Введи спалені калорії:</label>
+    <input type="number" id="caloriesInput" placeholder="ккал">
+    <button id="saveCaloriesBtn">Зберегти</button>
+    <button onclick="showScreen('homeScreen')">На головну</button>
+  </div>
+
+  <!-- Статистика -->
+  <div id="statsScreen" class="screen">
+    <h2>Статистика</h2>
+    <p id="statsSummary">Тут буде твоя статистика...</p>
+    <button onclick="showScreen('homeScreen')">Назад</button>
+  </div>
+
+  <!-- Налаштування -->
+  <div id="settingsScreen" class="screen">
+    <h2>Налаштування</h2>
+    <button>Додати нову програму</button>
+    <button>Змінити поточні програми</button>
+    <button onclick="showScreen('homeScreen')">Назад</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>

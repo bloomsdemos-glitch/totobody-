@@ -1,0 +1,154 @@
+/* ===== Загальні стилі ===== */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #e0e5ec;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.screen {
+  display: none;
+  padding: 20px;
+  text-align: center;
+}
+
+.screen.active {
+  display: block;
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.app-title {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+}
+
+/* ===== Плитки ===== */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.tile {
+  width: 120px;
+  height: 120px;
+  background: #e0e5ec;
+  border-radius: 20px;
+  box-shadow: 6px 6px 12px #b8bcc2, -6px -6px 12px #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.tile:active {
+  box-shadow: inset 4px 4px 8px #b8bcc2, inset -4px -4px 8px #ffffff;
+}
+
+.tile span {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+/* ===== Кнопки ===== */
+button {
+  background: #e0e5ec;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  box-shadow: 4px 4px 8px #b8bcc2, -4px -4px 8px #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:active {
+  box-shadow: inset 3px 3px 6px #b8bcc2, inset -3px -3px 6px #ffffff;
+}
+
+.back-btn {
+  margin-top: 20px;
+}
+
+/* ===== Бігуча стрічка ===== */
+.exercise-marquee {
+  background: #e0e5ec;
+  box-shadow: inset 3px 3px 6px #b8bcc2, inset -3px -3px 6px #ffffff;
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise-marquee marquee {
+  font-size: 1.2rem;
+  flex: 1;
+  color: #333;
+}
+
+#soundToggle {
+  margin-left: 10px;
+}
+
+/* ===== Таймер ===== */
+#timer {
+  font-size: 3rem;
+  margin: 20px 0;
+}
+
+/* ===== Контроли ===== */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.controls button {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+}
+
+/* ===== Фінішний екран ===== */
+#finishScreen input {
+  width: 100px;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+  background: #e0e5ec;
+  box-shadow: inset 3px 3px 6px #b8bcc2, inset -3px -3px 6px #ffffff;
+  font-size: 1rem;
+  margin: 15px 0;
+}
+
+/* ===== Статистика ===== */
+#statsSummary {
+  margin-bottom: 20px;
+}
+
+#statsCalendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+#statsCalendar div {
+  background: #e0e5ec;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 2px 2px 5px #b8bcc2, -2px -2px 5px #ffffff;
+  font-size: 0.8rem;
+}
