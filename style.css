@@ -1149,7 +1149,12 @@ body.theme-forest {
     text-align: center;
     font-size: 0.9rem;
 }
-
+.modal-info p {
+    margin-top: 0; /* Прибираємо зайвий відступ зверху */
+    margin-bottom: 10px; /* Додаємо трохи повітря знизу */
+    font-weight: 600; /* Зробимо його трохи жирнішим */
+    opacity: 0.8;
+}
 .modal-actions {
     display: flex;
     justify-content: space-between;
