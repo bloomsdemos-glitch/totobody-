@@ -187,6 +187,24 @@ function _actuallyStartWorkout(programName) {
   showScreen('trainingScreen');
 }
 
+// Нова функція для підтвердження виходу
+function confirmExitTraining() {
+  // Якщо тренування ще не почалось, просто виходимо
+  if (!isStarted) {
+    showScreen('homeScreen');
+    return;
+  }
+
+  // Показуємо стандартне вікно браузера з питанням
+  const userIsSure = confirm("Точно хочеш завершити тренування?");
+
+  // Якщо користувач натиснув "ОК" (true), то завершуємо тренування
+  if (userIsSure) {
+    finishWorkout();
+  }
+  // Якщо натиснув "Cancel", нічого не відбувається
+}
+
 
   function finishWorkout() {
     clearInterval(timerInterval);
