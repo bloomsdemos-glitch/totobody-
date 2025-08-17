@@ -91,7 +91,9 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
     calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
   display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 10px;
   cursor: pointer; font-family: var(--font-family); color: var(--text-color);
-  transition: all 0.2s ease-out; position: relative;
+  /* --- ОСЬ ЦЯ ПРАВКА --- */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; 
+  position: relative;
 }
 .neumorphic-tile:active {
   box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
@@ -102,6 +104,7 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .tile-label strong { font-size: 1rem; font-weight: 600; line-height: 1.2; display: block; }
 .tile-label span { font-size: 0.8rem; font-weight: 400; opacity: 0.7; }
 .neumorphic-tile.add-new .tile-icon { font-size: 4rem; font-weight: 300; opacity: 0.8; }
+
 
 .fab {
   position: fixed; bottom: 110px; right: 20px; width: 60px; height: 60px; border-radius: 50%; border: none; z-index: 10;
