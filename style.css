@@ -3,19 +3,19 @@
 /* ======================================== */
 
 :root {
-  --bg-color: #e0e5ec;
+  --bg-color: #e0ecec;
   --text-color: #555a68;
   --primary-color: #007aff;
   --font-family: 'Inter', sans-serif;
 
-  /* ===== ІДЕАЛЬНИЙ ДИЗАЙН (ЗНАЙДЕНО!) ===== */
+  /* ===== ІДЕАЛЬНИЙ ДИЗАЙН (ПОВЕРНУЛИ!) ===== */
   
   /* Тіні для дуже м'яких фізичних кнопочок */
   --shadow-light: #ffffff;
   --shadow-dark: #a8acb3;
   --shadow-distance: 2px;
   --shadow-blur: 5px;
-  --border-soft: 1px solid rgba(255, 255, 255, 0.4);
+  --border-soft: 1px solid rgba(184, 188, 194, 0.1); /* <--- ОСЬ ТА САМА ПРАВКА */
   
   /* Заокруглення для м'яких кутів як ✴️ */
   --border-radius-main: 24px;
@@ -52,13 +52,13 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
   position: fixed; top: 0; left: 0; width: 100%; display: flex;
   justify-content: space-between; align-items: center;
   padding: 15px 20px; z-index: 100;
-  background-color: var(--bg-color); /* Додано, щоб контент не просвічувався */
+  background-color: var(--bg-color);
 }
 .title-container { text-align: center; }
 .app-header h1 { font-size: 1.2rem; margin: 0; font-weight: 700; color: #333; }
 .datetime { font-size: 0.8rem; opacity: 0.6; margin: 4px 0 0 0; height: 1rem; }
 .icon-button { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 5px; color: var(--text-color); }
-.header-placeholder { width: 45px; /* Синхронізуємо з розміром кнопки */ }
+.header-placeholder { width: 45px; }
 .back-button {
   position: absolute; top: 95px; left: 20px; background: none; border: none; font-size: 1rem;
   font-family: var(--font-family); color: var(--text-color); opacity: 0.7; cursor: pointer; z-index: 10;
@@ -72,7 +72,6 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
   box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
   transform: scale(0.98);
 }
-
 
 /* ======================================== */
 /* ========= ГОЛОВНИЙ ЕКРАН ========= */
@@ -163,54 +162,29 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 
 .start-btn {
-  flex-grow: 1;
-  padding: 15px;
-  border-radius: var(--border-radius-small);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-
-  /* --- Стиль за замовчуванням (простий) --- */
-  background: var(--primary-color);
-  color: white;
-  border: none;
+  flex-grow: 1; padding: 15px; border-radius: var(--border-radius-small);
+  font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-out;
+  background: var(--bg-color); color: var(--text-color); border: var(--border-soft);
+  box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
 }
-
 .start-btn:active {
+    box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
     transform: scale(0.98);
-    /* Прибираємо стандартну синю тінь при натисканні на деяких браузерах */
-    box-shadow: none;
 }
-
-/* --- ПОКРАЩЕННЯ для сучасних браузерів з підтримкою rgba --- */
-@supports (background: rgba(0,0,0,0.1)) {
+@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
   .start-btn {
-    /* --- Ефект "фізичного" скла --- */
-    background: rgba(50, 50, 50, 0.15); /* Ледь помітний темний відтінок */
-    border: 1px solid rgba(80, 80, 80, 0.2); /* Тонкий темний контур */
-    color: var(--text-color); /* Повертаємо темний колір тексту для контрасту */
-    box-shadow: 
-      2px 2px 5px rgba(0, 0, 0, 0.1), /* М'яка зовнішня тінь для "підняття" */
-      inset 1px 1px 3px rgba(0, 0, 0, 0.05); /* Ледь помітна внутрішня тінь для "глибини" */
-    backdrop-filter: blur(8px); /* Легке розмиття фону */
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(50, 50, 50, 0.15); border: 1px solid rgba(80, 80, 80, 0.2);
+    color: var(--text-color);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   }
-
-  .start-btn:hover {
-    background: rgba(70, 70, 70, 0.2); /* Трохи темніший при наведенні */
-    border-color: rgba(90, 90, 90, 0.3);
-  }
-
+  .start-btn:hover { background: rgba(70, 70, 70, 0.2); border-color: rgba(90, 90, 90, 0.3); }
   .start-btn:active {
-    background: rgba(90, 90, 90, 0.25); /* Ще темніший при натисканні */
-    box-shadow: 
-      inset 1px 1px 3px rgba(0, 0, 0, 0.1), /* Збільшуємо внутрішню тінь при натисканні */
-      1px 1px 2px rgba(0, 0, 0, 0.05); /* Зменшуємо зовнішню тінь при натисканні */
+    background: rgba(90, 90, 90, 0.25);
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.05);
     transform: scale(0.99);
   }
 }
-
 
 .settings-btn { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; opacity: 0.7; }
 
