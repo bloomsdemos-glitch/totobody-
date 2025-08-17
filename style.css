@@ -1256,3 +1256,11 @@ div#workoutModal .modal-content.glassmorphism {
     opacity: 0;
   }
 }
+/* Робимо хедер гнучким, щоб елементи не наїжджали один на одного */
+.app-header {
+  display: flex;
+  justify-content: space-between; /* Розтягує елементи по краях */
+  align-items: center;
+  padding: 15px 20px;
+  width: 100%;
+}
