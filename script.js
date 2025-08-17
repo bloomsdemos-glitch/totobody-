@@ -150,17 +150,43 @@ const countdownNumberEl = document.getElementById('countdownNumber');
     timerInterval = setInterval(tick, 1000);
   }
 
-  function startWorkout(programName) {
-    currentProgram = programName;
-    exercises = buildWorkout(programName);
-    currentIndex = 0;
-    remainingTime = exercises[0]?.duration || DEFAULT_DURATION;
-    isStarted = true;
-    isPaused = false;
-    updateUI();
-    startTimer();
-    showScreen('trainingScreen');
-  }
+  // Нова функція, яка ТІЛЬКИ запускає відлік
+function startWorkout(programName) {
+  let count = 3; // Починаємо з 3
+
+  // Показуємо екран відліку
+  countdownNumberEl.textContent = count;
+  countdownScreen.classList.add('active');
+
+  const countdownInterval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      // Оновлюємо цифру
+      countdownNumberEl.textContent = count;
+    } else {
+      // Коли дійшло до 0, зупиняємо відлік
+      clearInterval(countdownInterval);
+      // Ховаємо екран відліку
+      countdownScreen.classList.remove('active');
+      // І ТІЛЬКИ ТЕПЕР реально запускаємо тренування
+      _actuallyStartWorkout(programName);
+    }
+  }, 1000); // Інтервал в 1 секунду
+}
+
+// Стара логіка старту, винесена в окрему функцію з підкресленням
+function _actuallyStartWorkout(programName) {
+  currentProgram = programName;
+  exercises = buildWorkout(programName);
+  currentIndex = 0;
+  remainingTime = exercises[0]?.duration || DEFAULT_DURATION;
+  isStarted = true;
+  isPaused = false;
+  updateUI();
+  startTimer();
+  showScreen('trainingScreen');
+}
+
 
   function finishWorkout() {
     clearInterval(timerInterval);
