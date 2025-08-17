@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== DOM елементи =====
 
-// --- Модальне вікно ---
+// --- Модальне вікно --- 
 const workoutModal = document.getElementById('workoutModal');
 const modalProgramNameEl = document.getElementById('modalProgramName');
 const modalExerciseListEl = document.getElementById('modalExerciseList');
