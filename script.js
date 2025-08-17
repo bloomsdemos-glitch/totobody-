@@ -28,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 const countdownScreen = document.getElementById('countdownScreen');
 const countdownNumberEl = document.getElementById('countdownNumber');
 
+// --- Екран тренування ---
+const trainingScreen = document.getElementById('trainingScreen');
+const trainingBackBtn = document.getElementById('trainingBackBtn'); // <-- НАША НОВА КНОПКА
+const trainingProgramNameEl = document.getElementById('trainingProgramName');
+// ... і так далі
+
 
   // --- Головний екран ---
   const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
