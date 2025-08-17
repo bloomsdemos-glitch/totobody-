@@ -157,66 +157,120 @@ h2 {
   display: none; /* Ховаємо скролбар в Chrome/Safari */
 }
 
-/* --- Плитки (Neumorphism) - Дуже м'які фізичні кнопочки --- */
+/* ======================================== */
+/* === ОНОВЛЕННЯ СТИЛІВ ПЛИТОК (Твоя версія + нова логіка) === */
+/* ======================================== */
+
+/* --- Основний контейнер плитки --- */
 .neumorphic-tile {
+  /* Твої розміри і базові стилі - зберігаємо */
   flex-shrink: 0;
   width: 160px;
   height: 160px;
   background: var(--bg-color);
-  border: var(--border-soft);
+  border: var(--border-soft); /* Якщо ти додав цю змінну, вона буде працювати */
   border-radius: var(--border-radius-main);
   
-  /* Дуже м'які тіні для фізичного відчуття */
+  /* Твої м'які тіні - зберігаємо */
   box-shadow: 
     var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
     calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
   
+  /* Нова логіка розташування */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: column; /* Елементи один під одним */
+  justify-content: flex-start; /* Притискаємо все до верху, щоб flex-grow спрацював */
   align-items: center;
-  gap: 4px;
+  padding: 10px; /* Додаємо внутрішні відступи */
   
   cursor: pointer;
-  font-size: 1rem;
   font-family: var(--font-family);
   color: var(--text-color);
-  
-  transition: all 0.3s ease-out;
-  position: relative;
+  transition: all 0.2s ease-out; /* Трохи пришвидшимо для кращого відчуття */
+  position: relative; /* Потрібно для позиціонування плюсика */
 }
 
+/* Твої круті ефекти наведення і кліку - зберігаємо! */
 .neumorphic-tile:hover {
-  transform: translateY(-0.5px);
+  transform: translateY(-1px); /* Трохи збільшив ефект */
 }
 
 .neumorphic-tile:active {
-  /* М'яке втискання з більш глибоким ефектом */
   box-shadow: 
-    inset 1px 1px 3px var(--shadow-dark),
-    inset -1px -1px 3px var(--shadow-light);
-  transform: translateY(0.5px) scale(0.995);
+    inset 2px 2px 4px var(--shadow-dark), /* Трохи збільшив для виразності */
+    inset -2px -2px 4px var(--shadow-light);
+  transform: translateY(1px) scale(0.99);
 }
 
-.neumorphic-tile strong {
-  font-size: 1.2rem;
-  font-weight: 700;
+/* --- Новий контейнер для іконки/емодзі --- */
+.tile-icon {
+  flex-grow: 1; /* Магія тут: цей блок займає весь вільний простір */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4.5rem; /* Великий розмір для емодзі */
+  line-height: 1;
+  width: 100%;
+}
+
+/* --- Новий контейнер для тексту --- */
+.tile-label {
+  width: 100%;
   text-align: center;
-  line-height: 1.2;
+  flex-shrink: 0; /* Щоб текст не стискався */
 }
 
-.neumorphic-tile span {
-  font-size: 0.85rem;
+/* Адаптуємо твої стилі тексту під нову структуру */
+.tile-label strong {
+  font-size: 1.1rem; /* Трохи зменшив, щоб краще виглядало внизу */
+  font-weight: 600;
+  line-height: 1.2;
+  display: block;
+}
+
+.tile-label span {
+  font-size: 0.8rem;
   font-weight: 400;
   opacity: 0.7;
-  text-align: center;
 }
 
-.neumorphic-tile.add-new strong {
-  font-size: 3.5rem;
+/* Адаптуємо твій стиль для кнопки "+" */
+.neumorphic-tile.add-new .tile-icon {
+  font-size: 4rem;
   font-weight: 300;
   opacity: 0.8;
 }
+
+/* --- Маленький плюсик для кастомізації --- */
+.tile-icon::after {
+  content: '+';
+  font-size: 0.8rem;
+  font-weight: bold;
+  position: absolute;
+  top: 10px; /* Позиціонуємо в кутку */
+  right: 10px;
+  color: var(--text-color);
+  opacity: 0.5;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  box-shadow: 1px 1px 2px var(--shadow-dark), -1px -1px 2px var(--shadow-light);
+  transition: all 0.2s ease-out;
+}
+.tile-icon:hover::after {
+    opacity: 1; /* Показуємо плюсик при наведенні */
+    transform: scale(1.1);
+}
+
+/* Ховаємо плюсик на кнопці "додати нову" */
+.neumorphic-tile.add-new .tile-icon::after {
+    display: none;
+}
+
 
 /* --- Кнопка FAB та Прогрес-бар --- */
 .fab {
