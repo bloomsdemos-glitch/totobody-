@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TOTOBODY</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>TOTOBODY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -23,66 +24,28 @@
     <section class="carousel-section">
       <h2>HIIT</h2>
       <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="HIIT BASIC">
-          <div class="tile-icon">🤸‍♂️</div>
-          <div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div>
-        </button>
-        <button class="neumorphic-tile" data-program="HIIT ULTRA">
-          <div class="tile-icon">🔥</div>
-          <div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div>
-        </button>
-        <button class="neumorphic-tile" data-program="HIIT PRO">
-          <div class="tile-icon">🏆</div>
-          <div class="tile-label"><strong>HIIT PRO</strong></div>
-        </button>
-        <button class="neumorphic-tile add-new" data-action="add-program">
-          <div class="tile-icon">+</div>
-          <div class="tile-label"><strong>Нова</strong><span>програма</span></div>
-        </button>
+        <button class="neumorphic-tile" data-program="HIIT BASIC"><div class="tile-icon">🤸‍♂️</div><div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div></button>
+        <button class="neumorphic-tile" data-program="HIIT ULTRA"><div class="tile-icon">🔥</div><div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div></button>
+        <button class="neumorphic-tile" data-program="HIIT PRO"><div class="tile-icon">🏆</div><div class="tile-label"><strong>HIIT PRO</strong></div></button>
+        <button class="neumorphic-tile add-new" data-action="add-program"><div class="tile-icon">+</div><div class="tile-label"><strong>Нова</strong><span>програма</span></div></button>
       </div>
     </section>
 
     <section class="carousel-section">
       <h2>Різне</h2>
       <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="MIXED BASIC">
-          <div class="tile-icon">💪</div>
-          <div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div>
-        </button>
-        <button class="neumorphic-tile" data-program="DUMBBELL">
-          <div class="tile-icon">🏋️‍♂️</div>
-          <div class="tile-label"><strong>ГАНТЕЛЬ</strong></div>
-        </button>
-        <button class="neumorphic-tile" data-program="BODYWEIGHT">
-          <div class="tile-icon">🧘‍♂️</div>
-          <div class="tile-label"><strong>ФІЗИЧНЕ</strong></div>
-        </button>
+        <button class="neumorphic-tile" data-program="MIXED BASIC"><div class="tile-icon">💪</div><div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div></button>
+        <button class="neumorphic-tile" data-program="DUMBBELL"><div class="tile-icon">🏋️‍♂️</div><div class="tile-label"><strong>ГАНТЕЛЬ</strong></div></button>
+        <button class="neumorphic-tile" data-program="BODYWEIGHT"><div class="tile-icon">🧘‍♂️</div><div class="tile-label"><strong>ФІЗИЧНЕ</strong></div></button>
       </div>
     </section>
 
     <section class="carousel-section">
         <h2>Інструменти</h2>
         <div class="carousel-track">
-          <button class="neumorphic-tile" data-action="show-dance">
-            <div class="tile-icon">🕺</div>
-            <div class="tile-label"><strong>DANCE</strong></div>
-          </button>
-          <button class="neumorphic-tile" data-action="show-stats">
-            <div class="tile-icon">📊</div>
-            <div class="tile-label"><strong>STATS</strong></div>
-          </button>
-          <button class="neumorphic-tile" data-action="show-calendar">
-            <div class="tile-icon">🗓️</div>
-            <div class="tile-label"><strong>КАЛЕНДАР</strong></div>
-          </button>
-          <button class="neumorphic-tile" data-action="show-records">
-            <div class="tile-icon">🥇</div>
-            <div class="tile-label"><strong>РЕКОРДИ</strong></div>
-          </button>
-          <button class="neumorphic-tile" data-action="show-weight">
-            <div class="tile-icon">⚖️</div>
-            <div class="tile-label"><strong>ВАГА</strong></div>
-          </button>
+          <button class="neumorphic-tile" data-action="show-dance"><div class="tile-icon">🕺</div><div class="tile-label"><strong>DANCE</strong></div></button>
+          <button class="neumorphic-tile" data-action="show-stats"><div class="tile-icon">📊</div><div class="tile-label"><strong>STATS</strong></div></button>
+          <button class="neumorphic-tile" data-action="show-calendar"><div class="tile-icon">🗓️</div><div class="tile-label"><strong>КАЛЕНДАР</strong></div></button>
         </div>
     </section>
     
@@ -90,16 +53,15 @@
     
     <div id="goalProgress" class="goal-bar">
         <span>Мета: Схуднути до 65 кг</span>
-        <div class="progress-line-bg">
-            <div class="progress-line-fg" style="width: 75%;"></div>
-        </div>
+        <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
     </div>
   </main>
   
   <div id="trainingScreen" class="screen">
     <button id="trainingBackBtn" class="back-button">← Назад</button>
+    <h2 id="trainingProgramName">HIIT BASIC</h2>
     <div class="exercise-display">
-        <div class="marquee"><span id="exerciseName">Присідання з гантелею</span></div>
+        <div class="marquee"><span id="exerciseName">Присідання</span></div>
     </div>
     <div id="timer" class="timer-display">00:30</div>
     <div class="controls">
@@ -111,9 +73,27 @@
     <div id="completedExercises"></div>
   </div>
 
-  <div id="workoutModal" class="modal-overlay"> ... </div>
-  <div id="countdownScreen" class="countdown-overlay"> ... </div>
-  
+  <div id="workoutModal" class="modal-overlay">
+    <div class="modal-content glassmorphism">
+      <button class="close-button">&times;</button>
+      <h2 id="modalProgramName">HIIT BASIC</h2>
+      <div class="modal-info">
+        <p>Програма включає (рандомні):</p>
+        <ul id="modalExerciseList"></ul>
+      </div>
+      <div class="modal-actions">
+        <button id="modalSettingsBtn" class="settings-btn">⚙️</button>
+        <button id="modalStartBtn" class="start-btn">Почати тренування</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="countdownScreen" class="countdown-overlay">
+    <div id="countdownNumber" class="countdown-number">3</div>
+  </div>
+
+  <div id="sideMenu" class="side-menu"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
