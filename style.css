@@ -241,35 +241,6 @@ h2 {
   opacity: 0.8;
 }
 
-/* --- Маленький плюсик для кастомізації --- */
-.tile-icon::after {
-  content: '+';
-  font-size: 0.8rem;
-  font-weight: bold;
-  position: absolute;
-  top: 10px; /* Позиціонуємо в кутку */
-  right: 10px;
-  color: var(--text-color);
-  opacity: 1;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg-color);
-  box-shadow: 1px 1px 2px var(--shadow-dark), -1px -1px 2px var(--shadow-light);
-  transition: all 0.2s ease-out;
-}
-.tile-icon:hover::after {
-    opacity: 1; /* Показуємо плюсик при наведенні */
-    transform: scale(1.1);
-}
-
-/* Ховаємо плюсик на кнопці "додати нову" */
-.neumorphic-tile.add-new .tile-icon::after {
-    display: none;
-}
 
 
 /* --- Кнопка FAB та Прогрес-бар --- */
