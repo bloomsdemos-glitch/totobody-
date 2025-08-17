@@ -765,14 +765,15 @@ const closeModalBtn = workoutModal.querySelector('.close-button');
   };
 
   // ===== ІНІЦІАЛІЗАЦІЯ =====
-  
-  // Load saved settings
-  loadAppSettings();
-  
-  // Оновлюємо прогрес-бар при завантаженні
-  updateProgressBar();
-
-  // Показуємо головний екран при завантаженні
-  showScreen('homeScreen');
-  loadButtonEmojis();
+// ✨ Нова магія: вішаємо один обробник на всі плитки тренувань ✨
+workoutTiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const programName = tile.dataset.program;
+    if (programName) {
+      startWorkout(programName);
+    }
+  });
 });
+
+// Показуємо головний екран при завантаженні
+showScreen('homeScreen');
