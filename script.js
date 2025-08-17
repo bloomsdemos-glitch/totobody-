@@ -189,11 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   workoutTiles.forEach(tile => {
-    tile.addEventListener('click', () => {
-      const programName = tile.dataset.program;
-      if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); }
-    });
+  tile.addEventListener('click', () => {
+    const programName = tile.dataset.program;
+    if (programName) {
+      openWorkoutModal(programName); // <--- Просто викликаємо функцію
+    }
   });
+});
+
 
   if(closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
