@@ -267,6 +267,7 @@ workoutModal.addEventListener('click', (event) => {
 });
 
 
+
   workoutModal.addEventListener('click', (event) => {
     if (event.target === workoutModal) {
       workoutModal.classList.remove('active');
