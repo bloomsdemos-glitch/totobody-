@@ -150,7 +150,30 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .modal-info p { margin-top: 0; margin-bottom: 10px; font-weight: 600; opacity: 0.8; }
 .modal-info ul { list-style: none; padding: 0; max-height: 150px; overflow-y: auto; text-align: center; font-size: 0.9rem; }
 .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-.start-btn { flex-grow: 1; padding: 15px; border: none; border-radius: var(--border-radius-small); background: var(--primary-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.start-btn {
+  flex-grow: 1;
+  padding: 15px;
+  border-radius: var(--border-radius-small);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+
+  /* --- Стиль "Товстого скла" --- */
+  background: rgba(255, 255, 255, 0.45); /* Більш насичений, менш прозорий */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: var(--text-color); /* Змінили колір тексту з білого на темний */
+}
+
+/* Додамо ефект при натисканні */
+.start-btn:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
 .settings-btn { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; opacity: 0.7; }
 
 .countdown-overlay {
