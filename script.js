@@ -226,39 +226,46 @@ function _actuallyStartWorkout(programName) {
   });
 
   // ===== Логіка Модального Вікна =====
-  function openWorkoutModal(programName) {
-    const previewExercises = buildWorkout(programName);
-    modalProgramNameEl.textContent = programName;
-    modalExerciseListEl.innerHTML = '';
-    previewExercises.forEach(ex => {
-      if (ex.name !== 'Кінець тренування') {
-        const li = document.createElement('li');
-        li.textContent = ex.name;
-        modalExerciseListEl.appendChild(li);
-      }
-    });
-    workoutModal.classList.add('active');
-    
-    const startFunction = () => {
-      workoutModal.classList.remove('active');
-      startWorkout(programName);
-      modalStartBtn.removeEventListener('click', startFunction);
-    };
-    modalStartBtn.addEventListener('click', startFunction);
-  }
-
-  workoutTiles.forEach(tile => {
-    tile.addEventListener('click', () => {
-      const programName = tile.dataset.program;
-      if (programName) {
-        openWorkoutModal(programName);
-      }
-    });
+function openWorkoutModal(programName) {
+  const previewExercises = buildWorkout(programName);
+  modalProgramNameEl.textContent = programName;
+  modalExerciseListEl.innerHTML = '';
+  previewExercises.forEach(ex => {
+    if (ex.name !== 'Кінець тренування') {
+      const li = document.createElement('li');
+      li.textContent = ex.name;
+      modalExerciseListEl.appendChild(li);
+    }
   });
-
-  closeModalBtn.addEventListener('click', () => {
+  workoutModal.classList.add('active');
+  
+  const startFunction = () => {
     workoutModal.classList.remove('active');
+    startWorkout(programName); // <-- Тут запускається відлік
+    modalStartBtn.removeEventListener('click', startFunction);
+  };
+  modalStartBtn.addEventListener('click', startFunction);
+}
+
+workoutTiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const programName = tile.dataset.program;
+    if (programName) {
+      openWorkoutModal(programName); // <-- Тут відкривається модалка
+    }
   });
+});
+
+closeModalBtn.addEventListener('click', () => {
+  workoutModal.classList.remove('active');
+});
+
+workoutModal.addEventListener('click', (event) => {
+  if (event.target === workoutModal) {
+    workoutModal.classList.remove('active');
+  }
+});
+
 
   workoutModal.addEventListener('click', (event) => {
     if (event.target === workoutModal) {
