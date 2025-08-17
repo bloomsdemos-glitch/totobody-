@@ -44,6 +44,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи', 'Махи гантелями в сторони'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування','Підйоми ніг'];
   
+  // ===== Оновлення дати і часу в хедері =====
+const datetimeDisplayEl = document.getElementById('datetime-display');
+
+function updateDateTime() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'Пʼятниця', 'Субота'];
+  const dayOfWeek = days[now.getDay()];
+
+  const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+  const month = months[now.getMonth()];
+  const dayOfMonth = now.getDate();
+
+  datetimeDisplayEl.textContent = `[${hours}:${minutes}], [${dayOfWeek}], [${dayOfMonth} ${month}]`;
+}
+
+// Запускаємо функцію одразу, а потім оновлюємо кожну секунду
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+  
   // ===== Логіка генерації тренувань =====
   function shuffle(arr) {
     return [...arr].sort(() => Math.random() - 0.5);
