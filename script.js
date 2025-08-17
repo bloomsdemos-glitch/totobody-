@@ -59,7 +59,8 @@ function updateDateTime() {
   const month = months[now.getMonth()];
   const dayOfMonth = now.getDate();
 
-  datetimeDisplayEl.textContent = `[${hours}:${minutes}], [${dayOfWeek}], [${dayOfMonth} ${month}]`;
+  datetimeDisplayEl.textContent = `${hours}:${minutes} • ${dayOfWeek}, ${dayOfMonth} ${month}`;
+
 }
 
 // Запускаємо функцію одразу, а потім оновлюємо кожну секунду
