@@ -9,9 +9,9 @@
 
   /* Тіні для неоморфізму - дуже м'які як фізичні кнопочки */
   --shadow-light: #ffffff;
-  --shadow-dark: #b8bcc2;
+  --shadow-dark: #a8acb3;
   --shadow-distance: 2px;
-  --shadow-blur: 6px;
+  --shadow-blur: 5px;
   --border-soft: 1px solid rgba(184, 188, 194, 0.1);
   
   /* Заокруглення - м'які кути як ✴️ */
