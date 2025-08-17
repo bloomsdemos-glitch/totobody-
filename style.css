@@ -223,7 +223,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 4.5rem; /* Великий розмір для емодзі */
+  font-size: 4rem; /* Великий розмір для емодзі */
   line-height: 1;
   width: 100%;
 }
