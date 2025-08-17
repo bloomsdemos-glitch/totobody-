@@ -1115,14 +1115,15 @@ body.theme-forest {
     transform: scale(1);
 }
 
-/* --- Ось і наш Glassmorphism --- */
+/* --- Ось і наш Glassmorphism (ультра-світла версія) --- */
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.25); /* Більш світлий і прозорий варіант */
-  backdrop-filter: blur(20px); /* Можна трохи збільшити розмиття для кращого ефекту */
-  -webkit-backdrop-filter: blur(20px); /* для Safari */
-  border: 1px solid rgba(255, 255, 255, 0.18); /* Бордюр теж робимо прозорішим */
+  background: rgba(255, 255, 255, 0.15); /* Максимальна прозорість */
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Ледь помітний бордюр */
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
+
 
 .modal-content h2 {
     text-align: center;
