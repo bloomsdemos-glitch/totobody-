@@ -250,7 +250,7 @@ h2 {
   top: 10px; /* Позиціонуємо в кутку */
   right: 10px;
   color: var(--text-color);
-  opacity: 0.5;
+  opacity: 1;
   border-radius: 50%;
   width: 22px;
   height: 22px;
