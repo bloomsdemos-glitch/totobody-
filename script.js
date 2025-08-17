@@ -49,6 +49,8 @@ const trainingProgramNameEl = document.getElementById('trainingProgramName');
   const prevBtn = document.getElementById('prevExercise');
   const pauseBtn = document.getElementById('pauseBtn');
   const stopBtn = document.getElementById('stopBtn');
+  
+
   const nextBtn = document.getElementById('nextExercise');
   const completedListEl = document.getElementById('completedExercises');
 
@@ -234,6 +236,13 @@ function confirmExitTraining() {
     }
     finishWorkout();
   });
+
+// Обробник для нової кнопки "Назад" на екрані тренування
+trainingBackBtn.addEventListener('click', () => {
+  // Викликаємо ту саму функцію, що і для кнопки "Стоп"
+  confirmExitTraining(); 
+});
+
 
 // Нова функція для підтвердження виходу
 function confirmExitTraining() {
