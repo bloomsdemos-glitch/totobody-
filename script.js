@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSettingsBtn = document.getElementById('modalSettingsBtn');
   const closeModalBtn = workoutModal.querySelector('.close-button');
 
+// --- Екран відліку ---
+const countdownScreen = document.getElementById('countdownScreen');
+const countdownNumberEl = document.getElementById('countdownNumber');
+
+
   // --- Головний екран ---
   const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
   const burgerBtn = document.getElementById('burgerBtn');
