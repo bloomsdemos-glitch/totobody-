@@ -42,7 +42,6 @@ const trainingProgramNameEl = document.getElementById('trainingProgramName');
   const restDayBtn = document.getElementById('restDayBtn');
 
   // --- Екран тренування ---
-  const trainingScreen = document.getElementById('trainingScreen');
   const trainingProgramNameEl = document.getElementById('trainingProgramName');
   const exerciseNameEl = document.getElementById('exerciseName');
   const timerEl = document.getElementById('timer');
