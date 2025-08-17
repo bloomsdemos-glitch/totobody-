@@ -1117,10 +1117,10 @@ body.theme-forest {
 
 /* --- Ось і наш Glassmorphism --- */
 .glassmorphism {
-  background: rgba(224, 229, 236, 0.6); /* Напівпрозорий фон кольору додатку */
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px); /* для Safari */
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.4); /* Більш світлий і прозорий варіант */
+  backdrop-filter: blur(20px); /* Можна трохи збільшити розмиття для кращого ефекту */
+  -webkit-backdrop-filter: blur(20px); /* для Safari */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Бордюр теж робимо прозорішим */
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
