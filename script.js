@@ -1,34 +1,17 @@
-// Запускаємо скрипт, коли вся сторінка завантажена
 document.addEventListener('DOMContentLoaded', () => {
-  
-  // ===== Навігація між екранами =====
-  const screens = document.querySelectorAll('.screen');
-  function showScreen(screenId) {
-    screens.forEach(s => s.classList.remove('active'));
-    const screenToShow = document.getElementById(screenId);
-    if (screenToShow) {
-      screenToShow.classList.add('active');
-    }
-  }
-
   // ===== DOM елементи =====
-
-  // --- Модальне вікно --- 
+  const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
   const modalProgramNameEl = document.getElementById('modalProgramName');
   const modalExerciseListEl = document.getElementById('modalExerciseList');
   const modalStartBtn = document.getElementById('modalStartBtn');
   const modalSettingsBtn = document.getElementById('modalSettingsBtn');
   const closeModalBtn = workoutModal.querySelector('.close-button');
-
-  // --- Головний екран ---
   const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
   const restDayBtn = document.getElementById('restDayBtn');
-  const datetimeDisplayEl = document.getElementById('datetime-display'); // Переніс сюди для порядку
-
-  // --- Екран тренування ---
+  const datetimeDisplayEl = document.getElementById('datetime-display');
   const trainingScreen = document.getElementById('trainingScreen');
   const trainingBackBtn = document.getElementById('trainingBackBtn');
   const trainingProgramNameEl = document.getElementById('trainingProgramName');
@@ -39,14 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopBtn = document.getElementById('stopBtn');
   const nextBtn = document.getElementById('nextExercise');
   const completedListEl = document.getElementById('completedExercises');
+  const countdownScreen = document.getElementById('countdownScreen');
+  const countdownNumberEl = document.getElementById('countdownNumber');
 
-  // ===== Пули вправ =====
-  const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
-  const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи', 'Махи гантелями в сторони'];
-  const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування','Підйоми ніг'];
-  
-  // ===== Оновлення дати і часу в хедері =====
-  // ВИПРАВЛЕНО: Я додав перевірку, щоб код не "падав", якщо раптом не знайде елемент в HTML
+  // ===== Навігація =====
+  function showScreen(screenId) {
+    screens.forEach(s => s.classList.remove('active'));
+    const screenToShow = document.getElementById(screenId);
+    if (screenToShow) screenToShow.classList.add('active');
+  }
+
+  // ===== Дата і час =====
   if (datetimeDisplayEl) {
     function updateDateTime() {
       const now = new Date();
@@ -62,11 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDateTime();
     setInterval(updateDateTime, 1000);
   }
+
+  // ===== Логіка тренувань =====
+  const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
+  const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
+  const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
   
-  // ===== Логіка генерації тренувань =====
-  function shuffle(arr) {
-    return [...arr].sort(() => Math.random() - 0.5);
-  }
+  function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
   function buildWorkout(program) {
     let basePool = poolCommon;
@@ -79,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return workout;
   }
 
-  // ===== Стан тренування =====
   let currentProgram = '';
   let exercises = [];
   let currentIndex = 0;
@@ -89,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let isStarted = false;
   const DEFAULT_DURATION = 30;
 
-  // ===== Функції тренування =====
   function formatTime(seconds) {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
     const s = String(seconds % 60).padStart(2, '0');
@@ -104,58 +90,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     timerEl.textContent = formatTime(remainingTime);
     pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
+    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} ✓</div>`).join('');
+    completedListEl.innerHTML = completedHTML;
   }
 
   function tick() {
     if (isPaused) return;
     remainingTime--;
-    timerEl.textContent = formatTime(remainingTime);
-    if (remainingTime <= 0) {
-      if (currentIndex < exercises.length - 1) {
-        currentIndex++;
-        remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
-        updateUI();
-      } else {
-        finishWorkout();
-      }
+    if (remainingTime < 0) {
+        if (currentIndex < exercises.length - 1) {
+            currentIndex++;
+            remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
+        } else {
+            finishWorkout();
+            return;
+        }
     }
+    updateUI();
   }
 
-  function startTimer() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(tick, 1000);
-  }
+  function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
 
   function finishWorkout() {
     clearInterval(timerInterval);
-    isStarted = false;
-    isPaused = true;
+    isStarted = false; isPaused = true;
     alert('Тренування завершено! 💪');
     showScreen('homeScreen');
   }
 
   function confirmExitTraining() {
-    if (!isStarted) {
-      showScreen('homeScreen');
-      return;
-    }
-    if (confirm("Точно хочеш завершити тренування?")) {
-      finishWorkout();
-    }
+    if (!isStarted) { showScreen('homeScreen'); return; }
+    if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); }
   }
 
-  // ===== Логіка відліку і старту =====
   function startWorkout(programName) {
     let count = 3;
-    const countdownScreen = document.getElementById('countdownScreen');
-    const countdownNumberEl = document.getElementById('countdownNumber');
     countdownNumberEl.textContent = count;
     countdownScreen.classList.add('active');
     const countdownInterval = setInterval(() => {
       count--;
-      if (count > 0) {
-        countdownNumberEl.textContent = count;
-      } else {
+      if (count > 0) { countdownNumberEl.textContent = count; } 
+      else {
         clearInterval(countdownInterval);
         countdownScreen.classList.remove('active');
         _actuallyStartWorkout(programName);
@@ -168,35 +143,19 @@ document.addEventListener('DOMContentLoaded', () => {
     exercises = buildWorkout(programName);
     currentIndex = 0;
     remainingTime = exercises[0]?.duration || DEFAULT_DURATION;
-    isStarted = true;
-    isPaused = false;
+    isStarted = true; isPaused = false;
     updateUI();
     startTimer();
     showScreen('trainingScreen');
   }
 
-  // ===== Обробники кнопок керування =====
-  if (pauseBtn) pauseBtn.addEventListener('click', () => {
-    if (!isStarted) return;
-    isPaused = !isPaused;
-    updateUI();
-  });
+  // ===== Обробники Подій =====
+  if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => {
-    if (!isStarted || currentIndex >= exercises.length - 1) return;
-    currentIndex++;
-    remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
-    updateUI();
-  });
-  if (prevBtn) prevBtn.addEventListener('click', () => {
-    if (!isStarted || currentIndex <= 0) return;
-    currentIndex--;
-    remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
-    updateUI();
-  });
+  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION; updateUI(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION; updateUI(); });
 
-  // ===== Логіка Модального Вікна =====
   function openWorkoutModal(programName) {
     const previewExercises = buildWorkout(programName);
     modalProgramNameEl.textContent = programName;
@@ -217,33 +176,16 @@ document.addEventListener('DOMContentLoaded', () => {
     modalStartBtn.addEventListener('click', startFunction);
   }
 
-  // ВИПРАВЛЕНО: додав setTimeout для тактильного відгуку
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
       const programName = tile.dataset.program;
-      if (programName) {
-        // Створюємо мікро-затримку в 150 мілісекунд
-        setTimeout(() => {
-          openWorkoutModal(programName);
-        }, 150); // 150ms - ідеальний час, щоб побачити анімацію
-      }
+      if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); }
     });
   });
 
-  closeModalBtn.addEventListener('click', () => {
-    workoutModal.classList.remove('active');
-  });
-
-  workoutModal.addEventListener('click', (event) => {
-    if (event.target === workoutModal) {
-      workoutModal.classList.remove('active');
-    }
-  });
-
-  modalSettingsBtn.addEventListener('click', () => {
-    alert('Тут буде вікно налаштувань і кастомізації плитки!');
-  });
+  if(closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
+  if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
+  if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
-  // ===== Ініціалізація =====
   showScreen('homeScreen');
 });
