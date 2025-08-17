@@ -1115,14 +1115,15 @@ body.theme-forest {
     transform: scale(1);
 }
 
-/* --- Ось і наш Glassmorphism (ультра-світла версія) --- */
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.15); /* Максимальна прозорість */
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Ледь помітний бордюр */
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+/* --- Ось і наш Glassmorphism (з тінню і меншим блуром) --- */
+div#workoutModal .modal-content.glassmorphism {
+  background: rgba(255, 255, 255, 0.15); 
+  backdrop-filter: blur(15px); /* <-- ЗМЕНШИЛИ БЛУР */
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15); /* <-- ДОДАЛИ ОБ'ЄМНУ ТІНЬ */
 }
+
 
 
 .modal-content h2 {
