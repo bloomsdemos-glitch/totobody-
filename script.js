@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
       screenToShow.classList.add('active');
     }
   }
-  
+
   // ===== DOM елементи =====
 
   // --- Модальне вікно --- 
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
   const restDayBtn = document.getElementById('restDayBtn');
+  const datetimeDisplayEl = document.getElementById('datetime-display'); // Переніс сюди для порядку
 
   // --- Екран тренування ---
   const trainingScreen = document.getElementById('trainingScreen');
@@ -45,28 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування','Підйоми ніг'];
   
   // ===== Оновлення дати і часу в хедері =====
-const datetimeDisplayEl = document.getElementById('datetime-display');
-
-function updateDateTime() {
-  const now = new Date();
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-
-  const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'Пʼятниця', 'Субота'];
-  const dayOfWeek = days[now.getDay()];
-
-  const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
-  const month = months[now.getMonth()];
-  const dayOfMonth = now.getDate();
-
-  datetimeDisplayEl.textContent = `${hours}:${minutes} • ${dayOfWeek}, ${dayOfMonth} ${month}`;
-
-}
-
-// Запускаємо функцію одразу, а потім оновлюємо кожну секунду
-updateDateTime();
-setInterval(updateDateTime, 1000);
-
+  // ВИПРАВЛЕНО: Я додав перевірку, щоб код не "падав", якщо раптом не знайде елемент в HTML
+  if (datetimeDisplayEl) {
+    function updateDateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'Пʼятниця', 'Субота'];
+      const dayOfWeek = days[now.getDay()];
+      const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+      const month = months[now.getMonth()];
+      const dayOfMonth = now.getDate();
+      datetimeDisplayEl.textContent = `${hours}:${minutes} • ${dayOfWeek}, ${dayOfMonth} ${month}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  }
   
   // ===== Логіка генерації тренувань =====
   function shuffle(arr) {
@@ -78,7 +73,6 @@ setInterval(updateDateTime, 1000);
     if (program.startsWith('HIIT')) basePool = poolHIIT;
     if (program.startsWith('MIXED') || program === 'DUMBBELL') basePool = poolMIX;
     if (program === 'BODYWEIGHT') basePool = poolCommon;
-    
     const workoutNames = shuffle([...new Set([...basePool, ...poolCommon])]).slice(0, 10);
     const workout = workoutNames.map(name => ({ name, duration: 30 }));
     workout.push({ name: 'Кінець тренування', duration: 3 });
@@ -155,10 +149,8 @@ setInterval(updateDateTime, 1000);
     let count = 3;
     const countdownScreen = document.getElementById('countdownScreen');
     const countdownNumberEl = document.getElementById('countdownNumber');
-    
     countdownNumberEl.textContent = count;
     countdownScreen.classList.add('active');
-    
     const countdownInterval = setInterval(() => {
       count--;
       if (count > 0) {
@@ -184,23 +176,20 @@ setInterval(updateDateTime, 1000);
   }
 
   // ===== Обробники кнопок керування =====
-  pauseBtn.addEventListener('click', () => {
+  if (pauseBtn) pauseBtn.addEventListener('click', () => {
     if (!isStarted) return;
     isPaused = !isPaused;
     updateUI();
   });
-
-  stopBtn.addEventListener('click', confirmExitTraining);
-  trainingBackBtn.addEventListener('click', confirmExitTraining);
-
-  nextBtn.addEventListener('click', () => {
+  if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
+  if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
+  if (nextBtn) nextBtn.addEventListener('click', () => {
     if (!isStarted || currentIndex >= exercises.length - 1) return;
     currentIndex++;
     remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
     updateUI();
   });
-
-  prevBtn.addEventListener('click', () => {
+  if (prevBtn) prevBtn.addEventListener('click', () => {
     if (!isStarted || currentIndex <= 0) return;
     currentIndex--;
     remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
@@ -220,7 +209,6 @@ setInterval(updateDateTime, 1000);
       }
     });
     workoutModal.classList.add('active');
-    
     const startFunction = () => {
       workoutModal.classList.remove('active');
       startWorkout(programName);
@@ -229,11 +217,15 @@ setInterval(updateDateTime, 1000);
     modalStartBtn.addEventListener('click', startFunction);
   }
 
+  // ВИПРАВЛЕНО: додав setTimeout для тактильного відгуку
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
       const programName = tile.dataset.program;
       if (programName) {
-        openWorkoutModal(programName);
+        // Створюємо мікро-затримку в 150 мілісекунд
+        setTimeout(() => {
+          openWorkoutModal(programName);
+        }, 150); // 150ms - ідеальний час, щоб побачити анімацію
       }
     });
   });
