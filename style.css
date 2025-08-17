@@ -1184,3 +1184,52 @@ div#workoutModal .modal-content.glassmorphism {
     margin-right: 15px;
     opacity: 0.7;
 }
+/* ======================================== */
+/* ========= СТИЛІ ЕКРАНУ ВІДЛІКУ ========= */
+/* ======================================== */
+
+.countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 30, 0.8); /* Напівпрозорий темний фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Має бути вище за все інше */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.countdown-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.countdown-number {
+  font-size: 15rem; /* Величезна цифра */
+  font-weight: 700;
+  color: white;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: countdown-beat 1s infinite;
+}
+
+/* Анімація "пульсації" цифри */
+@keyframes countdown-beat {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
