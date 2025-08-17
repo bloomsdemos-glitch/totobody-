@@ -180,8 +180,8 @@ h2 {
 .neumorphic-tile {
   /* Твої розміри і базові стилі - зберігаємо */
   flex-shrink: 0;
-  width: 160px;
-  height: 160px;
+  width: 150px;
+  height: 150px;
   background: var(--bg-color);
   border: var(--border-soft); /* Якщо ти додав цю змінну, вона буде працювати */
   border-radius: var(--border-radius-main);
