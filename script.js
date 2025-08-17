@@ -15,6 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
   window.showScreen = showScreen;
 
   // ===== DOM елементи =====
+
+// --- Модальне вікно ---
+const workoutModal = document.getElementById('workoutModal');
+const modalProgramNameEl = document.getElementById('modalProgramName');
+const modalExerciseListEl = document.getElementById('modalExerciseList');
+const modalStartBtn = document.getElementById('modalStartBtn');
+const modalSettingsBtn = document.getElementById('modalSettingsBtn');
+const closeModalBtn = workoutModal.querySelector('.close-button');
   // --- Головний екран ---
   const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
   const burgerBtn = document.getElementById('burgerBtn');
