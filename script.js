@@ -27,10 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Навігація =====
   function showScreen(screenId) {
-    screens.forEach(s => s.classList.remove('active'));
-    const screenToShow = document.getElementById(screenId);
-    if (screenToShow) screenToShow.classList.add('active');
+  screens.forEach(s => s.classList.remove('active'));
+  const screenToShow = document.getElementById(screenId);
+  if (screenToShow) {
+    screenToShow.classList.add('active');
   }
+
+  // --- НОВА ЛОГІКА: Ховаємо/показуємо бургер ---
+  if (burgerBtn) { // Перевірка, що кнопка існує
+    if (screenId === 'trainingScreen') {
+      burgerBtn.style.display = 'none'; // Ховаємо на екрані тренування
+    } else {
+      burgerBtn.style.display = 'block'; // Показуємо на всіх інших екранах
+    }
+  }
+}
+
 
   // ===== Дата і час =====
   if (datetimeDisplayEl) {
