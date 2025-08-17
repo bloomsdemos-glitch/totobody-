@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<h1>TOTOBODY ©</h1>
-<p id="datetime-display" class="datetime"></p> ```
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>TOTOBODY</title> <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <main id="homeScreen" class="screen active">
-    <header class="app-header">
-      <button id="burgerBtn" class="icon-button">☰</button>
-      <h1>TOTOBODY</h1>
-      <div class="header-placeholder"></div>
-    </header>
+  <header class="app-header">
+    <button id="burgerBtn" class="icon-button">☰</button>
+    <div class="title-container">
+      <h1>TOTOBODY ©</h1>
+      <p id="datetime-display" class="datetime"></p>
+    </div>
+    <div class="header-placeholder"></div>
+  </header>
 
+  <main id="homeScreen" class="screen active">
     <section class="carousel-section">
       <h2>HIIT</h2>
       <div class="carousel-track">
@@ -86,8 +86,7 @@
         </div>
     </section>
     
-  <button id="restDayBtn" class="fab" data-action="add-rest-day">⚡️</button>
-
+    <button id="restDayBtn" class="fab" data-action="add-rest-day"></button>
     
     <div id="goalProgress" class="goal-bar">
         <span>Мета: Схуднути до 65 кг</span>
@@ -98,7 +97,6 @@
   </main>
   
   <div id="trainingScreen" class="screen">
-    <h2 id="trainingProgramName">HIIT BASIC</h2>
     <button id="trainingBackBtn" class="back-button">← Назад</button>
     <div class="exercise-display">
         <div class="marquee"><span id="exerciseName">Присідання з гантелею</span></div>
@@ -113,25 +111,9 @@
     <div id="completedExercises"></div>
   </div>
 
-  <div id="workoutModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="modalProgramName">HIIT BASIC</h2>
-      <div class="modal-info">
-        <p>Програма включає (рандомні):</p>
-        <ul id="modalExerciseList"></ul>
-      </div>
-      <div class="modal-actions">
-        <button id="modalSettingsBtn" class="settings-btn">⚙️</button>
-        <button id="modalStartBtn" class="start-btn">Почати тренування</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="countdownScreen" class="countdown-overlay">
-    <div id="countdownNumber" class="countdown-number">3</div>
-  </div>
-
+  <div id="workoutModal" class="modal-overlay"> ... </div>
+  <div id="countdownScreen" class="countdown-overlay"> ... </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
