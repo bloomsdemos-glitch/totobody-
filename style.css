@@ -274,28 +274,44 @@ h2 {
   height: 60px;
   border-radius: 50%;
   border: none;
-  font-size: 2.2rem; /* Трохи підігнали розмір */
-  line-height: 1; /* Для кращого центрування по вертикалі */
-  padding-bottom: 4px; /* Коригування центрування */
   z-index: 10;
   background: var(--bg-color);
   box-shadow: 
     var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
     calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
   transition: all 0.2s ease-out;
+  cursor: pointer;
 }
-
-
-.fab:hover {
-  transform: translateY(-0.5px);
-}
-
 .fab:active {
   box-shadow: 
-    inset 1px 1px 3px var(--shadow-dark),
-    inset -1px -1px 3px var(--shadow-light);
-  transform: scale(0.97);
+    inset var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+    inset calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  transform: scale(0.95);
 }
+/* Малюємо плюсик за допомогою псевдо-елементів */
+.fab::before,
+.fab::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--text-color);
+  transition: all 0.2s ease-out;
+}
+.fab::before {
+  width: 20px;
+  height: 2px;
+}
+.fab::after {
+  width: 2px;
+  height: 20px;
+}
+.fab:hover::before,
+.fab:hover::after {
+    transform: translate(-50%, -50%) rotate(90deg); /* При наведенні плюсик перетворюється на хрестик */
+}
+
 
 .goal-bar {
     position: fixed;
