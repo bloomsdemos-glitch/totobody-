@@ -12,6 +12,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+// --- Модальне вікно ---
+const workoutModal = document.getElementById('workoutModal');
+const modalProgramNameEl = document.getElementById('modalProgramName');
+const modalExerciseListEl = document.getElementById('modalExerciseList');
+const modalStartBtn = document.getElementById('modalStartBtn');
+const modalSettingsBtn = document.getElementById('modalSettingsBtn');
+const closeModalBtn = workoutModal.querySelector('.close-button');
 
   <!-- Glassmorphism Menu -->
   <div id="sideMenu" class="side-menu">
@@ -369,6 +376,63 @@
         </div>
       </div>
     </div>
+
+// ===== ІНІЦІАЛІЗАЦІЯ та ЛОГІКА МОДАЛЬНОГО ВІКНА =====
+
+// Функція, яка відкриває модалку
+function openWorkoutModal(programName) {
+  // Генеруємо тимчасовий список вправ, щоб показати користувачу
+  const previewExercises = buildWorkout(programName);
+
+  // Заповнюємо модалку даними
+  modalProgramNameEl.textContent = programName;
+  modalExerciseListEl.innerHTML = ''; // Очищуємо старий список
+  previewExercises.forEach(ex => {
+    if (ex.name !== 'Кінець тренування') { // Не показуємо фінальну вправу
+      const li = document.createElement('li');
+      li.textContent = ex.name;
+      modalExerciseListEl.appendChild(li);
+    }
+  });
+
+  // Показуємо модалку
+  workoutModal.classList.add('active');
+
+  // Налаштовуємо кнопку "Почати тренування"
+  // Важливо: створюємо нову функцію, щоб уникнути накопичення старих слухачів
+  const startFunction = () => {
+    workoutModal.classList.remove('active'); // Ховаємо модалку
+    startWorkout(programName); // Запускаємо тренування
+    modalStartBtn.removeEventListener('click', startFunction); // Видаляємо слухач
+  };
+  modalStartBtn.addEventListener('click', startFunction);
+}
+
+// Новий обробник для всіх плиток
+workoutTiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const programName = tile.dataset.program;
+    if (programName) {
+      openWorkoutModal(programName);
+    }
+  });
+});
+
+// Обробник для кнопки закриття модалки
+closeModalBtn.addEventListener('click', () => {
+  workoutModal.classList.remove('active');
+});
+
+// Закриття модалки по кліку на темний фон
+workoutModal.addEventListener('click', (event) => {
+    if (event.target === workoutModal) {
+        workoutModal.classList.remove('active');
+    }
+});
+
+// Показуємо головний екран при завантаженні
+showScreen('homeScreen');
+
 
 </body>
 </html>
