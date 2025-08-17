@@ -69,6 +69,21 @@ h2 {
     margin: 0 0 10px 20px;
     font-size: 1.2rem;
 }
+/* Стиль для нашої нової кнопки "Назад" на екрані тренування */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+
 
 /* ======================================== */
 /* ========= ГОЛОВНИЙ ЕКРАН ========= */
