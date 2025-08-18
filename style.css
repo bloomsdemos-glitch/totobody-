@@ -191,3 +191,11 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
     opacity: 1;
     pointer-events: auto; /* Стає клікабельним, коли меню відкрите */
 }
+.menu-overlay-close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Цей оверлей невидимий, але ловить кліки */
+}
