@@ -239,34 +239,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
-  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
-      burgerBtn.addEventListener('click', () => {
-        sideMenu.classList.toggle('open');
-      });
+if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
+    const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
 
-      const menuLinks = mainMenu.querySelectorAll('a');
-      const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-      menuLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.dataset.target;
-          const targetScreen = document.getElementById(targetId);
+    burgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.add('open');
+    });
+    
+    // Нова, залізна логіка закриття
+    menuOverlayClose.addEventListener('click', () => {
+        sideMenu.classList.remove('open');
+    });
 
-          if (targetScreen) {
-            menuScreens.forEach(s => s.classList.remove('active'));
-            targetScreen.classList.add('active');
-            menuTitle.textContent = link.textContent;
-            menuBackBtn.style.display = 'block';
-          }
-        });
+    const menuLinks = mainMenu.querySelectorAll('a');
+    const menuScreens = sideMenu.querySelectorAll('.menu-screen');
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.target;
+        const targetScreen = document.getElementById(targetId);
+        
+        if (targetScreen) {
+          menuScreens.forEach(s => s.classList.remove('active'));
+          targetScreen.classList.add('active');
+          menuTitle.textContent = link.textContent;
+          menuBackBtn.style.display = 'block';
+        }
       });
-      menuBackBtn.addEventListener('click', () => {
-        menuScreens.forEach(s => s.classList.remove('active'));
-        mainMenu.classList.add('active');
-        menuTitle.textContent = 'Меню';
-        menuBackBtn.style.display = 'none';
-      });
-    }
+    });
+
+    menuBackBtn.addEventListener('click', () => {
+      menuScreens.forEach(s => s.classList.remove('active'));
+      mainMenu.classList.add('active');
+      menuTitle.textContent = 'Меню';
+      menuBackBtn.style.display = 'none';
+    });
+  }
 
   showScreen('homeScreen');
 });
