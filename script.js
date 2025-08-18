@@ -1,11 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.addEventListener('DOMContentLoaded', () => {
   // ===== "ЧАРІВНИЙ" РЯДОК ДЛЯ SAFARI =====
   document.body.addEventListener('touchstart', () => {}, {passive: true});
-
-  // ===== Навігація між екранами =====
-  const screens = document.querySelectorAll('.screen');
-  // ... і так далі, решта твого коду
 
   // ===== DOM елементи =====
   const screens = document.querySelectorAll('.screen');
@@ -35,22 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Навігація =====
   function showScreen(screenId) {
-  screens.forEach(s => s.classList.remove('active'));
-  const screenToShow = document.getElementById(screenId);
-  if (screenToShow) {
-    screenToShow.classList.add('active');
-  }
-
-  // --- НОВА ЛОГІКА: Ховаємо/показуємо бургер ---
-  if (burgerBtn) { // Перевірка, що кнопка існує
-    if (screenId === 'trainingScreen') {
-      burgerBtn.style.display = 'none'; // Ховаємо на екрані тренування
-    } else {
-      burgerBtn.style.display = 'block'; // Показуємо на всіх інших екранах
+    screens.forEach(s => s.classList.remove('active'));
+    const screenToShow = document.getElementById(screenId);
+    if (screenToShow) {
+      screenToShow.classList.add('active');
+    }
+    if (burgerBtn) {
+      if (screenId === 'trainingScreen') {
+        burgerBtn.style.display = 'none';
+      } else {
+        burgerBtn.style.display = 'flex'; // Використовуємо flex для сумісності з neumorphic-icon-btn
+      }
     }
   }
-}
-
 
   // ===== Дата і час =====
   if (datetimeDisplayEl) {
@@ -197,14 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   workoutTiles.forEach(tile => {
-  tile.addEventListener('click', () => {
-    const programName = tile.dataset.program;
-    if (programName) {
-      openWorkoutModal(programName); // <--- Просто викликаємо функцію
-    }
+    tile.addEventListener('click', () => {
+      const programName = tile.dataset.program;
+      if (programName) {
+        openWorkoutModal(programName);
+      }
+    });
   });
-});
-
 
   if(closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
