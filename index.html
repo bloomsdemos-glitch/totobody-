@@ -24,17 +24,26 @@
         <button class="back-btn" id="menuBackBtn" style="display: none;">← Назад</button>
         <h3 id="menuTitle">Меню</h3>
         <div id="mainMenu" class="menu-screen active">
-          <ul>
-            <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань</a></li>
-            <li><a href="#" data-target="statsSettingsMenu">Статистика</a></li>
-            <li><a href="#" data-target="goalSettingsMenu">Мета</a></li>
-            <li><a href="#" data-target="appSettingsMenu">Налаштування додатку</a></li>
-          </ul>
+        <ul>
+  <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань</a></li>
+  <li><a href="#" data-target="statsSettingsMenu">Статистика</a></li>
+  <li><a href="#" data-target="goalSettingsMenu">Мета</a></li>
+  <li><a href="#" data-target="appSettingsMenu">Налаштування додатку</a></li>
+  <li><a href="#" data-target="calendarMenu">Календар</a></li> <li><a href="#" data-target="historyMenu">Історія тренувань</a></li> </ul>
+
         </div>
         <div id="workoutSettingsMenu" class="menu-screen"><p>Тут буде список твоїх програм для редагування.</p></div>
         <div id="statsSettingsMenu" class="menu-screen"><p>Тут будуть налаштування статистики.</p></div>
         <div id="goalSettingsMenu" class="menu-screen"><p>Тут будуть налаштування мети.</p></div>
         <div id="appSettingsMenu" class="menu-screen">
+          <div id="calendarMenu" class="menu-screen">
+  <p>Тут буде твій календар тренувань.</p>
+</div>
+
+<div id="historyMenu" class="menu-screen">
+  <p>Тут буде архів твоїх тренувань.</p>
+</div>
+
           <div class="setting-item">
             <label for="bgUrlInput">URL фонового зображення:</label>
             <input type="text" id="bgUrlInput" placeholder="Встав сюди посилання...">
