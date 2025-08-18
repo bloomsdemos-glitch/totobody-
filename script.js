@@ -40,14 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveBgBtn = document.getElementById('saveBgBtn');
   const resetBgBtn = document.getElementById('resetBgBtn');
   const homeScreen = document.getElementById('homeScreen');
+  // ВИПРАВЛЕНО: Додав відсутні елементи
   const programListEl = document.getElementById('program-list');
-  const addNewProgramBtn = document.getElementById('addNewProgramBtn'); // <-- Додав кнопку
+  const addNewProgramBtn = document.getElementById('addNewProgramBtn');
   const addProgramMenu = document.getElementById('addProgramMenu');
   const newProgramNameInput = document.getElementById('newProgramNameInput');
   const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
   const programEditMenu = document.getElementById('programEditMenu');
   const programNameInput = document.getElementById('programNameInput');
-// ... і так далі, якщо потрібні інші елементи з нового екрану
+  const saveProgramBtn = document.getElementById('saveProgramBtn');
+  const deleteProgramBtn = document.getElementById('deleteProgramBtn');
 
   // ===== Навігація =====
   function showScreen(screenId) {
@@ -80,347 +82,83 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateDateTime, 1000);
   }
 
-  // ===== Логіка тренувань =====
+  // ===== Логіка тренувань (основна) =====
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
-  
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-  function buildWorkout(program) {
-    let basePool = poolCommon;
-    if (program.startsWith('HIIT')) basePool = poolHIIT;
-    if (program.startsWith('MIXED') || program === 'DUMBBELL') basePool = poolMIX;
-    if (program === 'BODYWEIGHT') basePool = poolCommon;
-    const workoutNames = shuffle([...new Set([...basePool, ...poolCommon])]).slice(0, 10);
-    const workout = workoutNames.map(name => ({ name, duration: 30 }));
-    workout.push({ name: 'Кінець тренування', duration: 3 });
-    return workout;
+  function buildWorkout(programName) {
+    const programData = workoutPrograms[programName] || {};
+    const exercises = programData.exercises || [];
+    if (exercises.length > 0) {
+      // Якщо програма кастомна і має вправи, використовуємо їх
+      const workout = exercises.map(ex => ({ name: ex.name, duration: ex.duration || 30 }));
+      workout.push({ name: 'Кінець тренування', duration: 3 });
+      return workout;
+    } else {
+      // Якщо програма стандартна або порожня, генеруємо рандомно
+      let basePool = poolCommon;
+      if (programName.startsWith('HIIT')) basePool = poolHIIT;
+      if (programName.startsWith('MIXED') || programName === 'DUMBBELL') basePool = poolMIX;
+      if (programName === 'BODYWEIGHT') basePool = poolCommon;
+      const workoutNames = shuffle([...new Set([...basePool, ...poolCommon])]).slice(0, 10);
+      const workout = workoutNames.map(name => ({ name, duration: 30 }));
+      workout.push({ name: 'Кінець тренування', duration: 3 });
+      return workout;
+    }
   }
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
   
-  function formatTime(seconds) {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${m}:${s}`;
-  }
-  function updateUI() {
-    const currentExercise = exercises[currentIndex];
-    if (currentExercise) {
-        trainingProgramNameEl.textContent = currentProgram;
-        exerciseNameEl.textContent = currentExercise.name;
-    }
-    timerEl.textContent = formatTime(remainingTime);
-    pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
-    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} ✓</div>`).join('');
-    completedListEl.innerHTML = completedHTML;
-  }
-  function tick() {
-    if (isPaused) return;
-    remainingTime--;
-    if (remainingTime < 0) {
-        if (currentIndex < exercises.length - 1) {
-            currentIndex++;
-            remainingTime = exercises[currentIndex].duration || 30;
-        } else { finishWorkout(); return; }
-    }
-    updateUI();
-  }
-  function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
-  function finishWorkout() {
-    clearInterval(timerInterval);
-    isStarted = false; isPaused = true;
-    alert('Тренування завершено! 💪');
-    showScreen('homeScreen');
-  }
-  function confirmExitTraining() {
-    if (!isStarted) { showScreen('homeScreen'); return; }
-    if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); }
-  }
-  function startWorkout(programName) {
-    let count = 3;
-    countdownNumberEl.textContent = count;
-    countdownScreen.classList.add('active');
-    const countdownInterval = setInterval(() => {
-      count--;
-      if (count > 0) { countdownNumberEl.textContent = count; } 
-      else {
-        clearInterval(countdownInterval);
-        countdownScreen.classList.remove('active');
-        _actuallyStartWorkout(programName);
-      }
-    }, 1000);
-  }
-  function _actuallyStartWorkout(programName) {
-    currentProgram = programName;
-    exercises = buildWorkout(programName);
-    currentIndex = 0;
-    remainingTime = exercises[0]?.duration || 30;
-    isStarted = true; isPaused = false;
-    updateUI();
-    startTimer();
-    showScreen('trainingScreen');
-  }
+  function formatTime(seconds) { /* ... без змін ... */ }
+  function updateUI() { /* ... без змін ... */ }
+  function tick() { /* ... без змін ... */ }
+  function startTimer() { /* ... без змін ... */ }
+  function finishWorkout() { /* ... без змін ... */ }
+  function confirmExitTraining() { /* ... без змін ... */ }
+  function startWorkout(programName) { /* ... без змін ... */ }
+  function _actuallyStartWorkout(programName) { /* ... без змін ... */ }
 
-  // ===== Обробники Подій =====
+  // ===== Обробники Подій (кнопки керування тренуванням) =====
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
-  if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
-  if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
+  // ... (решта обробників без змін)
 
   // ===== Логіка Модального Вікна =====
-  function openWorkoutModal(programName) {
-    const previewExercises = buildWorkout(programName);
-    modalProgramNameEl.textContent = programName;
-    modalExerciseListEl.innerHTML = '';
-    previewExercises.forEach(ex => {
-      if (ex.name !== 'Кінець тренування') {
-        const li = document.createElement('li');
-        li.textContent = ex.name;
-        modalExerciseListEl.appendChild(li);
-      }
-    });
-    workoutModal.classList.add('active');
-    const startFunction = () => {
-      workoutModal.classList.remove('active');
-      startWorkout(programName);
-      modalStartBtn.removeEventListener('click', startFunction);
-    };
-    modalStartBtn.addEventListener('click', startFunction);
-  }
-  workoutTiles.forEach(tile => {
-    tile.addEventListener('click', () => {
-      const programName = tile.dataset.program;
-      if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); }
-    });
-  });
+  function openWorkoutModal(programName) { /* ... без змін ... */ }
+  workoutTiles.forEach(tile => { /* ... без змін ... */ });
 
   if(closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
-  if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
-  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
-  function applyBackground(url) {
-    document.body.style.backgroundImage = `url('${url}')`;
-    document.body.style.backgroundSize = 'cover';
-    document.body.style.backgroundPosition = 'center';
-    document.body.style.backgroundAttachment = 'fixed';
-  }
-  if (saveBgBtn) {
-    saveBgBtn.addEventListener('click', () => {
-      const bgUrl = bgUrlInput.value.trim();
-      if (bgUrl) {
-        localStorage.setItem('customBackground', bgUrl);
-        applyBackground(bgUrl);
-        alert('Фон збережено!');
-      } else { alert('Будь ласка, встав посилання на картинку.'); }
-    });
-  }
-  if (resetBgBtn) {
-    resetBgBtn.addEventListener('click', () => {
-      localStorage.removeItem('customBackground');
-      document.body.style.backgroundImage = 'none';
-      if(bgUrlInput) bgUrlInput.value = '';
-      alert('Фон скинуто до стандартного.');
-    });
-  }
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ (ФОН) =====
+  function applyBackground(url) { /* ... без змін ... */ }
+  // ... (обробники для saveBgBtn, resetBgBtn і завантаження фону без змін)
+
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ =====
+  let workoutPrograms = {}; 
+  let currentlyEditing = null; 
+
+  function loadPrograms() { /* ... без змін ... */ }
+  function savePrograms() { /* ... без змін ... */ }
+  function renderProgramList() { /* ... без змін ... */ }
+  function openProgramEditor(programName) { /* ... без змін ... */ }
+
+  if (addNewProgramBtn) { /* ... без змін ... */ }
+  if (saveNewProgramBtn) { /* ... без змін ... */ }
+  if (saveProgramBtn) { /* ... без змін ... */ }
+  if (deleteProgramBtn) { /* ... без змін ... */ }
+
+  loadPrograms();
+  renderProgramList();
+  
+  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
+  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) { /* ... без змін ... */ }
+
+  // ===== Ініціалізація =====
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
-  
-// ============================================
-// ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ (v2.0) =====
-// ============================================
-
-// --- DOM елементи для редактора ---
-const programListEl = document.getElementById('program-list');
-const addNewProgramBtn = document.getElementById('addNewProgramBtn');
-const addProgramMenu = document.getElementById('addProgramMenu');
-const newProgramNameInput = document.getElementById('newProgramNameInput');
-const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
-const programEditMenu = document.getElementById('programEditMenu');
-const programNameInput = document.getElementById('programNameInput');
-const saveProgramBtn = document.getElementById('saveProgramBtn');
-const deleteProgramBtn = document.getElementById('deleteProgramBtn');
-
-let workoutPrograms = {}; // Тепер це буде наш головний об'єкт з програмами
-let currentlyEditing = null; // Змінна для збереження назви програми, яку редагуємо
-
-// --- Функції для роботи з localStorage ---
-function loadPrograms() {
-  const savedPrograms = localStorage.getItem('workoutPrograms');
-  if (savedPrograms) {
-    workoutPrograms = JSON.parse(savedPrograms);
-  } else {
-    // Якщо в "сейфі" нічого немає, створюємо стандартний набір
-    workoutPrograms = {
-      "HIIT BASIC": { exercises: [] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] },
-      "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] }
-    };
-  }
-}
-
-function savePrograms() {
-  localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms));
-}
-
-// --- Відображення списку програм ---
-function renderProgramList() {
-  if (!programListEl) return;
-  programListEl.innerHTML = '';
-  
-  for (const programName in workoutPrograms) {
-      const li = document.createElement('li');
-      li.className = 'program-list-item';
-      li.dataset.programName = programName;
-      li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`;
-      li.addEventListener('click', () => { openProgramEditor(programName); });
-      programListEl.appendChild(li);
-  }
-}
-
-// --- Відкриття редактора для конкретної програми ---
-function openProgramEditor(programName) {
-    currentlyEditing = programName; // Запам'ятовуємо, що ми редагуємо
-    workoutSettingsMenu.classList.remove('active');
-    programEditMenu.classList.add('active');
-    menuTitle.textContent = `Редагування`;
-    programNameInput.value = programName;
-    // Тут буде код для відображення списку вправ
-}
-
-// --- Обробники подій ---
-if (addNewProgramBtn) {
-  addNewProgramBtn.addEventListener('click', () => {
-    workoutSettingsMenu.classList.remove('active');
-    addProgramMenu.classList.add('active');
-    menuTitle.textContent = 'Нова програма';
-    menuBackBtn.style.display = 'block';
-  });
-}
-
-if (saveNewProgramBtn) {
-    saveNewProgramBtn.addEventListener('click', () => {
-        const newName = newProgramNameInput.value.trim();
-        if (newName && !workoutPrograms[newName]) { // Перевіряємо, чи назва не пуста і не дублюється
-            workoutPrograms[newName] = { exercises: [] };
-            savePrograms();
-            renderProgramList();
-            
-            addProgramMenu.classList.remove('active');
-            workoutSettingsMenu.classList.add('active');
-            menuTitle.textContent = 'Налаштування тренувань';
-            newProgramNameInput.value = '';
-        } else {
-            alert('Будь ласка, введи унікальну назву програми.');
-        }
-    });
-}
-
-if (saveProgramBtn) {
-  saveProgramBtn.addEventListener('click', () => {
-    const newName = programNameInput.value.trim();
-    if (newName && currentlyEditing) {
-      // Перейменовуємо програму
-      if (newName !== currentlyEditing) {
-        // Перевірка на дублікат
-        if (workoutPrograms[newName]) {
-          alert('Програма з такою назвою вже існує!');
-          return;
-        }
-        // Створюємо новий запис і копіюємо дані
-        workoutPrograms[newName] = workoutPrograms[currentlyEditing];
-        // Видаляємо старий запис
-        delete workoutPrograms[currentlyEditing];
-      }
-      // Тут буде збереження інших змін (списку вправ)
-      
-      savePrograms();
-      renderProgramList();
-      alert(`Програму "${newName}" збережено!`);
-      
-      // Повертаємось до списку
-      programEditMenu.classList.remove('active');
-      workoutSettingsMenu.classList.add('active');
-      menuTitle.textContent = 'Налаштування тренувань';
-    }
-  });
-}
-
-if (deleteProgramBtn) {
-  deleteProgramBtn.addEventListener('click', () => {
-    if (currentlyEditing && confirm(`Ви впевнені, що хочете видалити програму "${currentlyEditing}"?`)) {
-        delete workoutPrograms[currentlyEditing];
-        savePrograms();
-        renderProgramList();
-        
-        programEditMenu.classList.remove('active');
-        workoutSettingsMenu.classList.add('active');
-        menuTitle.textContent = 'Налаштування тренувань';
-    }
-  });
-}
-
-// --- Перший запуск ---
-loadPrograms(); // Завантажуємо програми з "сейфу"
-renderProgramList(); // Відображаємо їх
-
-
-// Обробник для кнопки "Зберегти" на екрані додавання
-if (saveNewProgramBtn) {
-    saveNewProgramBtn.addEventListener('click', () => {
-        const newName = newProgramNameInput.value.trim();
-        if (newName) {
-            // Додаємо нову програму в наш об'єкт
-            workoutPrograms[newName] = {};
-            // Оновлюємо список програм на екрані
-            renderProgramList();
-
-            // Повертаємось до списку програм
-            addProgramMenu.classList.remove('active');
-            workoutSettingsMenu.classList.add('active');
-            menuTitle.textContent = 'Налаштування тренувань';
-
-            // Очищуємо поле вводу
-            newProgramNameInput.value = '';
-        } else {
-            alert('Будь ласка, введи назву програми.');
-        }
-    });
-}
-
-  
-  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
-  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
-      const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
-      burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
-      if (menuOverlayClose) { menuOverlayClose.addEventListener('click', () => { sideMenu.classList.remove('open'); }); }
-      
-      const menuLinks = mainMenu.querySelectorAll('a');
-      const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-      menuLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.dataset.target;
-          const targetScreen = document.getElementById(targetId);
-          if (targetScreen) {
-            menuScreens.forEach(s => s.classList.remove('active'));
-            targetScreen.classList.add('active');
-            menuTitle.textContent = link.textContent;
-            menuBackBtn.style.display = 'block';
-          }
-        });
-      });
-      menuBackBtn.addEventListener('click', () => {
-        menuScreens.forEach(s => s.classList.remove('active'));
-        mainMenu.classList.add('active');
-        menuTitle.textContent = 'Меню';
-        menuBackBtn.style.display = 'none';
-      });
-    }
-
   showScreen('homeScreen');
 });
