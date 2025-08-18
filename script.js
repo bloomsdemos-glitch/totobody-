@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveBgBtn = document.getElementById('saveBgBtn');
   const resetBgBtn = document.getElementById('resetBgBtn');
   const homeScreen = document.getElementById('homeScreen');
+  // НОВІ ЕЛЕМЕНТИ для налаштувань тренувань
+  const programListEl = document.getElementById('program-list');
 
   // ===== Навігація =====
   function showScreen(screenId) {
@@ -76,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
+  
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
   function buildWorkout(program) {
     let basePool = poolCommon;
     if (program.startsWith('HIIT')) basePool = poolHIIT;
@@ -220,6 +224,27 @@ document.addEventListener('DOMContentLoaded', () => {
     applyBackground(savedBg);
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
+  
+  // НОВИЙ БЛОК: Логіка налаштувань тренувань
+  const workoutPrograms = {
+    "HIIT BASIC": {}, "HIIT ULTRA": {}, "HIIT PRO": {},
+    "MIXED BASIC": {}, "DUMBBELL": {}, "BODYWEIGHT": {}
+  };
+  function renderProgramList() {
+    if (!programListEl) return;
+    programListEl.innerHTML = '';
+    for (const programName in workoutPrograms) {
+        const li = document.createElement('li');
+        li.className = 'program-list-item';
+        li.dataset.programName = programName;
+        li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`;
+        li.addEventListener('click', () => {
+            alert(`Тут буде редагування програми: ${programName}`);
+        });
+        programListEl.appendChild(li);
+    }
+  }
+  renderProgramList(); // Генеруємо список при завантаженні
   
   // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
