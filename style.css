@@ -3,6 +3,10 @@
   --shadow-light: #ffffff; --shadow-dark: #a8acb3; --shadow-distance: 2px; --shadow-blur: 5px;
   --border-soft: 1px solid rgba(184, 188, 194, 0.1); --border-radius-main: 24px; --border-radius-small: 16px;
   --glass-bg: rgba(255, 255, 255, 0.25); --glass-border: rgba(255, 255, 255, 0.2); --glass-shadow: rgba(0, 0, 0, 0.1);
+  --progress-red: #ff4757;
+  --progress-orange: #ffa502;
+  --progress-yellow: #ffb400;
+  --progress-green: #2ed573;
 }
 * { box-sizing: border-box; }
 body { font-family: var(--font-family); background: var(--bg-color); margin: 0; padding: 0; color: var(--text-color); -webkit-tap-highlight-color: transparent; }
