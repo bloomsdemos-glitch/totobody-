@@ -282,6 +282,40 @@ document.addEventListener('DOMContentLoaded', () => {
         menuBackBtn.style.display = 'none';
       });
     }
+// ===== ЛОГІКА БОКОВОГО МЕНЮ =====
+if (burgerBtn && sideMenu) {
+  // Відкриття/закриття меню по кліку на бургер
+  burgerBtn.addEventListener('click', () => {
+    sideMenu.classList.toggle('open');
+  });
+
+  // Навігація всередині меню
+  const menuLinks = mainMenu.querySelectorAll('a');
+  const menuScreens = sideMenu.querySelectorAll('.menu-screen');
+
+  menuLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.target;
+      const targetScreen = document.getElementById(targetId);
+
+      if (targetScreen) {
+        menuScreens.forEach(s => s.classList.remove('active'));
+        targetScreen.classList.add('active');
+        menuTitle.textContent = link.textContent; // Змінюємо заголовок
+        menuBackBtn.style.display = 'block'; // Показуємо кнопку "Назад"
+      }
+    });
+  });
+
+  // Кнопка "Назад" всередині меню
+  menuBackBtn.addEventListener('click', () => {
+    menuScreens.forEach(s => s.classList.remove('active'));
+    mainMenu.classList.add('active'); // Повертаємось на головний екран меню
+    menuTitle.textContent = 'Меню'; // Повертаємо заголовок
+    menuBackBtn.style.display = 'none'; // Ховаємо кнопку "Назад"
+  });
+}
 
   showScreen('homeScreen');
 });
