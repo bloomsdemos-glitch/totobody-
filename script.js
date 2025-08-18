@@ -40,7 +40,47 @@ document.addEventListener('DOMContentLoaded', () => {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
     if (screenToShow) screenToShow.classList.add('active');
-    if (burgerBtn) {
+    // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
+if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
+    burgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Зупиняємо "спливання" кліку
+      sideMenu.classList.toggle('open');
+    });
+
+    // Новий, надійний спосіб закриття меню
+    sideMenu.addEventListener('click', (e) => {
+        // Якщо клікнули на сам контейнер (тобто, на затемнену область), а не на панель
+        if (e.target === sideMenu) {
+            sideMenu.classList.remove('open');
+        }
+    });
+
+    const menuLinks = mainMenu.querySelectorAll('a');
+    const menuScreens = sideMenu.querySelectorAll('.menu-screen');
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.dataset.target;
+        const targetScreen = document.getElementById(targetId);
+        
+        if (targetScreen) {
+          menuScreens.forEach(s => s.classList.remove('active'));
+          targetScreen.classList.add('active');
+          menuTitle.textContent = link.textContent;
+          menuBackBtn.style.display = 'block';
+        }
+      });
+    });
+
+    menuBackBtn.addEventListener('click', () => {
+      menuScreens.forEach(s => s.classList.remove('active'));
+      mainMenu.classList.add('active');
+      menuTitle.textContent = 'Меню';
+      menuBackBtn.style.display = 'none';
+    });
+  }
+
       if (screenId === 'trainingScreen') {
         burgerBtn.style.display = 'none';
       } else {
