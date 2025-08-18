@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const completedListEl = document.getElementById('completedExercises');
   const countdownScreen = document.getElementById('countdownScreen');
   const countdownNumberEl = document.getElementById('countdownNumber');
-
-  // НОВИЙ БЛОК: DOM елементи для меню
   // --- Menu screens ---
   const menuBackBtn = document.getElementById('menuBackBtn');
   const menuTitle = document.getElementById('menuTitle');
@@ -37,14 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const statsSettingsMenu = document.getElementById('statsSettingsMenu');
   const goalSettingsMenu = document.getElementById('goalSettingsMenu');
   const appSettingsMenu = document.getElementById('appSettingsMenu');
+  // --- App Settings Elements ---
+  const bgUrlInput = document.getElementById('bgUrlInput');
+  const saveBgBtn = document.getElementById('saveBgBtn');
+  const resetBgBtn = document.getElementById('resetBgBtn');
 
   // ===== Навігація =====
   function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
-    if (screenToShow) {
-      screenToShow.classList.add('active');
-    }
+    if (screenToShow) screenToShow.classList.add('active');
+    
     if (burgerBtn) {
       if (screenId === 'trainingScreen') {
         burgerBtn.style.display = 'none';
@@ -96,8 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerInterval = null;
   let isPaused = true;
   let isStarted = false;
-  const DEFAULT_DURATION = 30;
-
+  
   function formatTime(seconds) {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
     const s = String(seconds % 60).padStart(2, '0');
@@ -122,24 +122,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (remainingTime < 0) {
         if (currentIndex < exercises.length - 1) {
             currentIndex++;
-            remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
-        } else {
-            finishWorkout();
-            return;
-        }
+            remainingTime = exercises[currentIndex].duration || 30;
+        } else { finishWorkout(); return; }
     }
     updateUI();
   }
 
   function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
-
   function finishWorkout() {
     clearInterval(timerInterval);
     isStarted = false; isPaused = true;
     alert('Тренування завершено! 💪');
     showScreen('homeScreen');
   }
-
   function confirmExitTraining() {
     if (!isStarted) { showScreen('homeScreen'); return; }
     if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); }
@@ -164,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentProgram = programName;
     exercises = buildWorkout(programName);
     currentIndex = 0;
-    remainingTime = exercises[0]?.duration || DEFAULT_DURATION;
+    remainingTime = exercises[0]?.duration || 30;
     isStarted = true; isPaused = false;
     updateUI();
     startTimer();
@@ -175,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION; updateUI(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION; updateUI(); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
 
   function openWorkoutModal(programName) {
     const previewExercises = buildWorkout(programName);
@@ -201,9 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
       const programName = tile.dataset.program;
-      if (programName) {
-        setTimeout(() => { openWorkoutModal(programName); }, 150);
-      }
+      if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); }
     });
   });
 
@@ -212,17 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
   // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
-  const bgUrlInput = document.getElementById('bgUrlInput');
-  const saveBgBtn = document.getElementById('saveBgBtn');
-  const resetBgBtn = document.getElementById('resetBgBtn');
-
   function applyBackground(url) {
     document.body.style.backgroundImage = `url('${url}')`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundAttachment = 'fixed';
   }
-
   if (saveBgBtn) {
     saveBgBtn.addEventListener('click', () => {
       const bgUrl = bgUrlInput.value.trim();
@@ -230,42 +218,33 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('customBackground', bgUrl);
         applyBackground(bgUrl);
         alert('Фон збережено!');
-      } else {
-        alert('Будь ласка, встав посилання на картинку.');
-      }
+      } else { alert('Будь ласка, встав посилання на картинку.'); }
     });
   }
-
   if (resetBgBtn) {
     resetBgBtn.addEventListener('click', () => {
       localStorage.removeItem('customBackground');
       document.body.style.backgroundImage = 'none';
-      bgUrlInput.value = '';
+      if(bgUrlInput) bgUrlInput.value = '';
       alert('Фон скинуто до стандартного.');
     });
   }
-  
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
   
-  // НОВИЙ БЛОК: Логіка бокового меню
-  if (burgerBtn && sideMenu) {
-      burgerBtn.addEventListener('click', () => {
-        sideMenu.classList.toggle('open');
-      });
-
+  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
+  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
+      burgerBtn.addEventListener('click', () => { sideMenu.classList.toggle('open'); });
       const menuLinks = mainMenu.querySelectorAll('a');
       const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-
       menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const targetId = link.dataset.target;
           const targetScreen = document.getElementById(targetId);
-          
           if (targetScreen) {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
@@ -274,7 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       });
-
       menuBackBtn.addEventListener('click', () => {
         menuScreens.forEach(s => s.classList.remove('active'));
         mainMenu.classList.add('active');
@@ -282,40 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         menuBackBtn.style.display = 'none';
       });
     }
-// ===== ЛОГІКА БОКОВОГО МЕНЮ =====
-if (burgerBtn && sideMenu) {
-  // Відкриття/закриття меню по кліку на бургер
-  burgerBtn.addEventListener('click', () => {
-    sideMenu.classList.toggle('open');
-  });
-
-  // Навігація всередині меню
-  const menuLinks = mainMenu.querySelectorAll('a');
-  const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-
-  menuLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.dataset.target;
-      const targetScreen = document.getElementById(targetId);
-
-      if (targetScreen) {
-        menuScreens.forEach(s => s.classList.remove('active'));
-        targetScreen.classList.add('active');
-        menuTitle.textContent = link.textContent; // Змінюємо заголовок
-        menuBackBtn.style.display = 'block'; // Показуємо кнопку "Назад"
-      }
-    });
-  });
-
-  // Кнопка "Назад" всередині меню
-  menuBackBtn.addEventListener('click', () => {
-    menuScreens.forEach(s => s.classList.remove('active'));
-    mainMenu.classList.add('active'); // Повертаємось на головний екран меню
-    menuTitle.textContent = 'Меню'; // Повертаємо заголовок
-    menuBackBtn.style.display = 'none'; // Ховаємо кнопку "Назад"
-  });
-}
 
   showScreen('homeScreen');
 });
