@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
+  // ===== "ЧАРІВНИЙ" РЯДОК ДЛЯ SAFARI =====
+  document.body.addEventListener('touchstart', () => {}, {passive: true});
+
+  // ===== Навігація між екранами =====
+  const screens = document.querySelectorAll('.screen');
+  // ... і так далі, решта твого коду
+
   // ===== DOM елементи =====
   const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
