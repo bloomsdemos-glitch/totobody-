@@ -201,5 +201,49 @@ document.addEventListener('DOMContentLoaded', () => {
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
   if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
+    // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
+  const bgUrlInput = document.getElementById('bgUrlInput');
+  const saveBgBtn = document.getElementById('saveBgBtn');
+  const resetBgBtn = document.getElementById('resetBgBtn');
+
+  // Функція, яка застосовує фон
+  function applyBackground(url) {
+    document.body.style.backgroundImage = `url('${url}')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
+  }
+
+  // Зберігаємо фон
+  if (saveBgBtn) {
+    saveBgBtn.addEventListener('click', () => {
+      const bgUrl = bgUrlInput.value.trim();
+      if (bgUrl) {
+        localStorage.setItem('customBackground', bgUrl);
+        applyBackground(bgUrl);
+        alert('Фон збережено!');
+      } else {
+        alert('Будь ласка, встав посилання на картинку.');
+      }
+    });
+  }
+
+  // Скидаємо фон
+  if (resetBgBtn) {
+    resetBgBtn.addEventListener('click', () => {
+      localStorage.removeItem('customBackground');
+      document.body.style.backgroundImage = 'none';
+      bgUrlInput.value = '';
+      alert('Фон скинуто до стандартного.');
+    });
+  }
+
+  // При завантаженні сторінки перевіряємо, чи є збережений фон
+  const savedBg = localStorage.getItem('customBackground');
+  if (savedBg) {
+    applyBackground(savedBg);
+    bgUrlInput.value = savedBg; // Показуємо збережений URL в полі
+  }
+
   showScreen('homeScreen');
 });
