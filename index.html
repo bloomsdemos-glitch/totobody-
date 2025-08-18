@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3"> </head>
+  <link rel="stylesheet" href="style.css?v=4"> </head>
 <body>
 
   <header class="app-header">
@@ -23,7 +23,6 @@
       <div class="glassmorphism-panel">
         <button class="back-btn" id="menuBackBtn" style="display: none;">← Назад</button>
         <h3 id="menuTitle">Меню</h3>
-        
         <div id="mainMenu" class="menu-screen active">
           <ul>
             <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань</a></li>
@@ -32,19 +31,9 @@
             <li><a href="#" data-target="appSettingsMenu">Налаштування додатку</a></li>
           </ul>
         </div>
-        
-        <div id="workoutSettingsMenu" class="menu-screen">
-          <p>Тут буде список твоїх програм для редагування.</p>
-        </div>
-
-        <div id="statsSettingsMenu" class="menu-screen">
-          <p>Тут будуть налаштування статистики.</p>
-        </div>
-
-        <div id="goalSettingsMenu" class="menu-screen">
-          <p>Тут будуть налаштування мети.</p>
-        </div>
-        
+        <div id="workoutSettingsMenu" class="menu-screen"><p>Тут буде список твоїх програм для редагування.</p></div>
+        <div id="statsSettingsMenu" class="menu-screen"><p>Тут будуть налаштування статистики.</p></div>
+        <div id="goalSettingsMenu" class="menu-screen"><p>Тут будуть налаштування мети.</p></div>
         <div id="appSettingsMenu" class="menu-screen">
           <div class="setting-item">
             <label for="bgUrlInput">URL фонового зображення:</label>
@@ -54,8 +43,7 @@
               <button id="resetBgBtn" class="menu-button secondary">Скинути</button>
             </div>
           </div>
-          </div>
-
+        </div>
       </div>
     </div>
 
@@ -95,9 +83,7 @@
   <div id="trainingScreen" class="screen">
     <button id="trainingBackBtn" class="back-button">← Назад</button>
     <h2 id="trainingProgramName">HIIT BASIC</h2>
-    <div class="exercise-display">
-        <div class="marquee"><span id="exerciseName">Присідання</span></div>
-    </div>
+    <div class="exercise-display"><div class="marquee"><span id="exerciseName">Присідання</span></div></div>
     <div id="timer" class="timer-display">00:30</div>
     <div class="controls">
       <button id="prevExercise" class="icon-button">⤴️</button>
@@ -108,24 +94,9 @@
     <div id="completedExercises"></div>
   </div>
 
-  <div id="workoutModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="modalProgramName">HIIT BASIC</h2>
-      <div class="modal-info">
-        <p>Програма включає (рандомні):</p>
-        <ul id="modalExerciseList"></ul>
-      </div>
-      <div class="modal-actions">
-        <button id="modalSettingsBtn" class="settings-btn">⚙️</button>
-        <button id="modalStartBtn" class="start-btn">Почати тренування</button>
-      </div>
-    </div>
-  </div>
+  <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn">⚙️</button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
+  <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
 
-  <div id="countdownScreen" class="countdown-overlay">
-    <div id="countdownNumber" class="countdown-number">3</div>
-  </div>
-
-  <script src="script.js?v=3"></script> </body>
+  <script src="script.js?v=4"></script>
+</body>
 </html>
