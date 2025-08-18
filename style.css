@@ -146,3 +146,126 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 /* ... (решта стилів для меню без змін) ... */
 
 /* ... (решта твого CSS файлу) ... */
+/* ======================================== */
+/* ========= СТИЛІ БОКОВОГО МЕНЮ ========= */
+/* ======================================== */
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0; /* Змінено для анімації через transform */
+  width: 100%;
+  height: 100%;
+  z-index: 500;
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  display: flex;
+  pointer-events: none; /* Неактивне, коли сховане */
+}
+
+.side-menu.open {
+  transform: translateX(0);
+  pointer-events: auto; /* Активне, коли відкрите */
+}
+
+.menu-overlay-close {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.glassmorphism-panel {
+  width: 85%;
+  max-width: 320px;
+  height: 100%;
+  padding: 20px;
+  padding-top: 60px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 10px 0px 30px var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Щоб оверлей не перекривав панель */
+  z-index: 1;
+}
+
+.side-menu h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.menu-screen ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.menu-screen li a {
+  display: block;
+  padding: 15px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-small);
+  transition: background 0.2s ease;
+  font-weight: 600;
+}
+.menu-screen li a:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-screen { display: none; }
+.menu-screen.active { display: block; }
+
+.back-btn {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+    padding: 0;
+    font-size: 0;
+}
+.back-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+}
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--text-color);
+    border-left: 2px solid var(--text-color);
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Стилі для елементів в налаштуваннях */
+.setting-item { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.setting-item label { font-size: 0.9rem; opacity: 0.8; }
+.setting-item input[type="text"] {
+  width: 100%; padding: 12px; border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-small); background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color); font-family: var(--font-family); font-size: 1rem;
+}
+.setting-actions { display: flex; gap: 10px; margin-top: 10px; }
+.menu-button {
+  flex-grow: 1; padding: 12px; border: none; border-radius: var(--border-radius-small);
+  background: var(--primary-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer;
+}
+.menu-button.secondary {
+  background: rgba(255, 255, 255, 0.1); color: var(--text-color); border: 1px solid var(--glass-border);
+}
