@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveBgBtn = document.getElementById('saveBgBtn');
   const resetBgBtn = document.getElementById('resetBgBtn');
   const homeScreen = document.getElementById('homeScreen');
-  // НОВІ ЕЛЕМЕНТИ для налаштувань тренувань
   const programListEl = document.getElementById('program-list');
+  const addNewProgramBtn = document.getElementById('addNewProgramBtn'); // <-- Додав кнопку
 
   // ===== Навігація =====
   function showScreen(screenId) {
@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
   
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-
   function buildWorkout(program) {
     let basePool = poolCommon;
     if (program.startsWith('HIIT')) basePool = poolHIIT;
@@ -164,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
   if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
 
+  // ===== Логіка Модального Вікна =====
   function openWorkoutModal(programName) {
     const previewExercises = buildWorkout(programName);
     modalProgramNameEl.textContent = programName;
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
   
-  // НОВИЙ БЛОК: Логіка налаштувань тренувань
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ =====
   const workoutPrograms = {
     "HIIT BASIC": {}, "HIIT ULTRA": {}, "HIIT PRO": {},
     "MIXED BASIC": {}, "DUMBBELL": {}, "BODYWEIGHT": {}
@@ -244,7 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
         programListEl.appendChild(li);
     }
   }
-  renderProgramList(); // Генеруємо список при завантаженні
+  renderProgramList();
+  // Додано обробник для кнопки "Додати нову програму"
+  if (addNewProgramBtn) {
+    addNewProgramBtn.addEventListener('click', () => {
+      alert('Скоро тут можна буде додати нову програму!');
+    });
+  }
   
   // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
