@@ -238,5 +238,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+
+// ===== Закриття меню по кліку на основний екран =====
+const homeScreen = document.getElementById('homeScreen');
+if (homeScreen) {
+  homeScreen.addEventListener('click', () => {
+    // Якщо меню відкрите, закриваємо його
+    if (sideMenu.classList.contains('open')) {
+      sideMenu.classList.remove('open');
+    }
+  });
+}
+
   showScreen('homeScreen');
 });
