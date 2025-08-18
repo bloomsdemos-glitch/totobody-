@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const addProgramMenu = document.getElementById('addProgramMenu');
   const newProgramNameInput = document.getElementById('newProgramNameInput');
   const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
+  const programEditMenu = document.getElementById('programEditMenu');
+  const programNameInput = document.getElementById('programNameInput');
+// ... і так далі, якщо потрібні інші елементи з нового екрану
 
   // ===== Навігація =====
   function showScreen(screenId) {
@@ -234,19 +237,24 @@ document.addEventListener('DOMContentLoaded', () => {
     "MIXED BASIC": {}, "DUMBBELL": {}, "BODYWEIGHT": {}
   };
   function renderProgramList() {
-    if (!programListEl) return;
-    programListEl.innerHTML = '';
-    for (const programName in workoutPrograms) {
-        const li = document.createElement('li');
-        li.className = 'program-list-item';
-        li.dataset.programName = programName;
-        li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`;
-        li.addEventListener('click', () => {
-            alert(`Тут буде редагування програми: ${programName}`);
-        });
-        programListEl.appendChild(li);
-    }
+  if (!programListEl) return;
+  programListEl.innerHTML = '';
+
+  for (const programName in workoutPrograms) {
+      const li = document.createElement('li');
+      li.className = 'program-list-item';
+      li.dataset.programName = programName;
+      li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`;
+
+      // ОНОВЛЕНО: Тепер клік відкриває екран редагування
+      li.addEventListener('click', () => {
+          openProgramEditor(programName);
+      });
+
+      programListEl.appendChild(li);
   }
+}
+
   renderProgramList();
   // Додано обробник для кнопки "Додати нову програму"
   // Обробник для кнопки "Додати нову програму"
