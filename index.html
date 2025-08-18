@@ -7,19 +7,57 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
-
-</head>
+  <link rel="stylesheet" href="style.css?v=3"> </head>
 <body>
 
   <header class="app-header">
-    <button id="burgerBtn" class="icon-button">☰</button>
+    <button id="burgerBtn" class="icon-button neumorphic-icon-btn">☰</button>
     <div class="title-container">
       <h1>TOTOBODY ©</h1>
       <p id="datetime-display" class="datetime"></p>
     </div>
     <div class="header-placeholder"></div>
   </header>
+  
+  <div id="sideMenu" class="side-menu">
+      <div class="glassmorphism-panel">
+        <button class="back-btn" id="menuBackBtn" style="display: none;">← Назад</button>
+        <h3 id="menuTitle">Меню</h3>
+        
+        <div id="mainMenu" class="menu-screen active">
+          <ul>
+            <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань</a></li>
+            <li><a href="#" data-target="statsSettingsMenu">Статистика</a></li>
+            <li><a href="#" data-target="goalSettingsMenu">Мета</a></li>
+            <li><a href="#" data-target="appSettingsMenu">Налаштування додатку</a></li>
+          </ul>
+        </div>
+        
+        <div id="workoutSettingsMenu" class="menu-screen">
+          <p>Тут буде список твоїх програм для редагування.</p>
+        </div>
+
+        <div id="statsSettingsMenu" class="menu-screen">
+          <p>Тут будуть налаштування статистики.</p>
+        </div>
+
+        <div id="goalSettingsMenu" class="menu-screen">
+          <p>Тут будуть налаштування мети.</p>
+        </div>
+        
+        <div id="appSettingsMenu" class="menu-screen">
+          <div class="setting-item">
+            <label for="bgUrlInput">URL фонового зображення:</label>
+            <input type="text" id="bgUrlInput" placeholder="Встав сюди посилання...">
+            <div class="setting-actions">
+              <button id="saveBgBtn" class="menu-button">Зберегти</button>
+              <button id="resetBgBtn" class="menu-button secondary">Скинути</button>
+            </div>
+          </div>
+          </div>
+
+      </div>
+    </div>
 
   <main id="homeScreen" class="screen active">
     <section class="carousel-section">
@@ -31,7 +69,6 @@
         <button class="neumorphic-tile add-new" data-action="add-program"><div class="tile-icon">+</div><div class="tile-label"><strong>Нова</strong><span>програма</span></div></button>
       </div>
     </section>
-
     <section class="carousel-section">
       <h2>Різне</h2>
       <div class="carousel-track">
@@ -40,7 +77,6 @@
         <button class="neumorphic-tile" data-program="BODYWEIGHT"><div class="tile-icon">🧘‍♂️</div><div class="tile-label"><strong>ФІЗИЧНЕ</strong></div></button>
       </div>
     </section>
-
     <section class="carousel-section">
         <h2>Інструменти</h2>
         <div class="carousel-track">
@@ -49,9 +85,7 @@
           <button class="neumorphic-tile" data-action="show-calendar"><div class="tile-icon">🗓️</div><div class="tile-label"><strong>КАЛЕНДАР</strong></div></button>
         </div>
     </section>
-    
     <button id="restDayBtn" class="fab" data-action="add-rest-day"></button>
-    
     <div id="goalProgress" class="goal-bar">
         <span>Мета: Схуднути до 65 кг</span>
         <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
@@ -93,8 +127,5 @@
     <div id="countdownNumber" class="countdown-number">3</div>
   </div>
 
-  <div id="sideMenu" class="side-menu"></div>
-
-  <script src="script.js"></script>
-</body>
+  <script src="script.js?v=3"></script> </body>
 </html>
