@@ -239,6 +239,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderProgramList() {
   if (!programListEl) return;
   programListEl.innerHTML = '';
+// Нова функція для відкриття редактора
+function openProgramEditor(programName) {
+    // Ховаємо список програм і показуємо екран редагування
+    workoutSettingsMenu.classList.remove('active');
+    programEditMenu.classList.add('active');
+
+    // Змінюємо заголовок і показуємо кнопку "Назад"
+    menuTitle.textContent = `Редагування: ${programName}`;
+    menuBackBtn.style.display = 'block';
+
+    // Заповнюємо поле з назвою програми
+    programNameInput.value = programName;
+
+    // Тут в майбутньому буде код для відображення списку вправ
+}
 
   for (const programName in workoutPrograms) {
       const li = document.createElement('li');
