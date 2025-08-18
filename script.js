@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ===== "ЧАРІВНИЙ" РЯДОК ДЛЯ SAFARI =====
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
+  // ===== DOM елементи =====
   const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
   const modalProgramNameEl = document.getElementById('modalProgramName');
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const completedListEl = document.getElementById('completedExercises');
   const countdownScreen = document.getElementById('countdownScreen');
   const countdownNumberEl = document.getElementById('countdownNumber');
+  // --- Menu screens ---
   const menuBackBtn = document.getElementById('menuBackBtn');
   const menuTitle = document.getElementById('menuTitle');
   const mainMenu = document.getElementById('mainMenu');
@@ -32,55 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const statsSettingsMenu = document.getElementById('statsSettingsMenu');
   const goalSettingsMenu = document.getElementById('goalSettingsMenu');
   const appSettingsMenu = document.getElementById('appSettingsMenu');
+  // --- App Settings Elements ---
   const bgUrlInput = document.getElementById('bgUrlInput');
   const saveBgBtn = document.getElementById('saveBgBtn');
   const resetBgBtn = document.getElementById('resetBgBtn');
 
+  // ===== Навігація =====
   function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
-    if (screenToShow) screenToShow.classList.add('active');
-    // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
-if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
-    burgerBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Зупиняємо "спливання" кліку
-      sideMenu.classList.toggle('open');
-    });
-
-    // Новий, надійний спосіб закриття меню
-    sideMenu.addEventListener('click', (e) => {
-        // Якщо клікнули на сам контейнер (тобто, на затемнену область), а не на панель
-        if (e.target === sideMenu) {
-            sideMenu.classList.remove('open');
-        }
-    });
-
-    const menuLinks = mainMenu.querySelectorAll('a');
-    const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-
-    menuLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.dataset.target;
-        const targetScreen = document.getElementById(targetId);
-        
-        if (targetScreen) {
-          menuScreens.forEach(s => s.classList.remove('active'));
-          targetScreen.classList.add('active');
-          menuTitle.textContent = link.textContent;
-          menuBackBtn.style.display = 'block';
-        }
-      });
-    });
-
-    menuBackBtn.addEventListener('click', () => {
-      menuScreens.forEach(s => s.classList.remove('active'));
-      mainMenu.classList.add('active');
-      menuTitle.textContent = 'Меню';
-      menuBackBtn.style.display = 'none';
-    });
-  }
-
+    if (screenToShow) {
+      screenToShow.classList.add('active');
+    }
+    if (burgerBtn) {
       if (screenId === 'trainingScreen') {
         burgerBtn.style.display = 'none';
       } else {
@@ -89,6 +56,7 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     }
   }
 
+  // ===== Дата і час =====
   if (datetimeDisplayEl) {
     function updateDateTime() {
       const now = new Date();
@@ -105,10 +73,13 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     setInterval(updateDateTime, 1000);
   }
 
+  // ===== Логіка тренувань =====
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
+  
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
   function buildWorkout(program) {
     let basePool = poolCommon;
     if (program.startsWith('HIIT')) basePool = poolHIIT;
@@ -120,14 +91,20 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     return workout;
   }
 
-  let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
-  const DEFAULT_DURATION = 30;
-
+  let currentProgram = '';
+  let exercises = [];
+  let currentIndex = 0;
+  let remainingTime = 0;
+  let timerInterval = null;
+  let isPaused = true;
+  let isStarted = false;
+  
   function formatTime(seconds) {
     const m = String(Math.floor(seconds / 60)).padStart(2, '0');
     const s = String(seconds % 60).padStart(2, '0');
     return `${m}:${s}`;
   }
+
   function updateUI() {
     const currentExercise = exercises[currentIndex];
     if (currentExercise) {
@@ -139,17 +116,19 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} ✓</div>`).join('');
     completedListEl.innerHTML = completedHTML;
   }
+
   function tick() {
     if (isPaused) return;
     remainingTime--;
     if (remainingTime < 0) {
         if (currentIndex < exercises.length - 1) {
             currentIndex++;
-            remainingTime = exercises[currentIndex].duration || DEFAULT_DURATION;
+            remainingTime = exercises[currentIndex].duration || 30;
         } else { finishWorkout(); return; }
     }
     updateUI();
   }
+
   function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
   function finishWorkout() {
     clearInterval(timerInterval);
@@ -161,6 +140,7 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     if (!isStarted) { showScreen('homeScreen'); return; }
     if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); }
   }
+
   function startWorkout(programName) {
     let count = 3;
     countdownNumberEl.textContent = count;
@@ -175,17 +155,19 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       }
     }, 1000);
   }
+
   function _actuallyStartWorkout(programName) {
     currentProgram = programName;
     exercises = buildWorkout(programName);
     currentIndex = 0;
-    remainingTime = exercises[0]?.duration || DEFAULT_DURATION;
+    remainingTime = exercises[0]?.duration || 30;
     isStarted = true; isPaused = false;
     updateUI();
     startTimer();
     showScreen('trainingScreen');
   }
 
+  // ===== Обробники Подій =====
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
@@ -211,10 +193,13 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     };
     modalStartBtn.addEventListener('click', startFunction);
   }
+
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
       const programName = tile.dataset.program;
-      if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); }
+      if (programName) {
+        setTimeout(() => { openWorkoutModal(programName); }, 150);
+      }
     });
   });
 
@@ -222,6 +207,7 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
   if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
   function applyBackground(url) {
     document.body.style.backgroundImage = `url('${url}')`;
     document.body.style.backgroundSize = 'cover';
@@ -252,8 +238,12 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
   
+  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
-      burgerBtn.addEventListener('click', () => { sideMenu.classList.toggle('open'); });
+      burgerBtn.addEventListener('click', () => {
+        sideMenu.classList.toggle('open');
+      });
+
       const menuLinks = mainMenu.querySelectorAll('a');
       const menuScreens = sideMenu.querySelectorAll('.menu-screen');
       menuLinks.forEach(link => {
@@ -277,18 +267,6 @@ if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
         menuBackBtn.style.display = 'none';
       });
     }
-
-
-// ===== Закриття меню по кліку на основний екран =====
-const homeScreen = document.getElementById('homeScreen');
-if (homeScreen) {
-  homeScreen.addEventListener('click', () => {
-    // Якщо меню відкрите, закриваємо його
-    if (sideMenu.classList.contains('open')) {
-      sideMenu.classList.remove('open');
-    }
-  });
-}
 
   showScreen('homeScreen');
 });
