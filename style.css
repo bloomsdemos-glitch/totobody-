@@ -1,342 +1,94 @@
-/* ======================================== */
-/* ========= НАЛАШТУВАННЯ ТА ЗМІННІ ========= */
-/* ======================================== */
-
 :root {
-  --bg-color: #e0e5ec;
-  --text-color: #555a68;
-  --primary-color: #007aff;
-  --font-family: 'Inter', sans-serif;
-
-  /* ===== ІДЕАЛЬНИЙ ДИЗАЙН (ПОВЕРНУЛИ!) ===== */
-  
-  /* Тіні для дуже м'яких фізичних кнопочок */
-  --shadow-light: #ffffff;
-  --shadow-dark: #a8acb3;
-  --shadow-distance: 2px;
-  --shadow-blur: 5px;
-  --border-soft: 1px solid rgba(184, 188, 194, 0.1); /* <--- ОСЬ ТА САМА ПРАВКА */
-  
-  /* Заокруглення для м'яких кутів як ✴️ */
-  --border-radius-main: 24px;
-  --border-radius-small: 16px;
-  
-  /* Налаштування для Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.1);
+  --bg-color: #e0e5ec; --text-color: #555a68; --primary-color: #007aff; --font-family: 'Inter', sans-serif;
+  --shadow-light: #ffffff; --shadow-dark: #a8acb3; --shadow-distance: 2px; --shadow-blur: 5px;
+  --border-soft: 1px solid rgba(184, 188, 194, 0.1); --border-radius-main: 24px; --border-radius-small: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.25); --glass-border: rgba(255, 255, 255, 0.2); --glass-shadow: rgba(0, 0, 0, 0.1);
 }
-
-/* ======================================== */
-/* ========= ЗАГАЛЬНІ СТИЛІ ========= */
-/* ======================================== */
-
 * { box-sizing: border-box; }
-body {
-  font-family: var(--font-family);
-  background: var(--bg-color);
-  margin: 0;
-  padding: 0;
-  color: var(--text-color);
-  -webkit-tap-highlight-color: transparent;
-}
+body { font-family: var(--font-family); background: var(--bg-color); margin: 0; padding: 0; color: var(--text-color); -webkit-tap-highlight-color: transparent; }
 .screen { display: none; min-height: 100vh; padding-top: 80px; }
 .screen.active { display: flex; flex-direction: column; }
 h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
-
-/* ======================================== */
-/* ========= ХЕДЕР ТА НАВІГАЦІЯ ========= */
-/* ======================================== */
-
-.app-header {
-  position: fixed; top: 0; left: 0; width: 100%; display: flex;
-  justify-content: space-between; align-items: center;
-  padding: 15px 20px; z-index: 100;
-  background-color: var(--bg-color);
-}
+.app-header { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; z-index: 100; background-color: var(--bg-color); }
 .title-container { text-align: center; }
 .app-header h1 { font-size: 1.2rem; margin: 0; font-weight: 700; color: #333; }
 .datetime { font-size: 0.8rem; opacity: 0.6; margin: 4px 0 0 0; height: 1rem; }
 .icon-button { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 5px; color: var(--text-color); }
 .header-placeholder { width: 45px; }
-.back-button {
-  position: absolute; top: 95px; left: 20px; background: none; border: none; font-size: 1rem;
-  font-family: var(--font-family); color: var(--text-color); opacity: 0.7; cursor: pointer; z-index: 10;
-}
-.neumorphic-icon-btn {
-  width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-  background: var(--bg-color); box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
-  transition: all 0.2s ease-out;
-}
-.neumorphic-icon-btn:active {
-  box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
-  transform: scale(0.98);
-}
-
-/* ======================================== */
-/* ========= ГОЛОВНИЙ ЕКРАН ========= */
-/* ======================================== */
-
+.back-button { position: absolute; top: 95px; left: 20px; background: none; border: none; font-size: 1rem; font-family: var(--font-family); color: var(--text-color); opacity: 0.7; cursor: pointer; z-index: 10; }
+.neumorphic-icon-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: var(--bg-color); box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light); transition: all 0.2s ease-out; }
+.neumorphic-icon-btn:active { box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light); transform: scale(0.98); }
 .carousel-section { margin-bottom: 25px; }
 .carousel-track { display: flex; overflow-x: auto; padding: 10px 20px; gap: 20px; -webkit-overflow-scrolling: touch; }
 .carousel-track::-webkit-scrollbar { display: none; }
-
 .neumorphic-tile {
-  flex-shrink: 0; width: 150px; height: 150px;
-  background: var(--bg-color);
-  border: var(--border-soft);
-  border-radius: var(--border-radius-main);
-  box-shadow: 
-    var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
-    calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-  display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 10px;
-  cursor: pointer; font-family: var(--font-family); color: var(--text-color);
-  /* --- ОСЬ ЦЯ ПРАВКА --- */
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; 
-  position: relative;
+  flex-shrink: 0; width: 150px; height: 150px; background: var(--bg-color); border: var(--border-soft); border-radius: var(--border-radius-main);
+  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: 10px; cursor: pointer;
+  font-family: var(--font-family); color: var(--text-color); transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; position: relative;
 }
-.neumorphic-tile:active {
-  box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
-  transform: translateY(1px) scale(0.99);
-}
+.neumorphic-tile:active { box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light); transform: translateY(1px) scale(0.99); }
 .tile-icon { flex-grow: 1; display: flex; justify-content: center; align-items: center; font-size: 4rem; line-height: 1; width: 100%; }
 .tile-label { width: 100%; text-align: center; flex-shrink: 0; }
 .tile-label strong { font-size: 1rem; font-weight: 600; line-height: 1.2; display: block; }
 .tile-label span { font-size: 0.8rem; font-weight: 400; opacity: 0.7; }
 .neumorphic-tile.add-new .tile-icon { font-size: 4rem; font-weight: 300; opacity: 0.8; }
-
-
-.fab {
-  position: fixed; bottom: 110px; right: 20px; width: 60px; height: 60px; border-radius: 50%; border: none; z-index: 10;
-  background: var(--bg-color); cursor: pointer;
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-  transition: all 0.2s ease-out;
-}
+.fab { position: fixed; bottom: 110px; right: 20px; width: 60px; height: 60px; border-radius: 50%; border: none; z-index: 10; background: var(--bg-color); cursor: pointer; box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); transition: all 0.2s ease-out; }
 .fab:active { box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); transform: scale(0.95); }
 .fab::before, .fab::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: var(--text-color); transition: all 0.2s ease-out; }
 .fab::before { width: 20px; height: 2px; }
 .fab::after { width: 2px; height: 20px; }
 .fab:hover::before, .fab:hover::after { transform: translate(-50%, -50%) rotate(90deg); }
-
 .goal-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: var(--bg-color); z-index: 5; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); }
 .goal-bar span { font-size: 0.9rem; margin-bottom: 8px; display: block; }
 .progress-line-bg { width: 100%; height: 10px; background: var(--bg-color); border-radius: 5px; box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
 .progress-line-fg { height: 100%; background: var(--primary-color); border-radius: 5px; transition: width 0.5s ease-in-out; }
-
-/* ======================================== */
-/* ========= ЕКРАН ТРЕНУВАННЯ ========= */
-/* ======================================== */
 #trainingScreen { justify-content: flex-start; align-items: center; text-align: center; height: 100vh; position: relative; }
 #trainingProgramName { font-size: 1rem; opacity: 0.7; margin: 15px 0; flex-shrink: 0; }
 .exercise-display { width: 90%; overflow: hidden; flex-shrink: 0; }
 .marquee span { font-size: 2.2rem; font-weight: 700; color: #333; }
 .timer-display { font-size: 6rem; font-weight: 700; margin: 15px 0; flex-shrink: 0; }
 .controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; flex-shrink: 0; }
-#completedExercises {
-  width: 100%; flex-grow: 1; background: var(--bg-color); border-radius: var(--border-radius-main);
-  box-shadow: inset var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), inset calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-  padding: 15px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 10px;
-}
+#completedExercises { width: 100%; flex-grow: 1; background: var(--bg-color); border-radius: var(--border-radius-main); box-shadow: inset var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), inset calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); padding: 15px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .completed-exercise { font-size: 1rem; opacity: 0.6; }
-
-/* ======================================== */
-/* ========= МОДАЛЬНІ ВІКНА ТА ОВЕРЛЕЇ ========= */
-/* ======================================== */
-
-.modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2);
-  display: flex; justify-content: center; align-items: center; z-index: 1000;
-  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
-}
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
 .modal-overlay.active { opacity: 1; visibility: visible; }
-.modal-content {
-  width: 90%;
-  max-width: 400px;
-  padding: 25px;
-  border-radius: var(--border-radius-main);
-  position: relative;
-  opacity: 0; /* Робимо його прозорим за замовчуванням */
-  transform: scale(0.95); /* Трохи зменшуємо */
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Додаємо анімацію */
-}
-.modal-overlay.active .modal-content {
-  opacity: 1; /* Робимо видимим */
-  transform: scale(1); /* Повертаємо до нормального розміру */
-}
-
-.modal-overlay.active .modal-content { transform: scale(1); }
-.glassmorphism {
-  background: var(--glass-bg);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 var(--glass-shadow);
-}
+.modal-content { width: 90%; max-width: 400px; padding: 25px; border-radius: var(--border-radius-main); position: relative; opacity: 0; transform: scale(0.95); transition: opacity 0.2s ease-out, transform 0.2s ease-out; will-change: transform, opacity; }
+.modal-overlay.active .modal-content { opacity: 1; transform: scale(1); }
+.glassmorphism { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 var(--glass-shadow); }
 .modal-content h2 { text-align: center; margin-top: 0; }
 .close-button { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; color: var(--text-color); opacity: 0.7; cursor: pointer; }
 .modal-info p { margin-top: 0; margin-bottom: 10px; font-weight: 600; opacity: 0.8; }
 .modal-info ul { list-style: none; padding: 0; max-height: 150px; overflow-y: auto; text-align: center; font-size: 0.9rem; }
 .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-
-.start-btn {
-  flex-grow: 1; padding: 15px; border-radius: var(--border-radius-small);
-  font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-out;
-  background: var(--bg-color); color: var(--text-color); border: var(--border-soft);
-  box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
-}
-.start-btn:active {
-    box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
-    transform: scale(0.98);
-}
-@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+.start-btn { flex-grow: 1; padding: 15px; border-radius: var(--border-radius-small); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-out; background: var(--primary-color); color: white; border: none; }
+.start-btn:active { transform: scale(0.98); box-shadow: none; }
+@supports (background: rgba(0,0,0,0.1)) {
   .start-btn {
     background: rgba(50, 50, 50, 0.15); border: 1px solid rgba(80, 80, 80, 0.2);
-    color: var(--text-color);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.05);
+    color: var(--text-color); box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   }
   .start-btn:hover { background: rgba(70, 70, 70, 0.2); border-color: rgba(90, 90, 90, 0.3); }
-  .start-btn:active {
-    background: rgba(90, 90, 90, 0.25);
-    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.05);
-    transform: scale(0.99);
-  }
+  .start-btn:active { background: rgba(90, 90, 90, 0.25); box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.05); transform: scale(0.99); }
 }
-
 .settings-btn { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; opacity: 0.7; }
-
-.countdown-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 30, 30, 0.8);
-  display: flex; justify-content: center; align-items: center; z-index: 2000;
-  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
-}
+.countdown-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 30, 30, 0.8); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
 .countdown-overlay.active { opacity: 1; visibility: visible; }
 .countdown-number { font-size: 15rem; font-weight: 700; color: white; transform: scale(0.8); opacity: 0; animation: countdown-beat 1s infinite; }
-@keyframes countdown-beat {
-  0% { transform: scale(0.8); opacity: 0; }
-  50% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.1); opacity: 0; }
-}
-/* ======================================== */
-/* ========= СТИЛІ ЕЛЕМЕНТІВ МЕНЮ ========= */
-/* ======================================== */
-
-.setting-item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.setting-item label {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.setting-item input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--border-radius-small);
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-color);
-  font-family: var(--font-family);
-  font-size: 1rem;
-}
-
-.setting-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.menu-button {
-  flex-grow: 1;
-  padding: 12px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--primary-color);
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.menu-button.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-color);
-  border: 1px solid var(--glass-border);
-}
-/* ======================================== */
-/* ========= СТИЛІ БОКОВОГО МЕНЮ ========= */
-/* ======================================== */
-
-.side-menu {
-  position: fixed;
-  top: 0;
-  left: -100%; /* Починає за межами екрану */
-  width: 100%;
-  height: 100%;
-  z-index: 500;
-  transition: transform 0.4s ease-in-out;
-  transform: translateX(-100%); /* Покращена анімація */
-  display: flex;
-}
-
-.side-menu.open {
-  transform: translateX(0); /* Виїжджає на екран */
-}
-
-.glassmorphism-panel {
-  width: 85%;
-  max-width: 320px;
-  height: 100%;
-  padding: 20px;
-  padding-top: 60px; /* Відступ зверху для заголовка */
-  
-  /* Той самий ефект скла, що й у модалки */
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid var(--glass-border);
-  box-shadow: 10px 0px 30px var(--glass-shadow);
-
-  display: flex;
-  flex-direction: column;
-}
-
-.side-menu h3 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: var(--text-color);
-}
-
-/* Стилі для списків і посилань в меню */
-.menu-screen ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.menu-screen li a {
-  display: block;
-  padding: 15px;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: var(--text-color);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-small);
-  transition: background 0.2s ease;
-  font-weight: 600;
-}
-.menu-screen li a:active {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Ховаємо/показуємо екрани всередині меню */
-.menu-screen {
-  display: none;
-}
-.menu-screen.active {
-  display: block;
-}
+@keyframes countdown-beat { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.1); opacity: 0; } }
+.side-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 500; transform: translateX(-100%); transition: transform 0.4s ease-in-out; display: flex; }
+.side-menu.open { transform: translateX(0); }
+.glassmorphism-panel { width: 85%; max-width: 320px; height: 100%; padding: 20px; padding-top: 60px; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); box-shadow: 10px 0px 30px var(--glass-shadow); display: flex; flex-direction: column; }
+.side-menu h3 { text-align: center; margin-top: 0; margin-bottom: 20px; color: var(--text-color); }
+.menu-screen ul { list-style: none; padding: 0; margin: 0; }
+.menu-screen li a { display: block; padding: 15px; margin-bottom: 10px; text-decoration: none; color: var(--text-color); background: rgba(255, 255, 255, 0.1); border-radius: var(--border-radius-small); transition: background 0.2s ease; font-weight: 600; }
+.menu-screen li a:active { background: rgba(255, 255, 255, 0.2); }
+.menu-screen { display: none; }
+.menu-screen.active { display: block; }
+.setting-item { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.setting-item label { font-size: 0.9rem; opacity: 0.8; }
+.setting-item input[type="text"] { width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: var(--border-radius-small); background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-family: var(--font-family); font-size: 1rem; }
+.setting-actions { display: flex; gap: 10px; margin-top: 10px; }
+.menu-button { flex-grow: 1; padding: 12px; border: none; border-radius: var(--border-radius-small); background: var(--primary-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.menu-button.secondary { background: rgba(255, 255, 255, 0.1); color: var(--text-color); border: 1px solid var(--glass-border); }
