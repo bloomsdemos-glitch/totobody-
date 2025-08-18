@@ -231,59 +231,143 @@ document.addEventListener('DOMContentLoaded', () => {
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
   
-  // ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ =====
-  const workoutPrograms = {
-    "HIIT BASIC": {}, "HIIT ULTRA": {}, "HIIT PRO": {},
-    "MIXED BASIC": {}, "DUMBBELL": {}, "BODYWEIGHT": {}
-  };
-  function renderProgramList() {
-  if (!programListEl) return;
-  programListEl.innerHTML = '';
-// Нова функція для відкриття редактора
-function openProgramEditor(programName) {
-    // Ховаємо список програм і показуємо екран редагування
-    workoutSettingsMenu.classList.remove('active');
-    programEditMenu.classList.add('active');
+// ============================================
+// ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ (v2.0) =====
+// ============================================
 
-    // Змінюємо заголовок і показуємо кнопку "Назад"
-    menuTitle.textContent = `Редагування: ${programName}`;
-    menuBackBtn.style.display = 'block';
+// --- DOM елементи для редактора ---
+const programListEl = document.getElementById('program-list');
+const addNewProgramBtn = document.getElementById('addNewProgramBtn');
+const addProgramMenu = document.getElementById('addProgramMenu');
+const newProgramNameInput = document.getElementById('newProgramNameInput');
+const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
+const programEditMenu = document.getElementById('programEditMenu');
+const programNameInput = document.getElementById('programNameInput');
+const saveProgramBtn = document.getElementById('saveProgramBtn');
+const deleteProgramBtn = document.getElementById('deleteProgramBtn');
 
-    // Заповнюємо поле з назвою програми
-    programNameInput.value = programName;
+let workoutPrograms = {}; // Тепер це буде наш головний об'єкт з програмами
+let currentlyEditing = null; // Змінна для збереження назви програми, яку редагуємо
 
-    // Тут в майбутньому буде код для відображення списку вправ
+// --- Функції для роботи з localStorage ---
+function loadPrograms() {
+  const savedPrograms = localStorage.getItem('workoutPrograms');
+  if (savedPrograms) {
+    workoutPrograms = JSON.parse(savedPrograms);
+  } else {
+    // Якщо в "сейфі" нічого немає, створюємо стандартний набір
+    workoutPrograms = {
+      "HIIT BASIC": { exercises: [] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] },
+      "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] }
+    };
+  }
 }
 
+function savePrograms() {
+  localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms));
+}
+
+// --- Відображення списку програм ---
+function renderProgramList() {
+  if (!programListEl) return;
+  programListEl.innerHTML = '';
+  
   for (const programName in workoutPrograms) {
       const li = document.createElement('li');
       li.className = 'program-list-item';
       li.dataset.programName = programName;
       li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`;
-
-      // ОНОВЛЕНО: Тепер клік відкриває екран редагування
-      li.addEventListener('click', () => {
-          openProgramEditor(programName);
-      });
-
+      li.addEventListener('click', () => { openProgramEditor(programName); });
       programListEl.appendChild(li);
   }
 }
 
-  renderProgramList();
-  // Додано обробник для кнопки "Додати нову програму"
-  // Обробник для кнопки "Додати нову програму"
+// --- Відкриття редактора для конкретної програми ---
+function openProgramEditor(programName) {
+    currentlyEditing = programName; // Запам'ятовуємо, що ми редагуємо
+    workoutSettingsMenu.classList.remove('active');
+    programEditMenu.classList.add('active');
+    menuTitle.textContent = `Редагування`;
+    programNameInput.value = programName;
+    // Тут буде код для відображення списку вправ
+}
+
+// --- Обробники подій ---
 if (addNewProgramBtn) {
   addNewProgramBtn.addEventListener('click', () => {
-    // Ховаємо список програм і показуємо екран додавання
     workoutSettingsMenu.classList.remove('active');
     addProgramMenu.classList.add('active');
-
-    // Змінюємо заголовок і показуємо кнопку "Назад"
     menuTitle.textContent = 'Нова програма';
     menuBackBtn.style.display = 'block';
   });
 }
+
+if (saveNewProgramBtn) {
+    saveNewProgramBtn.addEventListener('click', () => {
+        const newName = newProgramNameInput.value.trim();
+        if (newName && !workoutPrograms[newName]) { // Перевіряємо, чи назва не пуста і не дублюється
+            workoutPrograms[newName] = { exercises: [] };
+            savePrograms();
+            renderProgramList();
+            
+            addProgramMenu.classList.remove('active');
+            workoutSettingsMenu.classList.add('active');
+            menuTitle.textContent = 'Налаштування тренувань';
+            newProgramNameInput.value = '';
+        } else {
+            alert('Будь ласка, введи унікальну назву програми.');
+        }
+    });
+}
+
+if (saveProgramBtn) {
+  saveProgramBtn.addEventListener('click', () => {
+    const newName = programNameInput.value.trim();
+    if (newName && currentlyEditing) {
+      // Перейменовуємо програму
+      if (newName !== currentlyEditing) {
+        // Перевірка на дублікат
+        if (workoutPrograms[newName]) {
+          alert('Програма з такою назвою вже існує!');
+          return;
+        }
+        // Створюємо новий запис і копіюємо дані
+        workoutPrograms[newName] = workoutPrograms[currentlyEditing];
+        // Видаляємо старий запис
+        delete workoutPrograms[currentlyEditing];
+      }
+      // Тут буде збереження інших змін (списку вправ)
+      
+      savePrograms();
+      renderProgramList();
+      alert(`Програму "${newName}" збережено!`);
+      
+      // Повертаємось до списку
+      programEditMenu.classList.remove('active');
+      workoutSettingsMenu.classList.add('active');
+      menuTitle.textContent = 'Налаштування тренувань';
+    }
+  });
+}
+
+if (deleteProgramBtn) {
+  deleteProgramBtn.addEventListener('click', () => {
+    if (currentlyEditing && confirm(`Ви впевнені, що хочете видалити програму "${currentlyEditing}"?`)) {
+        delete workoutPrograms[currentlyEditing];
+        savePrograms();
+        renderProgramList();
+        
+        programEditMenu.classList.remove('active');
+        workoutSettingsMenu.classList.add('active');
+        menuTitle.textContent = 'Налаштування тренувань';
+    }
+  });
+}
+
+// --- Перший запуск ---
+loadPrograms(); // Завантажуємо програми з "сейфу"
+renderProgramList(); // Відображаємо їх
+
 
 // Обробник для кнопки "Зберегти" на екрані додавання
 if (saveNewProgramBtn) {
