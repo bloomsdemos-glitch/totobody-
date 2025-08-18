@@ -28,6 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const countdownScreen = document.getElementById('countdownScreen');
   const countdownNumberEl = document.getElementById('countdownNumber');
 
+  // НОВИЙ БЛОК: DOM елементи для меню
+  // --- Menu screens ---
+  const menuBackBtn = document.getElementById('menuBackBtn');
+  const menuTitle = document.getElementById('menuTitle');
+  const mainMenu = document.getElementById('mainMenu');
+  const workoutSettingsMenu = document.getElementById('workoutSettingsMenu');
+  const statsSettingsMenu = document.getElementById('statsSettingsMenu');
+  const goalSettingsMenu = document.getElementById('goalSettingsMenu');
+  const appSettingsMenu = document.getElementById('appSettingsMenu');
+
   // ===== Навігація =====
   function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
@@ -39,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (screenId === 'trainingScreen') {
         burgerBtn.style.display = 'none';
       } else {
-        burgerBtn.style.display = 'flex'; // Використовуємо flex для сумісності з neumorphic-icon-btn
+        burgerBtn.style.display = 'flex';
       }
     }
   }
@@ -192,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tile.addEventListener('click', () => {
       const programName = tile.dataset.program;
       if (programName) {
-        openWorkoutModal(programName);
+        setTimeout(() => { openWorkoutModal(programName); }, 150);
       }
     });
   });
@@ -201,12 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
   if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
-    // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
   const bgUrlInput = document.getElementById('bgUrlInput');
   const saveBgBtn = document.getElementById('saveBgBtn');
   const resetBgBtn = document.getElementById('resetBgBtn');
 
-  // Функція, яка застосовує фон
   function applyBackground(url) {
     document.body.style.backgroundImage = `url('${url}')`;
     document.body.style.backgroundSize = 'cover';
@@ -214,7 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.backgroundAttachment = 'fixed';
   }
 
-  // Зберігаємо фон
   if (saveBgBtn) {
     saveBgBtn.addEventListener('click', () => {
       const bgUrl = bgUrlInput.value.trim();
@@ -228,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Скидаємо фон
   if (resetBgBtn) {
     resetBgBtn.addEventListener('click', () => {
       localStorage.removeItem('customBackground');
@@ -237,13 +244,44 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Фон скинуто до стандартного.');
     });
   }
-
-  // При завантаженні сторінки перевіряємо, чи є збережений фон
+  
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
-    bgUrlInput.value = savedBg; // Показуємо збережений URL в полі
+    if(bgUrlInput) bgUrlInput.value = savedBg;
   }
+  
+  // НОВИЙ БЛОК: Логіка бокового меню
+  if (burgerBtn && sideMenu) {
+      burgerBtn.addEventListener('click', () => {
+        sideMenu.classList.toggle('open');
+      });
+
+      const menuLinks = mainMenu.querySelectorAll('a');
+      const menuScreens = sideMenu.querySelectorAll('.menu-screen');
+
+      menuLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.dataset.target;
+          const targetScreen = document.getElementById(targetId);
+          
+          if (targetScreen) {
+            menuScreens.forEach(s => s.classList.remove('active'));
+            targetScreen.classList.add('active');
+            menuTitle.textContent = link.textContent;
+            menuBackBtn.style.display = 'block';
+          }
+        });
+      });
+
+      menuBackBtn.addEventListener('click', () => {
+        menuScreens.forEach(s => s.classList.remove('active'));
+        mainMenu.classList.add('active');
+        menuTitle.textContent = 'Меню';
+        menuBackBtn.style.display = 'none';
+      });
+    }
 
   showScreen('homeScreen');
 });
