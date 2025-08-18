@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeScreen = document.getElementById('homeScreen');
   const programListEl = document.getElementById('program-list');
   const addNewProgramBtn = document.getElementById('addNewProgramBtn'); // <-- Додав кнопку
+  const addProgramMenu = document.getElementById('addProgramMenu');
+  const newProgramNameInput = document.getElementById('newProgramNameInput');
+  const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
 
   // ===== Навігація =====
   function showScreen(screenId) {
@@ -246,11 +249,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   renderProgramList();
   // Додано обробник для кнопки "Додати нову програму"
-  if (addNewProgramBtn) {
-    addNewProgramBtn.addEventListener('click', () => {
-      alert('Скоро тут можна буде додати нову програму!');
+  // Обробник для кнопки "Додати нову програму"
+if (addNewProgramBtn) {
+  addNewProgramBtn.addEventListener('click', () => {
+    // Ховаємо список програм і показуємо екран додавання
+    workoutSettingsMenu.classList.remove('active');
+    addProgramMenu.classList.add('active');
+
+    // Змінюємо заголовок і показуємо кнопку "Назад"
+    menuTitle.textContent = 'Нова програма';
+    menuBackBtn.style.display = 'block';
+  });
+}
+
+// Обробник для кнопки "Зберегти" на екрані додавання
+if (saveNewProgramBtn) {
+    saveNewProgramBtn.addEventListener('click', () => {
+        const newName = newProgramNameInput.value.trim();
+        if (newName) {
+            // Додаємо нову програму в наш об'єкт
+            workoutPrograms[newName] = {};
+            // Оновлюємо список програм на екрані
+            renderProgramList();
+
+            // Повертаємось до списку програм
+            addProgramMenu.classList.remove('active');
+            workoutSettingsMenu.classList.add('active');
+            menuTitle.textContent = 'Налаштування тренувань';
+
+            // Очищуємо поле вводу
+            newProgramNameInput.value = '';
+        } else {
+            alert('Будь ласка, введи назву програми.');
+        }
     });
-  }
+}
+
   
   // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
