@@ -92,3 +92,43 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .setting-actions { display: flex; gap: 10px; margin-top: 10px; }
 .menu-button { flex-grow: 1; padding: 12px; border: none; border-radius: var(--border-radius-small); background: var(--primary-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
 .menu-button.secondary { background: rgba(255, 255, 255, 0.1); color: var(--text-color); border: 1px solid var(--glass-border); }
+/* ======================================== */
+/* ========= ВЕЛИКЕ ВІЗУАЛЬНЕ ОНОВЛЕННЯ ========= */
+/* ======================================== */
+
+/* 1. Робимо хедер і футер "скляними" */
+.app-header,
+.goal-bar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px var(--glass-shadow);
+}
+.goal-bar {
+    border-bottom: none; /* У футера нижня рамка не потрібна */
+    border-top: 1px solid var(--glass-border);
+}
+
+/* 2. Заокруглюємо кути меню в стилі iOS */
+.glassmorphism-panel {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* 3. Робимо кнопку "Назад" в меню красивішою */
+.back-btn {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* 4. Вирівнюємо список вправ в модалці по лівому краю */
+#modalExerciseList {
+    text-align: left;
+    padding-left: 20px; /* Додаємо невеликий відступ */
+    list-style-type: disc; /* Повертаємо крапочки для списку */
+}
+
+#modalExerciseList li {
+    margin-bottom: 5px;
+}
