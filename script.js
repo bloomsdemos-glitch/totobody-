@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ===== "ЧАРІВНИЙ" РЯДОК ДЛЯ SAFARI =====
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
+  // ===== DOM елементи =====
   const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
   const modalProgramNameEl = document.getElementById('modalProgramName');
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetBgBtn = document.getElementById('resetBgBtn');
   const homeScreen = document.getElementById('homeScreen');
 
+  // ===== Навігація =====
   function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
@@ -52,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ===== Дата і час =====
   if (datetimeDisplayEl) {
     function updateDateTime() {
       const now = new Date();
@@ -68,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateDateTime, 1000);
   }
 
+  // ===== Логіка тренувань =====
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
@@ -148,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('trainingScreen');
   }
 
+  // ===== Обробники Подій =====
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
@@ -184,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
   if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ =====
   function applyBackground(url) {
     document.body.style.backgroundImage = `url('${url}')`;
     document.body.style.backgroundSize = 'cover';
@@ -214,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
   
+  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
       burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
