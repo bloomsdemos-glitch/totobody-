@@ -792,3 +792,27 @@ h2 {
   opacity: 1;
   background: rgba(255, 255, 255, 0.2);
 }
+/* --- Стилі для кнопок редактора вправ --- */
+.exercise-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid var(--glass-border);
+}
+.exercise-list-item:last-child {
+  border-bottom: none;
+}
+.exercise-item-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 10px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+.exercise-item-actions button:hover {
+  opacity: 1;
+}
