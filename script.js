@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     timerEl.textContent = formatTime(remainingTime);
     pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
-    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} ✓</div>`).join('');
+    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} </div>`).join('');
     completedListEl.innerHTML = completedHTML;
   }
   function tick() {
