@@ -138,6 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
   
+  // --- АУДІО-ДВИГУН ---
+  function playCurrentExerciseSound() {
+    const currentExercise = exercises[currentIndex];
+    if (currentExercise && currentExercise.audio) {
+      const audioPath = `audio/${currentExercise.audio}`;
+      const exerciseSound = new Audio(audioPath);
+      exerciseSound.play().catch(error => console.error(`Помилка відтворення аудіо: ${audioPath}`, error));
+    }
+  }
+
   function updateUI() {
     const currentExercise = exercises[currentIndex];
     if (currentExercise) {
@@ -157,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentIndex < exercises.length - 1) {
         currentIndex++;
         remainingTime = exercises[currentIndex].duration || 30;
+        playCurrentExerciseSound(); // ВІДТВОРЕННЯ
       } else { 
         finishWorkout(); 
         return; 
@@ -217,14 +228,15 @@ document.addEventListener('DOMContentLoaded', () => {
     isPaused = false;
     updateUI();
     startTimer();
+    playCurrentExerciseSound(); // ВІДТВОРЕННЯ (для першої вправи)
     showScreen('trainingScreen');
   }
 
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
 
   function openWorkoutModal(programName) {
     const previewExercises = buildWorkout(programName);
@@ -521,7 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
              sideMenu.classList.remove('open');
-             menuBackBtn.style.display = 'none';
+             setTimeout(() => {
+                menuBackBtn.style.display = 'none';
+             }, 300);
         }
       });
   }
