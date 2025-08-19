@@ -140,7 +140,24 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUI();
   }
   function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
-  function finishWorkout() { clearInterval(timerInterval); isStarted = false; isPaused = true; alert('Тренування завершено! 💪'); showScreen('homeScreen'); }
+  function finishWorkout() {
+  clearInterval(timerInterval);
+  isStarted = false;
+  isPaused = true;
+
+  // Показуємо нове вікно з результатами
+  if (finishModal) {
+    finishModal.classList.add('active');
+  }
+  // Очищуємо поля
+  if (caloriesInput) caloriesInput.value = '';
+  if (difficultySlider) difficultySlider.value = 3;
+  // Скидаємо зірочки
+  if (starRating) {
+    starRating.querySelectorAll('span').forEach(star => star.classList.remove('active'));
+  }
+}
+
   function confirmExitTraining() { if (!isStarted) { showScreen('homeScreen'); return; } if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); } }
   function startWorkout(programName) {
     let count = 3;
