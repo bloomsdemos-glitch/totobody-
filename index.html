@@ -109,7 +109,30 @@
 
   <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn">⚙️</button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
   <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
-  <div id="exerciseModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="exerciseModalTitle">Нова вправа</h2><div class="setting-item"><label for="exerciseNameInput">Назва вправи:</label><input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі..."></div><div class="setting-item"><label for="exerciseDurationInput">Тривалість (в секундах):</label><input type="number" id="exerciseDurationInput" value="30"></div><div class="setting-actions"><button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button></div></div></div>
+  <div id="exerciseModal" class="modal-overlay">
+    <div class="modal-content glassmorphism">
+      <button class="close-button">&times;</button>
+      <h2 id="exerciseModalTitle">Нова вправа</h2>
+      <div class="setting-item">
+        <label for="exerciseNameInput">Назва вправи:</label>
+        <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
+      </div>
+      <div class="setting-item">
+        <label for="exerciseDurationInput">Тривалість (в секундах):</label>
+        <input type="number" id="exerciseDurationInput" value="30">
+      </div>
+      
+      <div class="setting-item">
+        <label for="exerciseAudioInput">Назва аудіофайлу (напр., burpee.mp3):</label>
+        <input type="text" id="exerciseAudioInput" placeholder="Введи точну назву файлу...">
+      </div>
+      
+      <div class="setting-actions">
+        <button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button>
+      </div>
+    </div>
+  </div>
+
   
   <div id="finishModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
