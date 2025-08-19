@@ -1,159 +1,230 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TOTOBODY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
-</head>
-<body>
+document.addEventListener('DOMContentLoaded', () => {
+  // ===== "ЧАРІВНИЙ" РЯДОК ДЛЯ SAFARI =====
+  document.body.addEventListener('touchstart', () => {}, {passive: true});
 
-  <header class="app-header">
-    <button id="burgerBtn" class="icon-button neumorphic-icon-btn">☰</button>
-    <div class="title-container">
-      <h1>TOTOBODY ©</h1>
-      <p id="datetime-display" class="datetime"></p>
-    </div>
-    <div class="header-placeholder"></div>
-  </header>
+  // ===== DOM елементи =====
+  const screens = document.querySelectorAll('.screen');
+  const workoutModal = document.getElementById('workoutModal');
+  const modalProgramNameEl = document.getElementById('modalProgramName');
+  const modalExerciseListEl = document.getElementById('modalExerciseList');
+  const modalStartBtn = document.getElementById('modalStartBtn');
+  const modalSettingsBtn = document.getElementById('modalSettingsBtn');
+  const closeModalBtn = workoutModal.querySelector('.close-button');
+  const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
+  const burgerBtn = document.getElementById('burgerBtn');
+  const sideMenu = document.getElementById('sideMenu');
+  const restDayBtn = document.getElementById('restDayBtn');
+  const datetimeDisplayEl = document.getElementById('datetime-display');
+  const trainingScreen = document.getElementById('trainingScreen');
+  const trainingBackBtn = document.getElementById('trainingBackBtn');
+  const trainingProgramNameEl = document.getElementById('trainingProgramName');
+  const exerciseNameEl = document.getElementById('exerciseName');
+  const timerEl = document.getElementById('timer');
+  const prevBtn = document.getElementById('prevExercise');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const nextBtn = document.getElementById('nextExercise');
+  const completedListEl = document.getElementById('completedExercises');
+  const countdownScreen = document.getElementById('countdownScreen');
+  const countdownNumberEl = document.getElementById('countdownNumber');
+  // --- Menu elements ---
+  const menuBackBtn = document.getElementById('menuBackBtn');
+  const menuTitle = document.getElementById('menuTitle');
+  const mainMenu = document.getElementById('mainMenu');
+  const workoutSettingsMenu = document.getElementById('workoutSettingsMenu');
+  const statsSettingsMenu = document.getElementById('statsSettingsMenu');
+  const goalSettingsMenu = document.getElementById('goalSettingsMenu');
+  const appSettingsMenu = document.getElementById('appSettingsMenu');
+  const calendarMenu = document.getElementById('calendarMenu');
+  const historyMenu = document.getElementById('historyMenu');
+  const bgUrlInput = document.getElementById('bgUrlInput');
+  const saveBgBtn = document.getElementById('saveBgBtn');
+  const resetBgBtn = document.getElementById('resetBgBtn');
+  const homeScreen = document.getElementById('homeScreen');
+  // --- Workout Settings Elements ---
+  const programListEl = document.getElementById('program-list');
+  const addNewProgramBtn = document.getElementById('addNewProgramBtn');
+  const addProgramMenu = document.getElementById('addProgramMenu');
+  const newProgramNameInput = document.getElementById('newProgramNameInput');
+  const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
+  const programEditMenu = document.getElementById('programEditMenu');
+  const programNameInput = document.getElementById('programNameInput');
+  const exerciseListEl = document.getElementById('exercise-list');
+  const addExerciseBtn = document.getElementById('addExerciseBtn');
+  const saveProgramBtn = document.getElementById('saveProgramBtn');
+  const deleteProgramBtn = document.getElementById('deleteProgramBtn');
+  // --- Exercise Modal Elements ---
+  const exerciseModal = document.getElementById('exerciseModal');
+  const exerciseModalTitle = document.getElementById('exerciseModalTitle');
+  const exerciseNameInput = document.getElementById('exerciseNameInput');
+  const exerciseDurationInput = document.getElementById('exerciseDurationInput');
+  const saveExerciseBtn = document.getElementById('saveExerciseBtn');
+  const closeExerciseModalBtn = exerciseModal.querySelector('.close-button');
+  // --- Finish Modal Elements ---
+  const finishModal = document.getElementById('finishModal');
+  const caloriesInput = document.getElementById('caloriesInput');
+  const difficultySlider = document.getElementById('difficultySlider');
+  const sliderEmojiBubble = document.getElementById('sliderEmojiBubble');
+  const energyRating = document.getElementById('energyRating');
+  const starRating = document.getElementById('starRating');
+  const saveWorkoutLogBtn = document.getElementById('saveWorkoutLogBtn');
+
+  // ===== Навігація =====
+  function showScreen(screenId) { /* ... тіло функції без змін ... */ }
+  // ===== Дата і час =====
+  if (datetimeDisplayEl) { /* ... тіло функції без змін ... */ }
+  // ===== Логіка тренувань (основна) =====
+  const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
+  const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
+  const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
+  function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+  function buildWorkout(programName) { /* ... тіло функції без змін ... */ }
+
+  let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
   
-  <div id="sideMenu" class="side-menu">
-      <div class="menu-overlay-close"></div>
-      <div class="glassmorphism-panel">
-        <button class="back-btn" id="menuBackBtn"></button>
-        <h3 id="menuTitle">Меню</h3>
-        <div id="mainMenu" class="menu-screen active">
-          <ul>
-            <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань</a></li>
-            <li><a href="#" data-target="statsSettingsMenu">Статистика</a></li>
-            <li><a href="#" data-target="goalSettingsMenu">Мета</a></li>
-            <li><a href="#" data-target="appSettingsMenu">Налаштування додатку</a></li>
-            <li><a href="#" data-target="calendarMenu">Календар</a></li>
-            <li><a href="#" data-target="historyMenu">Історія тренувань</a></li>
-          </ul>
-        </div>
-        <div id="workoutSettingsMenu" class="menu-screen"><ul id="program-list" class="program-list"></ul><button id="addNewProgramBtn" class="menu-button">Додати нову програму</button></div>
-        <div id="programEditMenu" class="menu-screen">
-          <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
-          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"><li>(Поки що порожньо)</li></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
-          <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
-        </div>
-        <div id="statsSettingsMenu" class="menu-screen"><p>Тут будуть налаштування статистики.</p></div>
-        <div id="goalSettingsMenu" class="menu-screen"><p>Тут будуть налаштування мети.</p></div>
-        <div id="appSettingsMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="bgUrlInput">URL фонового зображення:</label><input type="text" id="bgUrlInput" placeholder="Встав сюди посилання...">
-            <div class="setting-actions"><button id="saveBgBtn" class="menu-button">Зберегти</button><button id="resetBgBtn" class="menu-button secondary">Скинути</button></div>
-          </div>
-        </div>
-        <div id="calendarMenu" class="menu-screen"><p>Тут буде твій календар тренувань.</p></div>
-        <div id="historyMenu" class="menu-screen"><p>Тут буде архів твоїх тренувань.</p></div>
-        <div id="addProgramMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="newProgramNameInput">Назва нової програми:</label><input type="text" id="newProgramNameInput" placeholder="Наприклад, HIIT ULTIMATE...">
-            <div class="setting-actions"><button id="saveNewProgramBtn" class="menu-button">Зберегти</button></div>
-          </div>
-        </div>
-      </div>
-  </div>
-
-  <main id="homeScreen" class="screen active">
-    <section class="carousel-section">
-      <h2>HIIT</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="HIIT BASIC"><div class="tile-icon">🤸‍♂️</div><div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT ULTRA"><div class="tile-icon">🔥</div><div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT PRO"><div class="tile-icon">🏆</div><div class="tile-label"><strong>HIIT PRO</strong></div></button>
-        <button class="neumorphic-tile add-new" data-action="add-program"><div class="tile-icon">+</div><div class="tile-label"><strong>Нова</strong><span>програма</span></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-      <h2>Різне</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="MIXED BASIC"><div class="tile-icon">💪</div><div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="DUMBBELL"><div class="tile-icon">🏋️‍♂️</div><div class="tile-label"><strong>ГАНТЕЛЬ</strong></div></button>
-        <button class="neumorphic-tile" data-program="BODYWEIGHT"><div class="tile-icon">🧘‍♂️</div><div class="tile-label"><strong>ФІЗИЧНЕ</strong></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-        <h2>Інструменти</h2>
-        <div class="carousel-track">
-          <button class="neumorphic-tile" data-action="show-dance"><div class="tile-icon">🕺</div><div class="tile-label"><strong>DANCE</strong></div></button>
-          <button class="neumorphic-tile" data-action="show-stats"><div class="tile-icon">📊</div><div class="tile-label"><strong>STATS</strong></div></button>
-          <button class="neumorphic-tile" data-action="show-calendar"><div class="tile-icon">🗓️</div><div class="tile-label"><strong>КАЛЕНДАР</strong></div></button>
-        </div>
-    </section>
-    <button id="restDayBtn" class="fab" data-action="add-rest-day"></button>
-    <div id="goalProgress" class="goal-bar">
-        <span>Мета: Схуднути до 65 кг</span>
-        <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
-    </div>
-  </main>
+  function formatTime(seconds) { /* ... тіло функції без змін ... */ }
+  function updateUI() { /* ... тіло функції без змін ... */ }
+  function tick() { /* ... тіло функції без змін ... */ }
+  function startTimer() { /* ... тіло функції без змін ... */ }
   
-  <div id="trainingScreen" class="screen">
-    <button id="trainingBackBtn" class="back-button">← Назад</button>
-    <h2 id="trainingProgramName">HIIT BASIC</h2>
-    <div class="exercise-display"><div class="marquee"><span id="exerciseName">Присідання</span></div></div>
-    <div id="timer" class="timer-display">00:30</div>
-    <div class="controls">
-      <button id="prevExercise" class="icon-button">⤴️</button>
-      <button id="pauseBtn" class="icon-button pause-button">⏸️</button>
-      <button id="stopBtn" class="icon-button">⏹️</button>
-      <button id="nextExercise" class="icon-button">⤵️</button>
-    </div>
-    <div id="completedExercises"></div>
-  </div>
+  function finishWorkout() {
+    clearInterval(timerInterval);
+    isStarted = false;
+    isPaused = true;
+    
+    if (finishModal) {
+      // Скидання стану вікна до початкового
+      caloriesInput.value = '';
+      difficultySlider.value = 3;
+      updateSliderEmoji(); // Оновлюємо емодзі
+      starRating.querySelectorAll('span').forEach(s => s.classList.remove('active'));
+      energyRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
+      energyRating.querySelector('[data-value="5"]').classList.add('active'); // Встановлюємо дефолтне значення
 
-  <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn">⚙️</button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
-  <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
-  <div id="exerciseModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="exerciseModalTitle">Нова вправа</h2><div class="setting-item"><label for="exerciseNameInput">Назва вправи:</label><input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі..."></div><div class="setting-item"><label for="exerciseDurationInput">Тривалість (в секундах):</label><input type="number" id="exerciseDurationInput" value="30"></div><div class="setting-actions"><button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button></div></div></div>
-  <div id="finishModal" class="modal-overlay"><div class="modal-content glassmorphism">
-  <h2 id="finishModalTitle">Чудова робота!</h2>
+      finishModal.classList.add('active');
+    } else {
+      alert('Тренування завершено! 💪');
+      showScreen('homeScreen');
+    }
+  }
 
-  <div class="setting-item">
-    <label for="caloriesInput">Спалені калорії:</label>
-    <input type="number" id="caloriesInput" placeholder="Введи з фітнес-трекера...">
-  </div>
+  function confirmExitTraining() { /* ... тіло функції без змін ... */ }
+  function startWorkout(programName) { /* ... тіло функції без змін ... */ }
+  function _actuallyStartWorkout(programName) { /* ... тіло функції без змін ... */ }
 
-  <div class="setting-item">
-    <label for="difficultySlider">Наскільки було складно?</label>
-    <div class="difficulty-slider-container">
-      <div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div>
-      <input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider">
-    </div>
-  </div>
+  // ===== Обробники Подій =====
+  if (pauseBtn) { /* ... */ }
+  if (stopBtn) { /* ... */ }
+  if (trainingBackBtn) { /* ... */ }
+  if (nextBtn) { /* ... */ }
+  if (prevBtn) { /* ... */ }
 
-  <div class="setting-item">
-    <label>Рівень енергії:</label>
-    <div id="energyRating" class="emoji-rating">
-      <span data-value="0">😵‍💫</span>
-      <span data-value="1">🥱</span>
-      <span data-value="2">🫤</span>
-      <span data-value="3">👌🏻</span>
-      <span data-value="4">⚡️</span>
-      <span data-value="5" class="active">🔥</span>
-    </div>
-  </div>
+  // ===== Логіка Модального Вікна =====
+  function openWorkoutModal(programName) { /* ... */ }
+  workoutTiles.forEach(tile => { /* ... */ });
+  if(closeModalBtn) { /* ... */ }
+  if(workoutModal) { /* ... */ }
+  if(modalSettingsBtn) { /* ... */ }
+  
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ДОДАТКУ (ФОН) =====
+  function applyBackground(url) { /* ... */ }
+  if (saveBgBtn) { /* ... */ }
+  if (resetBgBtn) { /* ... */ }
+  
+  // ===== ЛОГІКА НАЛАШТУВАНЬ ТРЕНУВАНЬ =====
+  let workoutPrograms = {}; 
+  let currentlyEditing = null; 
+  function loadPrograms() { /* ... */ }
+  function savePrograms() { /* ... */ }
+  function renderProgramList() { /* ... */ }
+  function renderExerciseList(programName) { /* ... */ }
+  function openProgramEditor(programName) { /* ... */ }
+  if (addNewProgramBtn) { /* ... */ }
+  if (saveNewProgramBtn) { /* ... */ }
+  if (saveProgramBtn) { /* ... */ }
+  if (deleteProgramBtn) { /* ... */ }
+  if (addExerciseBtn) { /* ... */ }
+  if (saveExerciseBtn) { /* ... */ }
+  if (closeExerciseModalBtn) { /* ... */ }
 
-  <div class="setting-item">
-    <label>Твоя оцінка тренування:</label>
-    <div id="starRating" class="star-rating">
-      <span data-value="1">★</span>
-      <span data-value="2">★</span>
-      <span data-value="3">★</span>
-      <span data-value="4">★</span>
-      <span data-value="5">★</span>
-    </div>
-  </div>
+  // ===== ЛОГІКА МОДАЛКИ ПІСЛЯ ТРЕНУВАННЯ =====
+  const difficultyEmojis = ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'];
+  
+  function updateSliderEmoji() {
+    if (!difficultySlider || !sliderEmojiBubble) return;
+    const value = difficultySlider.value;
+    const min = difficultySlider.min;
+    const max = difficultySlider.max;
+    const percent = (value - min) / (max - min);
+    const thumbWidth = 26; // Ширина повзунка
+    const trackWidth = difficultySlider.offsetWidth;
+    const offset = (thumbWidth / 2) - (trackWidth * percent);
+    
+    sliderEmojiBubble.style.left = `calc(${percent * 100}% - ${offset}px)`;
+    sliderEmojiBubble.textContent = difficultyEmojis[value - 1];
+  }
 
-  <div class="setting-actions">
-      <button id="saveWorkoutLogBtn" class="menu-button">Зберегти результат</button>
-  </div>
-</div>
+  if (difficultySlider) {
+    difficultySlider.addEventListener('input', updateSliderEmoji);
+  }
 
-  <script src="script.js?v=9"></script>
-</body>
-</html>
+  function setupEmojiRating(container) {
+    if (!container) return;
+    const emojis = container.querySelectorAll('span');
+    emojis.forEach(emoji => {
+      emoji.addEventListener('click', () => {
+        emojis.forEach(e => e.classList.remove('active'));
+        emoji.classList.add('active');
+      });
+    });
+  }
+
+  setupEmojiRating(energyRating);
+
+  if (starRating) {
+    const stars = starRating.querySelectorAll('span');
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const currentRating = star.dataset.value;
+        stars.forEach(s => {
+          s.classList.toggle('active', s.dataset.value <= currentRating);
+        });
+      });
+    });
+  }
+
+  if (saveWorkoutLogBtn) {
+    saveWorkoutLogBtn.addEventListener('click', () => {
+      const calories = parseInt(caloriesInput.value, 10) || 0;
+      const difficulty = parseInt(difficultySlider.value, 10);
+      const activeEnergyEl = energyRating.querySelector('span.active');
+      const energy = activeEnergyEl ? parseInt(activeEnergyEl.dataset.value, 10) : 5;
+      const rating = starRating.querySelectorAll('span.active').length;
+      
+      const workoutLog = {
+        date: new Date().toISOString(), program: currentProgram,
+        calories, difficulty, energy, rating,
+        exercises: exercises.slice(0, -1)
+      };
+      
+      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+      history.push(workoutLog);
+      localStorage.setItem('workoutHistory', JSON.stringify(history));
+      alert('Результат збережено! Красунчик!');
+      
+      finishModal.classList.remove('active');
+      showScreen('homeScreen');
+    });
+  }
+  
+  // ===== ЛОГІКА БОКОВОГО МЕНЮ =====
+  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) { /* ... */ }
+  
+  // ===== Ініціалізація =====
+  loadPrograms(); 
+  renderProgramList();
+  const savedBg = localStorage.getItem('customBackground');
+  if (savedBg) { /* ... */ }
+  updateSliderEmoji(); // Викликаємо, щоб встановити емодзі при завантаженні
+  showScreen('homeScreen');
+});
