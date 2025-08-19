@@ -703,14 +703,16 @@ h2 {
 }
 .slider-emoji-bubble {
   position: absolute;
-  top: 0;
+  top: -5px; /* Трохи піднімемо, щоб було над бігунком */
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.8rem;
-  transition: left 0.1s linear;
+  font-size: 2rem; /* Трохи збільшимо для кращої видимості */
+  transition: left 0.1s linear, opacity 0.1s ease; /* Додамо transition для opacity */
   opacity: 0;
   pointer-events: none;
+  z-index: 5; /* ОСЬ І РІШЕННЯ: ставимо його на шар вище */
 }
+
 .difficulty-slider-container:focus-within .slider-emoji-bubble,
 .difficulty-slider-container:active .slider-emoji-bubble {
   opacity: 1;
