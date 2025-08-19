@@ -7,12 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 
   <header class="app-header">
-    <button id="burgerBtn" class="icon-button neumorphic-icon-btn">☰</button>
+    <button id="burgerBtn" class="icon-button neumorphic-icon-btn"><i class="bi bi-list"></i></button>
     <div class="title-container">
       <h1>TOTOBODY ©</h1>
       <p id="datetime-display" class="datetime"></p>
@@ -38,7 +39,7 @@
         <div id="workoutSettingsMenu" class="menu-screen"><ul id="program-list" class="program-list"></ul><button id="addNewProgramBtn" class="menu-button">Додати нову програму</button></div>
         <div id="programEditMenu" class="menu-screen">
           <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
-          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"><li>(Поки що порожньо)</li></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
+          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
           <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
         </div>
         <div id="statsSettingsMenu" class="menu-screen"><p>Тут будуть налаштування статистики.</p></div>
@@ -107,7 +108,7 @@
     <div id="completedExercises"></div>
   </div>
 
-  <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn">⚙️</button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
+  <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-gear-fill"></i></button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
   <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
   <div id="exerciseModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
@@ -118,8 +119,8 @@
         <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
       </div>
       <div class="setting-item">
-        <label for="exerciseDurationInput">Тривалість (в секундах):</label>
-        <input type="number" id="exerciseDurationInput" value="30">
+        <label for="exerciseDurationInput">Тривалість (хх:сс):</label>
+        <input type="text" id="exerciseDurationInput" placeholder="00:45">
       </div>
       
       <div class="setting-item">
@@ -162,6 +163,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=13"></script>
+  <script src="script.js?v=14"></script>
 </body>
 </html>
