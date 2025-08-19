@@ -1,12 +1,64 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
-  // --- DOM-елементи ---
-  // ... (всі твої старі const залишаються тут)
-  const exerciseAudioInput = document.getElementById('exerciseAudioInput'); // ДОДАНО
-  // ... (решта твоїх const)
-
-  // ... (весь твій код до "Логіка налаштувань тренувань" залишається без змін)
+  const screens = document.querySelectorAll('.screen');
+  const workoutModal = document.getElementById('workoutModal');
+  const modalProgramNameEl = document.getElementById('modalProgramName');
+  const modalExerciseListEl = document.getElementById('modalExerciseList');
+  const modalStartBtn = document.getElementById('modalStartBtn');
+  const modalSettingsBtn = document.getElementById('modalSettingsBtn');
+  const closeModalBtn = workoutModal.querySelector('.close-button');
+  const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
+  const burgerBtn = document.getElementById('burgerBtn');
+  const sideMenu = document.getElementById('sideMenu');
+  const datetimeDisplayEl = document.getElementById('datetime-display');
+  const trainingScreen = document.getElementById('trainingScreen');
+  const trainingBackBtn = document.getElementById('trainingBackBtn');
+  const trainingProgramNameEl = document.getElementById('trainingProgramName');
+  const exerciseNameEl = document.getElementById('exerciseName');
+  const timerEl = document.getElementById('timer');
+  const prevBtn = document.getElementById('prevExercise');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const nextBtn = document.getElementById('nextExercise');
+  const completedListEl = document.getElementById('completedExercises');
+  const countdownScreen = document.getElementById('countdownScreen');
+  const countdownNumberEl = document.getElementById('countdownNumber');
+  const menuBackBtn = document.getElementById('menuBackBtn');
+  const menuTitle = document.getElementById('menuTitle');
+  const mainMenu = document.getElementById('mainMenu');
+  const workoutSettingsMenu = document.getElementById('workoutSettingsMenu');
+  const addProgramMenu = document.getElementById('addProgramMenu');
+  const appSettingsMenu = document.getElementById('appSettingsMenu');
+  const bgUrlInput = document.getElementById('bgUrlInput');
+  const saveBgBtn = document.getElementById('saveBgBtn');
+  const resetBgBtn = document.getElementById('resetBgBtn');
+  const programListEl = document.getElementById('program-list');
+  const addNewProgramBtn = document.getElementById('addNewProgramBtn');
+  const newProgramNameInput = document.getElementById('newProgramNameInput');
+  const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
+  const programEditMenu = document.getElementById('programEditMenu');
+  const programNameInput = document.getElementById('programNameInput');
+  const exerciseListEl = document.getElementById('exercise-list');
+  const addExerciseBtn = document.getElementById('addExerciseBtn');
+  const saveProgramBtn = document.getElementById('saveProgramBtn');
+  const deleteProgramBtn = document.getElementById('deleteProgramBtn');
+  const exerciseModal = document.getElementById('exerciseModal');
+  const exerciseModalTitle = document.getElementById('exerciseModalTitle');
+  const exerciseNameInput = document.getElementById('exerciseNameInput');
+  const exerciseDurationInput = document.getElementById('exerciseDurationInput');
+  const exerciseAudioInput = document.getElementById('exerciseAudioInput'); // Наше нове поле
+  const saveExerciseBtn = document.getElementById('saveExerciseBtn');
+  const closeExerciseModalBtn = exerciseModal.querySelector('.close-button'); // А ось і винуватець
+  const finishModal = document.getElementById('finishModal');
+  const caloriesInput = document.getElementById('caloriesInput');
+  const difficultySlider = document.getElementById('difficultySlider');
+  const sliderEmojiBubble = document.getElementById('sliderEmojiBubble');
+  const energyRating = document.getElementById('energyRating');
+  const starRating = document.getElementById('starRating');
+  const saveWorkoutLogBtn = document.getElementById('saveWorkoutLogBtn');
+  const expandTagsBtn = document.getElementById('expandTagsBtn');
+  const extraTagsSection = document.getElementById('extraTagsSection');
 
   // --- Логіка налаштувань тренувань (ПОВНІСТЮ ОНОВЛЕНО) ---
   let workoutPrograms = {}; 
