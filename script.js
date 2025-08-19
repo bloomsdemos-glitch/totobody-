@@ -362,16 +362,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (difficultySlider) { difficultySlider.addEventListener('input', updateSliderEmoji); }
 
-  function setupEmojiRating(container) {
-    if (!container) return;
-    const emojis = container.querySelectorAll('span');
-    emojis.forEach(emoji => {
-      emoji.addEventListener('click', () => {
-        emojis.forEach(e => e.classList.remove('active'));
-        emoji.classList.add('active');
-      });
-    });
-  }
+  // Оновлена функція для бігунка v2.0
+function updateSliderEmoji() {
+  if (!difficultySlider || !sliderEmojiBubble) return;
+
+  const value = parseFloat(difficultySlider.value);
+  const min = parseFloat(difficultySlider.min);
+  const max = parseFloat(difficultySlider.max);
+
+  // Ширина самого треку бігунка
+  const trackWidth = difficultySlider.clientWidth;
+  // Ширина повзунка (ми знаємо її з CSS - 26px)
+  const thumbWidth = 26;
+
+  // Розраховуємо правильну позицію
+  const percent = (value - min) / (max - min);
+  const thumbPosition = percent * (trackWidth - thumbWidth) + (thumbWidth / 2);
+
+  // Встановлюємо позицію для емодзі
+  sliderEmojiBubble.style.left = `${thumbPosition}px`;
+
+  // Оновлюємо сам емодзі
+  sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
+}
+
   setupEmojiRating(energyRating);
 
   if (starRating) {
