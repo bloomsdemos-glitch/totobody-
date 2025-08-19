@@ -55,8 +55,23 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .marquee span { font-size: 2.2rem; font-weight: 700; color: #333; }
 .timer-display { font-size: 6rem; font-weight: 700; margin: 15px 0; flex-shrink: 0; }
 .controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; flex-shrink: 0; }
-#completedExercises { width: 100%; flex-grow: 1; background: var(--bg-color); border-radius: var(--border-radius-main); box-shadow: inset var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), inset calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); padding: 15px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.completed-exercise { font-size: 1rem; opacity: 0.6; }
+#completedExercises { width: 100%; flex-grow: 1; background: #dce1e7; /* "Paper gray" колір */border-radius: var(--border-radius-main);
+  /* ТРОХИ ВИПУКЛИЙ ефект, як ти хотів */
+  box-shadow: 
+    var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
+    calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* <--- ВИРІВНЮВАННЯ ВЛІВО */
+  gap: 12px;
+}
+.completed-exercise {
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 .modal-content { width: 90%; max-width: 400px; padding: 25px; border-radius: var(--border-radius-main); position: relative; opacity: 0; transform: scale(0.95); transition: opacity 0.2s ease-out, transform 0.2s ease-out; will-change: transform, opacity; }
@@ -110,7 +125,71 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .menu-button.danger { background: #ff4757; }
 #caloriesInput::placeholder { color: var(--text-color); opacity: 0.6; }
 #caloriesInput::-moz-placeholder { color: var(--text-color); opacity: 0.6; }
-.difficulty-slider-container { position: relative; padding-top: 30px; }
+/* --- Бігунок складності --- */
+.difficulty-slider-container {
+  position: relative;
+  padding-top: 30px;
+}
+.slider-emoji-bubble {
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%); font-size: 1.8rem;
+  transition: left 0.1s linear;
+}
+.difficulty-slider {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 12px;
+  background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939);
+  border-radius: 6px; outline: none;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+}
+/* ОНОВЛЕНИЙ повзунок у формі "скляного" квадратика */
+.difficulty-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 24px; height: 24px;
+  background: rgba(255, 255, 255, 0.6); /* Напівпрозорий білий */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px; /* Робимо його квадратиком з м'якими кутами */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.difficulty-slider::-moz-range-thumb { /* Те саме для Firefox */
+  width: 24px; height: 24px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* --- Рейтинг-енергія (без змін) --- */
+.emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
+.emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
+.emoji-rating span.active { transform: scale(1.3); opacity: 1; }
+
+/* --- Рейтинг-зірочки (НОВИЙ ДИЗАЙН) --- */
+.star-rating {
+  display: flex;
+  justify-content: space-around;
+  font-size: 2rem;
+}
+.star-rating span {
+  width: 45px; height: 45px; display: flex;
+  justify-content: center; align-items: center; cursor: pointer;
+  border-radius: 50%; background: var(--bg-color);
+  color: var(--shadow-dark);
+  /* ДУЖЕ ДЕЛІКАТНА ВИПУКЛІСТЬ */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 1px 1px 2px var(--shadow-dark), 
+              -1px -1px 2px var(--shadow-light);
+  transition: all 0.2s ease-out;
+}
+.star-rating span.active {
+  color: #FFC107; /* "Золотий" колір, як у 📣 */
+  /* ДЕЛІКАТНЕ ВТИСКАННЯ */
+  box-shadow: inset 1px 1px 2px var(--shadow-dark), 
+              inset -1px -1px 2px var(--shadow-light);
+  transform: scale(0.98);
+}
+
 .slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; transition: left 0.1s linear; }
 .difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939); border-radius: 6px; outline: none; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
 .difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; background: transparent; border: rgba(255, 255, 255, 0.1); box-shadow: none; cursor: pointer; }
