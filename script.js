@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
+  // ... (весь JS код без змін)
   const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
   const modalProgramNameEl = document.getElementById('modalProgramName');
@@ -92,9 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateDateTime, 1000);
   }
 
+  let workoutPrograms = {}; 
+  let currentlyEditing = null;
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями','Тяга гантелей у нахилі','Жим гантелей лежачи'];
   const poolCommon = ['Віджимання','Планка','Стрибки на місці','Випади','Скручування'];
+
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
   function buildWorkout(programName) {
     const programData = workoutPrograms[programName] || {};
@@ -116,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
-  
+  const DEFAULT_DURATION = 30;
+
   function formatTime(seconds) { const m = String(Math.floor(seconds / 60)).padStart(2, '0'); const s = String(seconds % 60).padStart(2, '0'); return `${m}:${s}`; }
   function updateUI() {
     const currentExercise = exercises[currentIndex];
@@ -177,13 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
     startTimer();
     showScreen('trainingScreen');
   }
-
+  
+  // --- Обробники кнопок керування тренуванням ---
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
   if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
   if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
 
+  // --- Логіка модального вікна перед тренуванням ---
   function openWorkoutModal(programName) {
     const previewExercises = buildWorkout(programName);
     modalProgramNameEl.textContent = programName;
@@ -212,8 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if(closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if(workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
-  if(modalSettingsBtn) modalSettingsBtn.addEventListener('click', () => { alert('Тут буде вікно налаштувань!'); });
   
+  // --- Логіка налаштувань додатку ---
   function applyBackground(url) {
     document.body.style.backgroundImage = `url('${url}')`;
     document.body.style.backgroundSize = 'cover';
@@ -236,8 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  let workoutPrograms = {}; 
-  let currentlyEditing = null; 
+  // --- Логіка налаштувань тренувань ---
   function loadPrograms() { const savedPrograms = localStorage.getItem('workoutPrograms'); if (savedPrograms) { workoutPrograms = JSON.parse(savedPrograms); } else { workoutPrograms = { "HIIT BASIC": { exercises: [{name: "Стрибки джек", duration: 30}, {name: "Берпі", duration: 30}] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] }, "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] } }; } }
   function savePrograms() { localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms)); }
   function renderProgramList() {
@@ -348,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
+  // --- Логіка модалки після тренування ---
   const difficultyEmojis = ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'];
   function updateSliderEmoji() {
     if (!difficultySlider || !sliderEmojiBubble) return;
@@ -355,13 +362,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const min = parseFloat(difficultySlider.min);
     const max = parseFloat(difficultySlider.max);
     const trackWidth = difficultySlider.clientWidth;
-    const thumbWidth = 26;
+    const thumbWidth = 30;
     const percent = (value - min) / (max - min);
     const thumbPosition = percent * (trackWidth - thumbWidth) + (thumbWidth / 2);
     sliderEmojiBubble.style.left = `${thumbPosition}px`;
     sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
   }
-  if (difficultySlider) { difficultySlider.addEventListener('input', updateSliderEmoji); }
+  if (difficultySlider) {
+    difficultySlider.addEventListener('input', updateSliderEmoji);
+    difficultySlider.addEventListener('touchstart', () => { sliderEmojiBubble.classList.add('visible'); }, {passive: true});
+    difficultySlider.addEventListener('touchend', () => { sliderEmojiBubble.classList.remove('visible'); });
+  }
 
   function setupEmojiRating(container) {
     if (!container) return;
@@ -401,6 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
+  // --- Логіка бокового меню ---
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
       burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
@@ -428,12 +440,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   
+  // --- Ініціалізація ---
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
     if(bgUrlInput) bgUrlInput.value = savedBg;
   }
-  
   loadPrograms(); 
   renderProgramList();
   if (difficultySlider) { updateSliderEmoji(); }
