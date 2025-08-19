@@ -7,8 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7"> 
-</head>
+  <link rel="stylesheet" href="style.css?v=8"> </head>
 <body>
 
   <header class="app-header">
@@ -35,14 +34,11 @@
             <li><a href="#" data-target="historyMenu">Історія тренувань</a></li>
           </ul>
         </div>
-        <div id="workoutSettingsMenu" class="menu-screen">
-            <ul id="program-list" class="program-list"></ul>
-            <button id="addNewProgramBtn" class="menu-button">Додати нову програму</button>
-        </div>
+        <div id="workoutSettingsMenu" class="menu-screen"><ul id="program-list" class="program-list"></ul><button id="addNewProgramBtn" class="menu-button">Додати нову програму</button></div>
         <div id="programEditMenu" class="menu-screen">
-            <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
-            <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"><li>(Поки що порожньо)</li></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
-            <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
+          <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
+          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"><li>(Поки що порожньо)</li></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
+          <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
         </div>
         <div id="statsSettingsMenu" class="menu-screen"><p>Тут будуть налаштування статистики.</p></div>
         <div id="goalSettingsMenu" class="menu-screen"><p>Тут будуть налаштування мети.</p></div>
@@ -67,19 +63,12 @@
     <div class="modal-content glassmorphism">
       <button class="close-button">&times;</button>
       <h2 id="exerciseModalTitle">Нова вправа</h2>
-      <div class="setting-item">
-        <label for="exerciseNameInput">Назва вправи:</label>
-        <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
-      </div>
-      <div class="setting-item">
-        <label for="exerciseDurationInput">Тривалість (в секундах):</label>
-        <input type="number" id="exerciseDurationInput" value="30">
-      </div>
-      <div class="setting-actions">
-          <button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button>
-      </div>
+      <div class="setting-item"><label for="exerciseNameInput">Назва вправи:</label><input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі..."></div>
+      <div class="setting-item"><label for="exerciseDurationInput">Тривалість (в секундах):</label><input type="number" id="exerciseDurationInput" value="30"></div>
+      <div class="setting-actions"><button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button></div>
     </div>
   </div>
+
   <main id="homeScreen" class="screen active">
     <section class="carousel-section">
       <h2>HIIT</h2>
@@ -130,6 +119,6 @@
   <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn">⚙️</button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
   <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
 
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>
