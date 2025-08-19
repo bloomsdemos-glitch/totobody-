@@ -388,5 +388,52 @@ document.addEventListener('DOMContentLoaded', () => {
   
   loadPrograms(); 
   renderProgramList();
-  showScreen('homeScreen');
-});
+  
+  // ===== ЛОГІКА МОДАЛКИ ПІСЛЯ ТРЕНУВАННЯ =====
+if (starRating) {
+  const stars = starRating.querySelectorAll('span');
+  let currentRating = 0;
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      currentRating = star.dataset.value;
+      stars.forEach(s => {
+        s.classList.toggle('active', s.dataset.value <= currentRating);
+      });
+    });
+  });
+}
+
+if (saveWorkoutLogBtn) {
+  saveWorkoutLogBtn.addEventListener('click', () => {
+    // 1. Збираємо дані з полів
+    const calories = parseInt(caloriesInput.value, 10) || 0;
+    const difficulty = parseInt(difficultySlider.value, 10);
+    const rating = starRating.querySelectorAll('span.active').length;
+
+    // 2. Створюємо об'єкт з логом тренування
+    const workoutLog = {
+      date: new Date().toISOString(), // Зберігаємо точну дату і час
+      program: currentProgram,
+      calories: calories,
+      difficulty: difficulty,
+      rating: rating,
+      exercises: exercises.slice(0, -1) // Зберігаємо список вправ без "Кінця тренування"
+    };
+
+    // 3. Зберігаємо в localStorage
+    // Завантажуємо існуючу історію або створюємо новий масив
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    // Додаємо новий запис
+    history.push(workoutLog);
+    // Зберігаємо оновлену історію
+    localStorage.setItem('workoutHistory', JSON.stringify(history));
+
+    alert('Результат збережено! Красунчик!');
+
+    // 4. Закриваємо модалку і повертаємось на головний екран
+    finishModal.classList.remove('active');
+    showScreen('homeScreen');
+  });
+}
+
