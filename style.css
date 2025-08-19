@@ -121,7 +121,7 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .star-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .star-rating span {
   width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
-  cursor: pointer; border-radius: 50%; background: var(--bg-color);
+  cursor: pointer; border-radius: 30%; background: var(--bg-color);
   color: var(--shadow-dark);
   box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 1px var(--shadow-light);
   transition: all 0.2s ease-out;
