@@ -96,6 +96,8 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .setting-item { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .setting-item label { font-size: 0.9rem; opacity: 0.8; }
 .setting-item input[type="text"], .setting-item input[type="number"] { width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: var(--border-radius-small); background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-family: var(--font-family); font-size: 1rem; }
+#caloriesInput::placeholder { color: var(--text-color); opacity: 0.6; }
+#caloriesInput::-moz-placeholder { color: var(--text-color); opacity: 0.6; }
 .setting-actions { display: flex; gap: 10px; margin-top: 10px; }
 .menu-button { flex-grow: 1; padding: 12px; border: none; border-radius: var(--border-radius-small); background: var(--primary-color); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; }
 .menu-button.secondary { background: rgba(255, 255, 255, 0.1); color: var(--text-color); border: 1px solid var(--glass-border); }
@@ -109,13 +111,23 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .exercise-list li:last-child { border-bottom: none; }
 .menu-button.danger { background: #ff4757; }
 .difficulty-slider-container { position: relative; padding-top: 30px; }
-.slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; transition: left 0.2s ease-out; }
+.slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; transition: left 0.1s linear; }
 .difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939); border-radius: 6px; outline: none; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
 .difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; background: white; border-radius: 50%; cursor: pointer; border: 3px solid var(--bg-color); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
 .difficulty-slider::-moz-range-thumb { width: 26px; height: 26px; background: white; border-radius: 50%; cursor: pointer; border: 3px solid var(--bg-color); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-.star-rating { display: flex; justify-content: space-around; font-size: 2rem; color: transparent; }
-.star-rating span { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; border-radius: 50%; background: var(--bg-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); color: var(--shadow-dark); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); transition: all 0.2s ease-out; }
-.star-rating span.active { color: #FCD55B; box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light); transform: scale(0.95); }
+.star-rating { display: flex; justify-content: space-around; font-size: 2rem; }
+.star-rating span {
+  width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+  cursor: pointer; border-radius: 50%; background: var(--bg-color);
+  color: var(--shadow-dark);
+  box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
+  transition: all 0.2s ease-out;
+}
+.star-rating span.active {
+  color: #FCD55B;
+  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
+  transform: scale(1.05);
+}
