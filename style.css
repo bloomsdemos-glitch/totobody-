@@ -6,7 +6,7 @@
   --progress-red: #ff4757; --progress-orange: #ffa502; --progress-yellow: #ffb400; --progress-green: #2ed573;
 }
 * { box-sizing: border-box; }
-body { font-family: var(--font-family); background: var(--bg-color); margin: 0; padding: 0; color: var(--text-color); -webkit-tap-highlight-color: transparent; }
+body { font-family: var(--font-family); background: var(--bg-color); margin: 0; padding: 0; color: var(--text-color); -webkit-tap-highlight-color: transparent; background-size: cover; background-position: center; background-attachment: fixed; }
 .screen { display: none; min-height: 100vh; padding-top: 80px; }
 .screen.active { display: flex; flex-direction: column; }
 h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
@@ -64,9 +64,9 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .glassmorphism { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 var(--glass-shadow); }
 .modal-content h2 { text-align: center; margin-top: 0; }
 .close-button { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; color: var(--text-color); opacity: 0.7; cursor: pointer; }
-.modal-info p { margin-top: 0; margin-bottom: 10px; font-weight: 600; opacity: 0.8; }
-.modal-info ul { list-style: none; padding-left: 20px; text-align: left; max-height: 150px; overflow-y: auto; font-size: 0.9rem; }
-.modal-info ul li { margin-bottom: 5px; }
+.modal-info p { margin-top: 0; margin-bottom: 10px; font-weight: 600; opacity: 0.8; text-align: center;}
+.modal-info ul { list-style: none; padding-left: 0; text-align: left; max-height: 150px; overflow-y: auto; font-size: 0.9rem; }
+.modal-info ul li { margin-bottom: 5px; list-style-type: disc; margin-left: 20px; }
 .modal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
 .start-btn { flex-grow: 1; padding: 15px; border-radius: var(--border-radius-small); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-out; background: var(--primary-color); color: white; border: none; }
 .start-btn:active { transform: scale(0.98); box-shadow: none; }
@@ -108,64 +108,12 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .exercise-list li { padding: 10px 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--glass-border); }
 .exercise-list li:last-child { border-bottom: none; }
 .menu-button.danger { background: #ff4757; }
-/* ======================================== */
-/* ===== СТИЛІ МОДАЛКИ ПІСЛЯ ТРЕНУВАННЯ ===== */
-/* ======================================== */
-
-/* --- Бігунок складності --- */
-.difficulty-slider-container {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-.difficulty-slider-container span {
-  font-size: 1.5rem;
-}
-.difficulty-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 10px;
-  background: var(--bg-color);
-  border-radius: 5px;
-  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
-  outline: none;
-}
-.difficulty-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  background: white;
-  border-radius: 50%;
-  border: 2px solid var(--primary-color);
-  cursor: pointer;
-  box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
-}
-.difficulty-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  background: white;
-  border-radius: 50%;
-  border: 2px solid var(--primary-color);
-  cursor: pointer;
-  box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
-}
-
-/* --- Рейтинг-зірочки --- */
-.star-rating {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  font-size: 2.5rem;
-  color: #d1d1d1; /* Колір неактивних зірочок */
-}
-.star-rating span {
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
+.difficulty-slider-container { display: flex; align-items: center; gap: 15px; }
+.difficulty-slider-container span { font-size: 1.5rem; }
+.difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 10px; background: var(--bg-color); border-radius: 5px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); outline: none; }
+.difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: white; border-radius: 50%; border: 2px solid var(--primary-color); cursor: pointer; box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color); }
+.difficulty-slider::-moz-range-thumb { width: 24px; height: 24px; background: white; border-radius: 50%; border: 2px solid var(--primary-color); cursor: pointer; box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color); }
+.star-rating { display: flex; justify-content: center; gap: 10px; font-size: 2.5rem; color: #d1d1d1; }
+.star-rating span { cursor: pointer; transition: color 0.2s ease, transform 0.2s ease; }
 .star-rating span:hover,
-.star-rating span.active {
-  color: #ffb400; /* Колір активних зірочок */
-  transform: scale(1.1);
-}
+.star-rating span.active { color: #ffb400; transform: scale(1.1); }
