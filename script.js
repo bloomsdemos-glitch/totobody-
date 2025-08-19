@@ -55,6 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const exerciseDurationInput = document.getElementById('exerciseDurationInput');
   const saveExerciseBtn = document.getElementById('saveExerciseBtn');
   const closeExerciseModalBtn = exerciseModal.querySelector('.close-button');
+// --- Finish Modal Elements ---
+  const finishModal = document.getElementById('finishModal');
+  const caloriesInput = document.getElementById('caloriesInput');
+  const difficultySlider = document.getElementById('difficultySlider');
+  const starRating = document.getElementById('starRating');
+  const saveWorkoutLogBtn = document.getElementById('saveWorkoutLogBtn');
 
   function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
