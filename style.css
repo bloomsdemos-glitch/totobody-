@@ -55,7 +55,7 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .marquee span { font-size: 2.2rem; font-weight: 700; color: #333; }
 .timer-display { font-size: 6rem; font-weight: 700; margin: 15px 0; flex-shrink: 0; }
 .controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px; flex-shrink: 0; }
-#completedExercises { width: 100%; flex-grow: 1; background: #f0f1f3; border-radius: var(--border-radius-main); box-shadow: 0px 4px 12px rgba(0,0,0,0.15); var(--shadow-dark), -1px -1px 3px var(--shadow-light); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+#completedExercises { width: 100%; flex-grow: 1; background: #dce1e7; border-radius: var(--border-radius-main); box-shadow: 2px 2px 5px var(--shadow-dark), -1px -1px 3px var(--shadow-light); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 .completed-exercise { font-size: 1rem; opacity: 0.7; }
 .completed-exercise::before { content: '✓⃝'; margin-right: 10px; color: var(--primary-color); }
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
@@ -112,11 +112,15 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 #caloriesInput::placeholder { color: var(--text-color); opacity: 0.6; }
 #caloriesInput::-moz-placeholder { color: var(--text-color); opacity: 0.6; }
 .difficulty-slider-container { position: relative; padding-top: 30px; }
-.slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 2.5rem; transition: left 0.1s linear; }
+.slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; transition: left 0.1s linear; opacity: 0; pointer-events: none;}
+.difficulty-slider-container:focus-within .slider-emoji-bubble,
+.difficulty-slider-container:active .slider-emoji-bubble {
+    opacity: 1;
+}
 .difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939); border-radius: 6px; outline: none; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
-.difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 8px; cursor: pointer; margin-top: -14px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.difficulty-slider::-moz-range-thumb { width: 30px; height: 30px; background: rgba(255, 255, 255, 0.6); border-radius: 8px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-.emoji-rating { display: flex; justify-content: space-around; font-size: 1.5rem; }
+.difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; background: var(--bg-color); border-radius: 50%; cursor: pointer; margin-top: -9px; box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
+.difficulty-slider::-moz-range-thumb { width: 30px; height: 30px; background: var(--bg-color); border-radius: 50%; cursor: pointer; box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
+.emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
 .star-rating { display: flex; justify-content: space-around; font-size: 2rem; }
@@ -125,12 +129,12 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
   cursor: pointer; border-radius: 50%; background: var(--bg-color);
   color: var(--shadow-dark);
   border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 1px 1px 3px var(--shadow-dark);
+  box-shadow: 2px 2px 4px var(--shadow-dark);
   transition: all 0.2s ease-out;
 }
 .star-rating span.active {
-  color: #ffd70f;
-  background: #A9ABB2;
+  color: #FFC107;
+  background: #d1d5db;
   box-shadow: inset 1px 1px 2px var(--shadow-dark);
   transform: scale(0.98);
 }
