@@ -65,19 +65,13 @@ h2 {
 }
 .title-container {
   text-align: center;
+  flex-grow: 1;
 }
 .app-header h1 {
   font-size: 1.2rem;
   margin: 0;
   font-weight: 700;
   color: #333;
-}
-/* ПРАВКА #3: Вирівнювання TOTOBODY */
-#trainingScreen .app-header h1 {
-  /* Цей селектор більш точний, щоб не зачепити інші заголовки */
-  text-align: left;
-  margin: 0; /* Скидаємо стандартні відступи */
-  flex-grow: 1; /* Дозволяємо йому зайняти доступне місце */
 }
 .datetime {
   font-size: 0.8rem;
@@ -95,6 +89,7 @@ h2 {
 }
 .header-placeholder {
   width: 45px;
+  flex-shrink: 0;
 }
 .back-button {
   position: absolute;
@@ -119,6 +114,7 @@ h2 {
   background: var(--bg-color);
   box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
   transition: all 0.2s ease-out;
+  flex-shrink: 0;
 }
 .neumorphic-icon-btn:active {
   box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
@@ -261,13 +257,12 @@ h2 {
   border-radius: 6px;
   box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
 }
-/* ПРАВКА #1: Прибираємо LED-ефект */
 .progress-line-fg {
   height: 100%;
   border-radius: 6px;
   transition: width 0.5s ease-in-out;
-  background: var(--progress-green); /* Замість градієнту - простий колір */
-  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4); /* Дуже легкий внутрішній відблиск для об'єму */
+  background: var(--progress-green);
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
 }
 #trainingScreen {
   justify-content: flex-start;
@@ -306,12 +301,10 @@ h2 {
   margin-bottom: 20px;
   flex-shrink: 0;
 }
-/* ПРАВКА #2: Робимо список вправ у стилі matte glass */
 #completedExercises {
   width: 90%;
   margin: 20px auto;
   flex-grow: 1;
-  /* Застосовуємо наш улюблений glassmorphism */
   background: var(--glass-bg);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -327,7 +320,7 @@ h2 {
 }
 .completed-exercise {
   font-size: 1rem;
-  opacity: 0.8; /* Зробимо трохи чіткішим на склі */
+  opacity: 0.8;
   color: var(--text-color);
 }
 .completed-exercise::before {
@@ -433,25 +426,6 @@ h2 {
   transform: scale(0.98);
   box-shadow: none;
 }
-@supports (background: rgba(0, 0, 0, 0.1)) {
-  .start-btn {
-    background: rgba(50, 50, 50, 0.15);
-    border: 1px solid rgba(80, 80, 80, 0.2);
-    color: var(--text-color);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), inset 1px 1px 3px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-  .start-btn:hover {
-    background: rgba(70, 70, 70, 0.2);
-    border-color: rgba(90, 90, 90, 0.3);
-  }
-  .start-btn:active {
-    background: rgba(90, 90, 90, 0.25);
-    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.05);
-    transform: scale(0.99);
-  }
-}
 .settings-btn {
   font-size: 1.8rem;
   background: none;
@@ -488,18 +462,9 @@ h2 {
   animation: countdown-beat 1s infinite;
 }
 @keyframes countdown-beat {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.1);
-    opacity: 0;
-  }
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
 }
 .side-menu {
   position: fixed;
@@ -680,7 +645,7 @@ h2 {
 }
 .exercise-list li {
   padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255,255,255,0.05);
   border-bottom: 1px solid var(--glass-border);
 }
 .exercise-list li:last-child {
@@ -693,29 +658,25 @@ h2 {
   color: var(--text-color);
   opacity: 0.6;
 }
-#caloriesInput::-moz-placeholder {
-  color: var(--text-color);
-  opacity: 0.6;
-}
 .difficulty-slider-container {
   position: relative;
   padding-top: 30px;
 }
+/* ОСНОВНІ ЗМІНИ ТУТ */
 .slider-emoji-bubble {
   position: absolute;
   top: -5px; /* Трохи піднімемо, щоб було над бігунком */
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem; /* Трохи збільшимо для кращої видимості */
-  transition: left 0.1s linear, opacity 0.1s ease; /* Додамо transition для opacity */
+  transition: left 0.1s linear, opacity 0.1s ease;
   opacity: 0;
   pointer-events: none;
-  z-index: 5; /* ОСЬ І РІШЕННЯ: ставимо його на шар вище */
+  z-index: 5; /* Ставимо його на шар вище */
 }
-
 .difficulty-slider-container:focus-within .slider-emoji-bubble,
 .difficulty-slider-container:active .slider-emoji-bubble {
-  opacity: 1;
+    opacity: 1;
 }
 .difficulty-slider {
   -webkit-appearance: none;
@@ -725,22 +686,21 @@ h2 {
   background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939);
   border-radius: 6px;
   outline: none;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
 }
-/* ПРАВКА #4: Робимо бігунок у стилі matte glass */
 .difficulty-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 30px;
   height: 30px;
-  background: var(--glass-bg); /* Фон */
-  border: 1px solid var(--glass-border); /* Скляна рамка */
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border-radius: 50%;
   cursor: pointer;
-  margin-top: -9px; /* Вирівнювання по центру */
-  box-shadow: 0 2px 5px var(--glass-shadow); /* Тінь */
+  margin-top: -9px;
+  box-shadow: 0 2px 5px var(--glass-shadow);
 }
 .difficulty-slider::-moz-range-thumb {
   width: 30px;
@@ -770,7 +730,6 @@ h2 {
   justify-content: space-around;
   font-size: 2rem;
 }
-/* ПРАВКА #5 і #6: Стилізуємо зірочки */
 .star-rating span {
   width: 45px;
   height: 45px;
@@ -781,19 +740,55 @@ h2 {
   border-radius: 50%;
   background: var(--bg-color);
   color: var(--shadow-dark);
-  border: 1px solid rgba(0, 0, 0, 0.08); /* #5: Більш помітний контур */
-  box-shadow: 1px 1px 3px rgba(168, 172, 179, 0.8); /* #5: Тінь темніша і менш розмита */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 1px 1px 3px rgba(168, 172, 179, 0.8);
   transition: all 0.2s ease-out;
-  /* #6: Ефект Embossing (випуклості) для зірочки */
   text-shadow: -1px -1px 2px rgba(255, 255, 255, 0.7), 1px 1px 2px rgba(50, 50, 50, 0.2);
 }
 .star-rating span.active {
   color: #FFC107;
   background: #d1d5db;
   border-color: rgba(0, 0, 0, 0.05);
-  /* #5: Додаємо глибину всередині */
   box-shadow: inset 1px 1px 2px rgba(168, 172, 179, 0.9);
   transform: scale(0.98);
-  /* #6: Ефект Debossing (вдавленості) для зірочки */
   text-shadow: 1px 1px 2px rgba(50, 50, 50, 0.3), -1px -1px 2px rgba(255, 255, 255, 0.5);
+}
+/* НОВІ СТИЛІ для секції "+" */
+.expand-section {
+  margin-top: 20px;
+  text-align: center;
+}
+#expandTagsBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  padding: 0;
+  line-height: 50px;
+}
+.extra-tags-section {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
+}
+.extra-tags-section.visible {
+  max-height: 100px;
+  margin-top: 20px;
+}
+.tags-rating {
+  display: flex;
+  justify-content: space-around;
+  font-size: 2rem;
+}
+.tags-rating span {
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.5;
+  padding: 5px;
+  border-radius: 12px;
+}
+.tags-rating span.active {
+  transform: scale(1.2);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
 }
