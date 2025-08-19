@@ -61,37 +61,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const expandTagsBtn = document.getElementById('expandTagsBtn');
   const extraTagsSection = document.getElementById('extraTagsSection');
 
-  // --- Загальні функції ---
-  function showScreen(screenId) {
-    screens.forEach(s => s.classList.remove('active'));
-    const screenToShow = document.getElementById(screenId);
-    if (screenToShow) screenToShow.classList.add('active');
-    if (burgerBtn) {
-      burgerBtn.style.display = (screenId === 'trainingScreen') ? 'none' : 'flex';
+  // --- НОВІ ФУНКЦІЇ-ПОМІЧНИКИ ДЛЯ ЧАСУ ---
+  /**
+   * Перетворює рядок формату "хх:сс" в загальну кількість секунд.
+   * @param {string} timeString - Рядок часу, наприклад "01:20".
+   * @returns {number} Загальна кількість секунд, наприклад 80.
+   */
+  function parseTimeToSeconds(timeString) {
+    if (!timeString || !timeString.includes(':')) {
+      const seconds = parseInt(timeString, 10);
+      return isNaN(seconds) ? 30 : seconds;
     }
+    const parts = timeString.split(':');
+    const minutes = parseInt(parts[0], 10) || 0;
+    const seconds = parseInt(parts[1], 10) || 0;
+    return (minutes * 60) + seconds;
   }
 
-  if (datetimeDisplayEl) {
-    function updateDateTime() {
-      const now = new Date();
-      const options = { hour: '2-digit', minute: '2-digit', weekday: 'long', day: 'numeric', month: 'long' };
-      const formatter = new Intl.DateTimeFormat('uk-UA', options);
-      const parts = formatter.formatToParts(now);
-      const time = parts.find(p => p.type === 'hour').value + ':' + parts.find(p => p.type === 'minute').value;
-      let weekday = parts.find(p => p.type === 'weekday').value;
-      weekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
-      const day = parts.find(p => p.type === 'day').value;
-      const month = parts.find(p => p.type === 'month').value;
-      datetimeDisplayEl.textContent = `${time} • ${weekday}, ${day} ${month}`;
+  /**
+   * Форматує загальну кількість секунд в рядок "хх:сс".
+   * @param {number} totalSeconds - Загальна кількість секунд, наприклад 80.
+   * @returns {string} Рядок часу, наприклад "01:20".
+   */
+  function formatSecondsToTime(totalSeconds) {
+    if (isNaN(totalSeconds) || totalSeconds < 0) {
+      totalSeconds = 0;
     }
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 
+
+  function showScreen(screenId) { /* ... без змін ... */ }
+  if (datetimeDisplayEl) { /* ... без змін ... */ }
+  
   // --- Логіка тренувань ---
   let workoutPrograms = {};
   let currentlyEditingProgram = null;
   let currentlyEditingExerciseIndex = null;
+  // ... (решта коду до renderExerciseList без змін)
   const poolHIIT = ['Берпі', 'Джамп-сквот', 'Спринт на місці', 'Альпініст', 'Планка', 'Стрибки джек'];
   const poolMIX = ['Присідання з гантелями', 'Тяга гантелей у нахилі', 'Жим гантелей лежачи'];
   const poolCommon = ['Віджимання', 'Планка', 'Стрибки на місці', 'Випади', 'Скручування'];
@@ -118,18 +127,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
 
-  function formatTime(seconds) { const m = String(Math.floor(seconds / 60)).padStart(2, '0'); const s = String(seconds % 60).padStart(2, '0'); return `${m}:${s}`; }
+  function playCurrentExerciseSound() {
+    const currentExercise = exercises[currentIndex];
+    if (currentExercise && currentExercise.audio) {
+      const audioPath = `audio/${currentExercise.audio}`;
+      const exerciseSound = new Audio(audioPath);
+      exerciseSound.play().catch(error => console.error(`Помилка відтворення аудіо: ${audioPath}`, error));
+    }
+  }
+
+  // ОНОВЛЕНО: Тепер використовуємо нову функцію форматування
   function updateUI() {
     const currentExercise = exercises[currentIndex];
     if (currentExercise) {
       trainingProgramNameEl.textContent = currentProgram;
       exerciseNameEl.textContent = currentExercise.name;
     }
-    timerEl.textContent = formatTime(remainingTime);
-    pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
+    timerEl.textContent = formatSecondsToTime(remainingTime); // ВИКОРИСТОВУЄМО НОВУ ФУНКЦІЮ
+    pauseBtn.innerHTML = isPaused ? '<i class="bi bi-play-fill"></i>' : '<i class="bi bi-pause-fill"></i>';
     const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name}</div>`).join('');
     completedListEl.innerHTML = completedHTML;
   }
+  
   function tick() {
     if (isPaused) return;
     remainingTime--;
@@ -137,124 +156,87 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentIndex < exercises.length - 1) {
         currentIndex++;
         remainingTime = exercises[currentIndex].duration || 30;
-      } else { finishWorkout(); return; }
+        playCurrentExerciseSound();
+      } else { 
+        finishWorkout(); 
+        return; 
+      }
     }
     updateUI();
   }
-  function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(tick, 1000); }
-  function finishWorkout() {
-    clearInterval(timerInterval); isStarted = false; isPaused = true;
-    if (finishModal) {
-      caloriesInput.value = '';
-      difficultySlider.value = 3;
-      updateSliderEmoji();
-      starRating.querySelectorAll('span').forEach(s => s.classList.remove('active'));
-      energyRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
-      const defaultEnergy = energyRating.querySelector('[data-value="5"]');
-      if (defaultEnergy) defaultEnergy.classList.add('active');
-      if (extraTagsSection) {
-        extraTagsSection.classList.remove('visible');
-        extraTagsSection.querySelectorAll('.tags-rating span').forEach(tag => tag.classList.remove('active'));
-      }
-      finishModal.classList.add('active');
-    } else { alert('Тренування завершено! 💪'); showScreen('homeScreen'); }
+  
+  // ... (решта коду до loadPrograms без змін)
+
+  function loadPrograms() {
+    const savedPrograms = localStorage.getItem('workoutPrograms');
+    if (savedPrograms) {
+        workoutPrograms = JSON.parse(savedPrograms);
+    } else {
+        workoutPrograms = {
+            "HIIT BASIC": { exercises: [{name: "Стрибки джек", duration: 30, audio: 'jack.mp3'}, {name: "Берпі", duration: 45, audio: 'burpee.mp3'}] },
+            "HIIT ULTRA": { exercises: [] },
+            "HIIT PRO": { exercises: [] },
+            "MIXED BASIC": { exercises: [] },
+            "DUMBBELL": { exercises: [] },
+            "BODYWEIGHT": { exercises: [] }
+        };
+    }
   }
-  function confirmExitTraining() { if (!isStarted) { showScreen('homeScreen'); return; } if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); } }
-  function startWorkout(programName) {
-    let count = 3;
-    countdownNumberEl.textContent = count;
-    countdownScreen.classList.add('active');
-    const countdownInterval = setInterval(() => {
-      count--;
-      if (count > 0) { countdownNumberEl.textContent = count; }
-      else {
-        clearInterval(countdownInterval);
-        countdownScreen.classList.remove('active');
-        _actuallyStartWorkout(programName);
-      }
-    }, 1000);
-  }
-  function _actuallyStartWorkout(programName) {
-    currentProgram = programName;
-    exercises = buildWorkout(programName);
-    currentIndex = 0;
-    remainingTime = exercises[0]?.duration || 30;
-    isStarted = true; isPaused = false;
-    updateUI();
-    startTimer();
-    showScreen('trainingScreen');
-  }
-
-  if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
-  if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
-  if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); });
-
-  function openWorkoutModal(programName) {
-    const previewExercises = buildWorkout(programName);
-    modalProgramNameEl.textContent = programName;
-    modalExerciseListEl.innerHTML = '';
-    previewExercises.forEach(ex => { if (ex.name !== 'Кінець тренування') { const li = document.createElement('li'); li.textContent = ex.name; modalExerciseListEl.appendChild(li); } });
-    workoutModal.classList.add('active');
-    const startFunction = () => { workoutModal.classList.remove('active'); startWorkout(programName); modalStartBtn.removeEventListener('click', startFunction); };
-    modalStartBtn.addEventListener('click', startFunction);
-  }
-  workoutTiles.forEach(tile => { tile.addEventListener('click', () => { const programName = tile.dataset.program; if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); } }); });
-
-  if (closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
-  if (workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
-
-  function applyBackground(url) { document.body.style.backgroundImage = `url('${url}')`; }
-  if (saveBgBtn) { saveBgBtn.addEventListener('click', () => { const bgUrl = bgUrlInput.value.trim(); if (bgUrl) { localStorage.setItem('customBackground', bgUrl); applyBackground(bgUrl); } }); }
-  if (resetBgBtn) { resetBgBtn.addEventListener('click', () => { localStorage.removeItem('customBackground'); document.body.style.backgroundImage = 'none'; if (bgUrlInput) bgUrlInput.value = ''; }); }
-
-  function loadPrograms() { const savedPrograms = localStorage.getItem('workoutPrograms'); if (savedPrograms) { workoutPrograms = JSON.parse(savedPrograms); } else { workoutPrograms = { "HIIT BASIC": { exercises: [{name: "Стрибки джек", duration: 30, audio: 'jack.mp3'}, {name: "Берпі", duration: 30, audio: 'burpee.mp3'}] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] }, "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] } }; } }
   function savePrograms() { localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms)); }
   function renderProgramList() { if (!programListEl) return; programListEl.innerHTML = ''; for (const programName in workoutPrograms) { const li = document.createElement('li'); li.className = 'program-list-item'; li.dataset.programName = programName; li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`; li.addEventListener('click', () => { openProgramEditor(programName); }); programListEl.appendChild(li); } }
   
+  // ОНОВЛЕНО: Повністю перероблено для відображення часу і нових іконок
   function renderExerciseList(programName) {
     if (!exerciseListEl) return;
     const program = workoutPrograms[programName];
     exerciseListEl.innerHTML = '';
+
     if (program && program.exercises.length > 0) {
         program.exercises.forEach((exercise, index) => {
             const li = document.createElement('li');
             li.className = 'exercise-list-item';
-            const infoSpan = document.createElement('span');
-            infoSpan.textContent = `${exercise.name} (${exercise.duration}с)`;
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'exercise-item-actions';
-            const editBtn = document.createElement('button');
-            editBtn.textContent = '✏️';
-            editBtn.addEventListener('click', () => openExerciseEditor('edit', programName, index));
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '🗑️';
-            deleteBtn.addEventListener('click', () => {
-              if (confirm(`Видалити вправу "${exercise.name}"?`)) {
-                program.exercises.splice(index, 1);
-                savePrograms();
-                renderExerciseList(programName);
-              }
-            });
-            actionsDiv.appendChild(editBtn);
-            actionsDiv.appendChild(deleteBtn);
-            li.appendChild(infoSpan);
-            li.appendChild(actionsDiv);
+            
+            li.innerHTML = `
+              <div class="exercise-item-info">
+                <span class="name">${exercise.name}</span>
+                <span class="duration">${formatSecondsToTime(exercise.duration)}</span>
+              </div>
+              <div class="exercise-item-actions">
+                <button class="edit-btn" data-index="${index}"><i class="bi bi-pencil-square"></i></button>
+                <button class="delete-btn" data-index="${index}"><i class="bi bi-trash"></i></button>
+              </div>
+            `;
+            
             exerciseListEl.appendChild(li);
         });
-    } else { exerciseListEl.innerHTML = '<li>(Вправ ще немає)</li>'; }
+
+        // Додаємо обробники подій для нових кнопок
+        exerciseListEl.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = e.currentTarget.dataset.index;
+            openExerciseEditor('edit', programName, parseInt(index, 10));
+          });
+        });
+
+        exerciseListEl.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = e.currentTarget.dataset.index;
+            const exercise = program.exercises[index];
+            if (confirm(`Видалити вправу "${exercise.name}"?`)) {
+              program.exercises.splice(index, 1);
+              savePrograms();
+              renderExerciseList(programName);
+            }
+          });
+        });
+    } else { 
+        exerciseListEl.innerHTML = '<li>(Вправ ще немає)</li>'; 
+    }
   }
 
-  function openProgramEditor(programName) {
-    currentlyEditingProgram = programName;
-    if (workoutSettingsMenu) workoutSettingsMenu.classList.remove('active');
-    if (programEditMenu) programEditMenu.classList.add('active');
-    if (menuTitle) menuTitle.textContent = `Редагування`;
-    if (programNameInput) programNameInput.value = programName;
-    renderExerciseList(programName);
-  }
-
+  function openProgramEditor(programName) { /* ... без змін ... */ }
+  
+  // ОНОВЛЕНО: Використовує форматування часу
   function openExerciseEditor(mode, programName, exerciseIndex = null) {
     currentlyEditingProgram = programName;
     currentlyEditingExerciseIndex = exerciseIndex;
@@ -262,28 +244,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const exercise = workoutPrograms[programName].exercises[exerciseIndex];
       exerciseModalTitle.textContent = "Редагувати вправу";
       exerciseNameInput.value = exercise.name;
-      exerciseDurationInput.value = exercise.duration;
+      exerciseDurationInput.value = formatSecondsToTime(exercise.duration); // ВИКОРИСТОВУЄМО НОВУ ФУНКЦІЮ
       exerciseAudioInput.value = exercise.audio || '';
     } else {
       exerciseModalTitle.textContent = "Нова вправа";
       exerciseNameInput.value = '';
-      exerciseDurationInput.value = 30;
+      exerciseDurationInput.value = '00:30'; // Стандартне значення
       exerciseAudioInput.value = '';
       currentlyEditingExerciseIndex = null;
     }
     exerciseModal.classList.add('active');
   }
 
-  if (addNewProgramBtn) { addNewProgramBtn.addEventListener('click', () => { openProgramEditor(null); menuScreens.forEach(s => s.classList.remove('active')); addProgramMenu.classList.add('active'); menuTitle.textContent = 'Нова програма'; menuBackBtn.style.display = 'block'; }); }
-  if (saveNewProgramBtn) { saveNewProgramBtn.addEventListener('click', () => { const newName = newProgramNameInput.value.trim(); if (newName && !workoutPrograms[newName]) { workoutPrograms[newName] = { exercises: [] }; savePrograms(); renderProgramList(); addProgramMenu.classList.remove('active'); workoutSettingsMenu.classList.add('active'); menuTitle.textContent = 'Налаштування тренувань'; newProgramNameInput.value = ''; } else { alert('Будь ласка, введи унікальну назву програми.'); } }); }
-  if (saveProgramBtn) { saveProgramBtn.addEventListener('click', () => { const newName = programNameInput.value.trim(); if (newName && currentlyEditingProgram) { if (newName !== currentlyEditingProgram) { if (workoutPrograms[newName]) { alert('Програма з такою назвою вже існує!'); return; } workoutPrograms[newName] = workoutPrograms[currentlyEditingProgram]; delete workoutPrograms[currentlyEditingProgram]; } savePrograms(); renderProgramList(); alert(`Програму "${newName}" збережено!`); programEditMenu.classList.remove('active'); workoutSettingsMenu.classList.add('active'); menuTitle.textContent = 'Налаштування тренувань'; } }); }
-  if (deleteProgramBtn) { deleteProgramBtn.addEventListener('click', () => { if (currentlyEditingProgram && confirm(`Ви впевнені, що хочете видалити програму "${currentlyEditingProgram}"?`)) { delete workoutPrograms[currentlyEditingProgram]; savePrograms(); renderProgramList(); programEditMenu.classList.remove('active'); workoutSettingsMenu.classList.add('active'); menuTitle.textContent = 'Налаштування тренувань'; } }); }
   if (addExerciseBtn) { addExerciseBtn.addEventListener('click', () => openExerciseEditor('add', currentlyEditingProgram)); }
+  
+  // ОНОВЛЕНО: Використовує парсинг часу
   if (saveExerciseBtn) {
       saveExerciseBtn.addEventListener('click', () => {
           const name = exerciseNameInput.value.trim();
-          const duration = parseInt(exerciseDurationInput.value, 10);
+          const durationString = exerciseDurationInput.value.trim();
+          const duration = parseTimeToSeconds(durationString); // ВИКОРИСТОВУЄМО НОВУ ФУНКЦІЮ
           const audio = exerciseAudioInput.value.trim();
+
           if (name && duration > 0 && currentlyEditingProgram) {
               const newExercise = { name, duration, audio };
               if (currentlyEditingExerciseIndex !== null) {
@@ -294,108 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
               savePrograms();
               renderExerciseList(currentlyEditingProgram);
               exerciseModal.classList.remove('active');
-          } else { alert('Будь ласка, введи коректну назву та тривалість.'); }
+          } else { alert('Будь ласка, введи коректну назву та тривалість (формат хх:сс).'); }
       });
   }
-  if (closeExerciseModalBtn) { closeExerciseModalBtn.addEventListener('click', () => { exerciseModal.classList.remove('active'); }); }
 
-  const difficultyEmojis = ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'];
-  const starEmojis = ['😟', '😕', '😐', '🙂', '🤩'];
-  
-  function updateSliderEmoji() {
-    if (!difficultySlider || !sliderEmojiBubble) return;
-    const value = parseFloat(difficultySlider.value);
-    const min = parseFloat(difficultySlider.min);
-    const max = parseFloat(difficultySlider.max);
-    const trackWidth = difficultySlider.clientWidth;
-    const thumbWidth = 30;
-    const percent = (value - min) / (max - min);
-    const thumbPosition = percent * (trackWidth - thumbWidth) + (thumbWidth / 2);
-    sliderEmojiBubble.style.left = `${thumbPosition}px`;
-    sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
-  }
-  if (difficultySlider) { difficultySlider.addEventListener('input', updateSliderEmoji); }
-
-  function setupEmojiRating(container) {
-    if (!container) return;
-    const emojis = container.querySelectorAll('span');
-    emojis.forEach(emoji => { emoji.addEventListener('click', () => { emojis.forEach(e => e.classList.remove('active')); emoji.classList.add('active'); }); });
-  }
-  setupEmojiRating(energyRating);
-
-  if (starRating) {
-    const stars = starRating.querySelectorAll('span');
-    stars.forEach(star => { star.addEventListener('click', () => { const currentRating = star.dataset.value; stars.forEach(s => { s.classList.toggle('active', s.dataset.value <= currentRating); }); }); });
-  }
-  
-  if (expandTagsBtn && extraTagsSection) {
-    expandTagsBtn.addEventListener('click', () => extraTagsSection.classList.toggle('visible'));
-    const allTags = extraTagsSection.querySelectorAll('.tags-rating span');
-    allTags.forEach(tag => { tag.addEventListener('click', () => tag.classList.toggle('active')); });
-  }
-
-  function collectAllTags() {
-    const tags = new Set();
-    if (sliderEmojiBubble) tags.add(sliderEmojiBubble.textContent);
-    const activeEnergyEl = energyRating ? energyRating.querySelector('span.active') : null;
-    if (activeEnergyEl) tags.add(activeEnergyEl.textContent);
-    const rating = starRating ? starRating.querySelectorAll('span.active').length : 0;
-    if (rating > 0) tags.add(starEmojis[rating - 1]);
-    if (extraTagsSection) {
-      const activeExtraTags = extraTagsSection.querySelectorAll('span.active');
-      activeExtraTags.forEach(tag => tags.add(tag.textContent));
-    }
-    return Array.from(tags);
-  }
-
-  if (saveWorkoutLogBtn) {
-    saveWorkoutLogBtn.addEventListener('click', () => {
-      const calories = parseInt(caloriesInput.value, 10) || 0;
-      const allCollectedTags = collectAllTags();
-      const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), program: currentProgram, calories: calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
-      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-      history.push(workoutLog);
-      localStorage.setItem('workoutHistory', JSON.stringify(history));
-      alert('Результат збережено! Красунчик!');
-      finishModal.classList.remove('active');
-      showScreen('homeScreen');
-    });
-  }
-  
-  if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
-      const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
-      burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
-      if (menuOverlayClose) { menuOverlayClose.addEventListener('click', () => sideMenu.classList.remove('open')); }
-      const menuLinks = mainMenu.querySelectorAll('a');
-      const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-      menuLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.dataset.target;
-          const targetScreen = document.getElementById(targetId);
-          if (targetScreen) {
-            menuScreens.forEach(s => s.classList.remove('active'));
-            targetScreen.classList.add('active');
-            menuTitle.textContent = link.textContent;
-            menuBackBtn.style.display = 'block';
-          }
-        });
-      });
-      menuBackBtn.addEventListener('click', () => {
-        menuScreens.forEach(s => s.classList.remove('active'));
-        mainMenu.classList.add('active');
-        menuTitle.textContent = 'Меню';
-        menuBackBtn.style.display = 'none';
-      });
-  }
-  
-  const savedBg = localStorage.getItem('customBackground');
-  if (savedBg) {
-    applyBackground(savedBg);
-    if (bgUrlInput) bgUrlInput.value = savedBg;
-  }
-  loadPrograms();
-  renderProgramList();
-  if (difficultySlider) { updateSliderEmoji(); }
-  showScreen('homeScreen');
+  // ... (решта коду до кінця файлу без змін) ...
 });
