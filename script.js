@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     timerEl.textContent = formatTime(remainingTime);
     pauseBtn.textContent = isPaused ? '▶️' : '⏸️';
-    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name} </div>`).join('');
+    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name}</div>`).join('');
     completedListEl.innerHTML = completedHTML;
   }
   function tick() {
@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
       caloriesInput.value = ''; difficultySlider.value = 3; updateSliderEmoji();
       starRating.querySelectorAll('span').forEach(s => s.classList.remove('active'));
       energyRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
-      energyRating.querySelector('[data-value="5"]').classList.add('active');
+      const defaultEnergy = energyRating.querySelector('[data-value="5"]');
+      if (defaultEnergy) defaultEnergy.classList.add('active');
       finishModal.classList.add('active');
     } else { alert('Тренування завершено! 💪'); showScreen('homeScreen'); }
   }
