@@ -108,121 +108,14 @@ h2 { margin: 0 0 10px 20px; font-size: 1.2rem; font-weight: 700; color: #333; }
 .exercise-list li { padding: 10px 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--glass-border); }
 .exercise-list li:last-child { border-bottom: none; }
 .menu-button.danger { background: #ff4757; }
-.difficulty-slider-container { display: flex; align-items: center; gap: 15px; }
-.difficulty-slider-container span { font-size: 1.5rem; }
-.difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 10px; background: var(--bg-color); border-radius: 5px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light); outline: none; }
-.difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: white; border-radius: 50%; border: 2px solid var(--primary-color); cursor: pointer; box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color); }
-.difficulty-slider::-moz-range-thumb { width: 24px; height: 24px; background: white; border-radius: 50%; border: 2px solid var(--primary-color); cursor: pointer; box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color); }
-.star-rating { display: flex; justify-content: center; gap: 10px; font-size: 2.5rem; color: #d1d1d1; }
-.star-rating span { cursor: pointer; transition: color 0.2s ease, transform 0.2s ease; }
-.star-rating span:hover,
-.star-rating span.active { color: #ffb400; transform: scale(1.1); }
-/* ======================================== */
-/* == ОНОВЛЕННЯ ВІКНА ПІСЛЯ ТРЕНУВАННЯ == */
-/* ======================================== */
-
-/* 1. Робимо placeholder для калорій білим */
-#caloriesInput::placeholder {
-  color: white;
-  opacity: 0.7;
-}
-/* Для Firefox */
-#caloriesInput::-moz-placeholder {
-  color: white;
-  opacity: 0.7;
-}
-
-/* 2. Повністю перероблюємо бігунок складності */
-.difficulty-slider-container {
-  position: relative;
-  padding-top: 30px; /* Місце для емодзі зверху */
-}
-.slider-emoji-bubble {
-  position: absolute;
-  top: 0;
-  left: 50%; /* Початкова позиція, JS буде її змінювати */
-  transform: translateX(-50%);
-  font-size: 1.8rem;
-  transition: left 0.2s ease-out;
-}
-.difficulty-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 12px;
-  background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939); /* Градієнт треку */
-  border-radius: 6px;
-  outline: none;
-  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
-}
-/* Стиль для "повзунка" (thumb) */
-.difficulty-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 26px;
-  height: 26px;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 3px solid var(--bg-color);
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
-              calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-}
-.difficulty-slider::-moz-range-thumb { /* Те саме для Firefox */
-  width: 26px;
-  height: 26px;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 3px solid var(--bg-color);
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
-              calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-}
-
-
-/* 3. Стилізуємо новий блок "Енергія" */
-.emoji-rating {
-  display: flex;
-  justify-content: space-around;
-  font-size: 2rem;
-}
-.emoji-rating span {
-  cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  opacity: 0.5;
-}
-.emoji-rating span.active {
-  transform: scale(1.3);
-  opacity: 1;
-}
-
-
-/* 4. Робимо зірочки неоморфними */
-.star-rating {
-  display: flex;
-  justify-content: space-around;
-  font-size: 2rem;
-  color: transparent; /* Ховаємо стандартний колір зірочки */
-}
-.star-rating span {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border-radius: 50%;
-  background: var(--bg-color);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  color: var(--shadow-dark);
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark),
-              calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-  transition: all 0.2s ease-out;
-}
-
-.star-rating span.active {
-  color: #FCD55B; /* Колір як у 🐤 */
-  box-shadow: inset 1px 1px 2px var(--shadow-dark), 
-              inset -1px -1px 2px var(--shadow-light);
-  transform: scale(0.95);
-}
+.difficulty-slider-container { position: relative; padding-top: 30px; }
+.slider-emoji-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 1.8rem; transition: left 0.2s ease-out; }
+.difficulty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939); border-radius: 6px; outline: none; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2); }
+.difficulty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; background: white; border-radius: 50%; cursor: pointer; border: 3px solid var(--bg-color); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
+.difficulty-slider::-moz-range-thumb { width: 26px; height: 26px; background: white; border-radius: 50%; cursor: pointer; border: 3px solid var(--bg-color); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); }
+.emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
+.emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
+.emoji-rating span.active { transform: scale(1.3); opacity: 1; }
+.star-rating { display: flex; justify-content: space-around; font-size: 2rem; color: transparent; }
+.star-rating span { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; border-radius: 50%; background: var(--bg-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); color: var(--shadow-dark); box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light); transition: all 0.2s ease-out; }
+.star-rating span.active { color: #FCD55B; box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light); transform: scale(0.95); }
