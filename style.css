@@ -13,10 +13,10 @@
   --glass-bg: rgba(255, 255, 255, 0.25);
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-shadow: rgba(0, 0, 0, 0.1);
-  --progress-red: #ff4757;
-  --progress-orange: #ffa502;
-  --progress-yellow: #ffb400;
-  --progress-green: #2ed573;
+  --active-green: #2ed573;
+  --active-blue: #007aff;
+  --active-red: #CB444A;
+  --inactive-gray: #a8acb3;
 }
 * {
   box-sizing: border-box;
@@ -66,6 +66,10 @@ h2 {
 .title-container {
   text-align: center;
   flex-grow: 1;
+}
+/* ОНОВЛЕНО: Зміщення шапки вліво на екрані тренування */
+#trainingScreen .title-container {
+  text-align: left;
 }
 .app-header h1 {
   font-size: 1.2rem;
@@ -209,24 +213,31 @@ h2 {
   font-weight: 300;
   opacity: 0.8;
 }
+/* ОНОВЛЕНО: Стиль FAB кнопки */
 .fab {
   position: fixed;
   bottom: 110px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 65px; /* Збільшено */
+  height: 65px; /* Збільшено */
   border-radius: 50%;
-  border: none;
   z-index: 10;
-  background: var(--bg-color);
   cursor: pointer;
-  box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
-  transition: all 0.2s ease-out;
-  font-size: 1.8rem;
+  font-size: 2.2rem; /* Збільшено */
   color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Замінено на glass mate */
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 2px 2px 5px var(--glass-shadow);
+  transition: all 0.2s ease-out;
 }
 .fab:active {
-  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
   transform: scale(0.95);
 }
 .goal-bar {
@@ -262,17 +273,19 @@ h2 {
   background: var(--progress-green);
   box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
 }
+/* ОНОВЛЕНО: Новий порядок елементів на екрані тренування */
 #trainingScreen {
   justify-content: flex-start;
   align-items: center;
   text-align: center;
   height: 100vh;
   position: relative;
+  padding-top: 90px;
 }
 #trainingProgramName {
-  font-size: 1rem;
-  opacity: 0.7;
-  margin: 15px 0;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin: 0 0 15px 0;
   flex-shrink: 0;
 }
 .exercise-display {
@@ -281,12 +294,12 @@ h2 {
   flex-shrink: 0;
 }
 .marquee span {
-  font-size: 2.2rem;
+  font-size: 2.5rem; /* Збільшено */
   font-weight: 700;
   color: #333;
 }
 .timer-display {
-  font-size: 6rem;
+  font-size: 5.5rem; /* Зменшено */
   font-weight: 700;
   margin: 15px 0;
   flex-shrink: 0;
@@ -295,19 +308,27 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 10px; /* Зменшено */
   margin-bottom: 20px;
   flex-shrink: 0;
 }
-/* ОНОВЛЕНО: Загальний стиль для всіх кнопок керування */
 .controls .icon-button {
-  font-size: 2.5rem; /* Збільшуємо розмір іконок */
+  font-size: 2rem; /* Зменшено */
   opacity: 0.8;
-  padding: 10px;
+  padding: 8px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.controls .icon-button:active {
+  transform: scale(0.9);
 }
 .controls .pause-button {
-  font-size: 3.5rem; /* Робимо кнопку плей/пауза більшою */
+  font-size: 3rem; /* Зменшено */
 }
+/* ОНОВЛЕНО: Кольори для кнопок керування */
+#stopBtn { color: var(--active-red); }
+.mute-btn-muted { color: var(--inactive-gray) !important; }
+.active-green { color: var(--active-green) !important; }
+.active-blue { color: var(--active-blue) !important; }
 #completedExercises {
   width: 90%;
   margin: 20px auto;
@@ -332,7 +353,6 @@ h2 {
   display: flex;
   align-items: center;
 }
-/* ОНОВЛЕНО: Стиль для іконки-галочки */
 .completed-exercise i {
   margin-right: 10px;
   color: var(--text-color);
@@ -420,6 +440,13 @@ h2 {
   align-items: center;
   margin-top: 20px;
 }
+/* ОНОВЛЕНО: Стиль кнопок з іконками */
+.btn-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
 .start-btn {
   flex-grow: 1;
   padding: 15px;
@@ -436,20 +463,20 @@ h2 {
   transform: scale(0.98);
   box-shadow: none;
 }
-/* ОНОВЛЕНО: Стиль кнопки налаштувань плитки */
 .settings-btn {
-  font-size: 1.5rem; /* Зменшуємо розмір іконки */
+  font-size: 1.4rem; /* Зменшено */
   background: none;
   border: none;
   cursor: pointer;
   margin-right: 15px;
-  opacity: 0.7;
+  opacity: 0.6;
   padding: 5px;
   color: var(--text-color);
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
 }
 .settings-btn:hover {
   opacity: 1;
+  transform: rotate(45deg);
 }
 .countdown-overlay {
   position: fixed;
@@ -535,11 +562,10 @@ h2 {
   padding: 0;
   margin: 0;
 }
-/* ОНОВЛЕНО: Стилі для пунктів меню з іконками */
 .menu-screen li a {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: center; /* Вирівнюємо іконку і текст */
+  gap: 15px; /* Відступ між іконкою і текстом */
   padding: 15px;
   margin-bottom: 10px;
   text-decoration: none;
@@ -551,6 +577,7 @@ h2 {
 }
 .menu-screen li a i {
   opacity: 0.6;
+  font-size: 1.2rem;
 }
 .menu-screen li a:active {
   background: rgba(255, 255, 255, 0.2);
@@ -577,6 +604,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-color);
 }
 .back-btn:active {
   background: rgba(255, 255, 255, 0.2);
@@ -602,6 +630,10 @@ h2 {
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: 1rem;
+}
+/* ОНОВЛЕНО: Ширина поля для калорій */
+#caloriesInput {
+  max-width: 50%;
 }
 .setting-actions {
   display: flex;
@@ -709,10 +741,10 @@ h2 {
 }
 .slider-emoji-bubble {
   position: absolute;
-  top: -5px;
+  top: -8px; /* Піднято трохи вище */
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2rem;
+  font-size: 2.2rem; /* Збільшено */
   transition: left 0.1s linear, opacity 0.1s ease;
   opacity: 0;
   pointer-events: none;
@@ -798,8 +830,8 @@ h2 {
   text-shadow: 1px 1px 2px rgba(50, 50, 50, 0.3), -1px -1px 2px rgba(255, 255, 255, 0.5);
 }
 .expand-section {
-  margin-top: 20px;
   text-align: center;
+  margin: 30px 0 15px 0; /* Змінено відступи */
 }
 #expandTagsBtn {
   width: 50px;
@@ -808,6 +840,8 @@ h2 {
   font-size: 1.8rem;
   padding: 0;
   line-height: 50px;
+  flex-shrink: 0;
+  width: auto;
 }
 .extra-tags-section {
   max-height: 0;
