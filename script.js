@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalStartBtn = document.getElementById('modalStartBtn');
   const modalSettingsBtn = document.getElementById('modalSettingsBtn');
   const closeModalBtn = workoutModal.querySelector('.close-button');
-  const workoutTiles = document.querySelectorAll('.neumorphic-tile[data-program]');
+  const workoutTiles = document.querySelectorAll('.neumorphic-tile'); // Оновлено для всіх плиток
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
   const datetimeDisplayEl = document.getElementById('datetime-display');
@@ -63,14 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const expandTagsBtn = document.getElementById('expandTagsBtn');
   const extraTagsSection = document.getElementById('extraTagsSection');
   const restDayBtn = document.getElementById('restDayBtn');
-  
-  // Нові DOM-елементи для "Дня тюленя"
   const restDayModal = document.getElementById('restDayModal');
   const closeRestDayModalBtn = document.getElementById('closeRestDayModal');
   const stepsInput = document.getElementById('stepsInput');
   const restDayCaloriesInput = document.getElementById('restDayCaloriesInput');
   const moodRating = document.getElementById('moodRating');
   const saveRestDayBtn = document.getElementById('saveRestDayBtn');
+  // Нові DOM-елементи для "DANCE"
+  const danceModal = document.getElementById('danceModal');
+  const closeDanceModalBtn = danceModal.querySelector('.close-button');
+  const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
+
 
   let isMuted = false;
   let isShuffleActive = false;
@@ -206,7 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function confirmExitTraining() { if (!isStarted) { showScreen('homeScreen'); return; } if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); } }
   
-  function startWorkout(programName) {
+  // ОНОВЛЕНО: Тепер приймає готовий масив вправ
+  function startWorkout(workoutData) {
     let count = 3;
     countdownNumberEl.textContent = count;
     countdownScreen.classList.add('active');
@@ -216,14 +220,14 @@ document.addEventListener('DOMContentLoaded', () => {
       else {
         clearInterval(countdownInterval);
         countdownScreen.classList.remove('active');
-        _actuallyStartWorkout(programName);
+        _actuallyStartWorkout(workoutData);
       }
     }, 1000);
   }
 
-  function _actuallyStartWorkout(programName) {
-    currentProgram = programName;
-    exercises = buildWorkout(programName);
+  function _actuallyStartWorkout(workoutData) {
+    currentProgram = workoutData.name;
+    exercises = workoutData.exerciseList;
     
     if (isShuffleActive && exercises.length > 1) {
       const lastExercise = exercises.pop();
@@ -283,18 +287,26 @@ document.addEventListener('DOMContentLoaded', () => {
     modalExerciseListEl.innerHTML = '';
     previewExercises.forEach(ex => { if (ex.name !== 'Кінець тренування') { const li = document.createElement('li'); li.textContent = ex.name; modalExerciseListEl.appendChild(li); } });
     workoutModal.classList.add('active');
-    const startFunction = () => { workoutModal.classList.remove('active'); startWorkout(programName); modalStartBtn.removeEventListener('click', startFunction); };
+    const startFunction = () => { 
+      workoutModal.classList.remove('active');
+      startWorkout({ name: programName, exerciseList: buildWorkout(programName) });
+      modalStartBtn.removeEventListener('click', startFunction);
+    };
     modalStartBtn.addEventListener('click', startFunction);
   }
   
+  // ОНОВЛЕНО: Обробник для всіх плиток на головному екрані
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
         const programName = tile.dataset.program;
         const action = tile.dataset.action;
+
         if (programName) {
             setTimeout(() => openWorkoutModal(programName), 150);
+        } else if (action === 'show-dance') {
+            danceModal.classList.add('active');
         } else if (action === 'add-program') {
-            // Тут можна додати логіку для кнопки "Нова програма" з головного екрану, якщо потрібно
+            // Можна додати відкриття меню створення програми
         }
     });
   });
@@ -506,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     emojis.forEach(emoji => { emoji.addEventListener('click', () => { emojis.forEach(e => e.classList.remove('active')); emoji.classList.add('active'); }); });
   }
   setupEmojiRating(energyRating);
-  setupEmojiRating(moodRating); // Активуємо новий селектор настрою
+  setupEmojiRating(moodRating);
 
   if (starRating) {
     const stars = starRating.querySelectorAll('span');
@@ -547,7 +559,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // ЛОГІКА ДЛЯ "ДНЯ ТЮЛЕНЯ"
   if (restDayBtn) {
     restDayBtn.addEventListener('click', () => {
       if (restDayModal) {
@@ -580,15 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeMoodEl = moodRating.querySelector('span.active');
       const mood = activeMoodEl ? activeMoodEl.dataset.value : null;
       
-      const restDayLog = {
-        sessionId: new Date().getTime(),
-        date: new Date().toISOString(),
-        type: 'rest',
-        steps: steps,
-        calories: calories,
-        tags: mood ? [mood] : []
-      };
-
+      const restDayLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'rest', steps: steps, calories: calories, tags: mood ? [mood] : [] };
       const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
       history.push(restDayLog);
       localStorage.setItem('workoutHistory', JSON.stringify(history));
@@ -596,7 +599,34 @@ document.addEventListener('DOMContentLoaded', () => {
       restDayModal.classList.remove('active');
     });
   }
-
+  
+  // ЛОГІКА ДЛЯ РЕЖИМУ "DANCE"
+  if (closeDanceModalBtn) {
+    closeDanceModalBtn.addEventListener('click', () => danceModal.classList.remove('active'));
+  }
+  if (danceModal) {
+    danceModal.addEventListener('click', (event) => {
+      if(event.target === danceModal) {
+        danceModal.classList.remove('active');
+      }
+    });
+  }
+  if (danceOptionBtns) {
+    danceOptionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const duration = parseInt(btn.dataset.duration, 10);
+        const danceWorkout = {
+          name: 'Dance',
+          exerciseList: [
+            { name: 'Dance', duration: duration, audio: null },
+            { name: 'Кінець тренування', duration: 3 }
+          ]
+        };
+        danceModal.classList.remove('active');
+        setTimeout(() => startWorkout(danceWorkout), 300); // Невелика затримка для плавного закриття
+      });
+    });
+  }
 
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
@@ -641,7 +671,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
-  // --- Ініціалізація ---
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
