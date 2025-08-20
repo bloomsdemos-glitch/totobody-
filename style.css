@@ -568,66 +568,68 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* ========================================= */
-/* ===== ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v3.0 ===== */
-/* ========================================= */
+/* ================================================= */
+/* ===== ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v4.0 (FINAL) ===== */
+/* ================================================= */
 
 @keyframes pop-and-glow {
   0% {
     transform: scale(1);
-    opacity: 0.6;
-    text-shadow: none;
   }
-  60% {
-    transform: scale(1.2);
-    opacity: 1;
-    text-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+  50% {
+    transform: scale(1.3);
+    text-shadow: 0 0 12px rgba(255, 193, 7, 0.9);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
-    text-shadow: 0 0 8px rgba(255, 193, 7, 0.7);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255, 193, 7, 0.6);
   }
 }
 
 .star-rating {
   display: flex;
   justify-content: space-around;
-  font-size: 2.2rem; /* Трохи зменшимо розмір, щоб краще виглядало кнопкою */
+  font-size: 2.2rem;
 }
 
+/* --- СТАН КНОПКИ ЗА ЗАМОВЧУВАННЯМ (ОПУКЛА) --- */
 .star-rating span {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   cursor: pointer;
-  color: var(--inactive-gray);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2); /* Прозорий фон кнопки */
+  background: rgba(255, 255, 255, 0.15);
   box-shadow:
-    1px 1px 3px rgba(0, 0, 0, 0.15), /* Легка зовнішня тінь для опуклості */
-    inset 1px 1px 2px rgba(255, 255, 255, 0.3); /* Легкий внутрішній блік зверху */
+    1px 1px 3px rgba(0, 0, 0, 0.1),
+    inset 1px 1px 1px rgba(255, 255, 255, 0.4);
   transition: transform 0.1s ease-out, box-shadow 0.1s ease-in-out;
-  opacity: 0.7;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3); /* Soft emboss на зірочці */
+  
+  /* --- СТАН ЗІРОЧКИ ВСЕРЕДИНІ (СІРА, ВТИСНУТА) --- */
+  color: var(--inactive-gray);
+  opacity: 0.8;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4); /* Dark emboss effect */
 }
 
+/* --- СТАН КНОПКИ В МОМЕНТ НАТИСКАННЯ (ВТИСНУТА) --- */
 .star-rating span:active {
   box-shadow:
-    inset 1px 1px 3px rgba(0, 0, 0, 0.2), /* Ефект вдавлення */
-    inset -1px -1px 2px rgba(255, 255, 255, 0.2);
+    inset 1px 1px 3px rgba(0, 0, 0, 0.2);
   transform: scale(0.95);
+  transition: transform 0.05s ease-out, box-shadow 0.05s ease-in-out;
 }
 
+/* --- СТАН КНОПКИ ПІСЛЯ АКТИВАЦІЇ (ОПУКЛА, АЛЕ З ЖОВТОЮ ЗІРКОЮ) --- */
 .star-rating span.active {
-  color: #FFC107; /* Яскраво-жовтий */
-  animation: pop-and-glow 0.4s ease-out forwards; /* Затримка не потрібна, анімація сама зробить ефект */
-  box-shadow:
-    1px 1px 5px rgba(0, 0, 0, 0.2),
-    inset 1px 1px 2px rgba(255, 255, 255, 0.4);
+  /* --- СТАН ЗІРОЧКИ ВСЕРЕДИНІ (ЖОВТА, ВТИСНУТА, СЯЮЧА) --- */
+  color: #FFC107;
+  opacity: 1;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255, 193, 7, 0.6); /* Зберігаємо emboss + додаємо світіння */
+  animation: pop-and-glow 0.5s ease-out forwards;
 }
+
 
 .expand-section {
   text-align: center; margin: 30px 0 15px 0;
@@ -764,13 +766,14 @@ h2 {
 }
 .setting-item.calories-input-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center; /* Центруємо по горизонталі */
-  gap: 10px; /* Відступ між іконкою та полем */
-  margin-bottom: 20px; /* Повертаємо звичайний відступ знизу */
+  flex-direction: column; /* Ставимо елементи в колонку */
+  align-items: center;    /* Центруємо по горизонталі */
+  gap: 5px;               /* Невеликий відступ між іконкою та полем */
+  margin-bottom: 20px;
 }
 
 .setting-item.calories-input-wrapper i.bi-fire {
-  font-size: 1.4rem;
+  font-size: 1.6rem; /* Трохи збільшимо іконку */
   opacity: 0.7;
 }
+
