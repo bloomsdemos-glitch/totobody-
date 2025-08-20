@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const trainingScreen = document.getElementById('trainingScreen');
   const trainingBackBtn = document.getElementById('trainingBackBtn');
   const muteBtn = document.getElementById('muteBtn');
-  const shuffleBtn = document.getElementById('shuffleBtn'); // Нова кнопка
+  const shuffleBtn = document.getElementById('shuffleBtn');
   const trainingProgramNameEl = document.getElementById('trainingProgramName');
   const exerciseNameEl = document.getElementById('exerciseName');
   const timerEl = document.getElementById('timer');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const extraTagsSection = document.getElementById('extraTagsSection');
 
   let isMuted = false;
-  let isShuffleActive = false; // Нова змінна стану
+  let isShuffleActive = false;
 
   function parseTimeToSeconds(timeString) {
     if (!timeString || !timeString.includes(':')) {
@@ -216,14 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
     currentProgram = programName;
     exercises = buildWorkout(programName);
     
-    // ЛОГІКА SHUFFLE
     if (isShuffleActive && exercises.length > 1) {
-      const lastExercise = exercises.pop(); // Відкладаємо "Кінець тренування"
+      const lastExercise = exercises.pop();
       for (let i = exercises.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [exercises[i], exercises[j]] = [exercises[j], exercises[i]];
       }
-      exercises.push(lastExercise); // Повертаємо "Кінець тренування" в самий кінець
+      exercises.push(lastExercise);
     }
 
     currentIndex = 0;
@@ -255,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // ЛОГІКА ДЛЯ КНОПКИ SHUFFLE
   function updateShuffleButtonUI() {
     if (!shuffleBtn) return;
     shuffleBtn.classList.toggle('shuffle-active', isShuffleActive);
@@ -470,9 +468,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (difficultySlider) {
     const show = () => sliderEmojiBubble.classList.add('visible');
     const hideAndPop = () => {
-      sliderEmojiBubble.classList.remove('visible');
       sliderEmojiBubble.classList.add('pop');
-      setTimeout(() => sliderEmojiBubble.classList.remove('pop'), 400);
+      sliderEmojiBubble.addEventListener('animationend', () => {
+        sliderEmojiBubble.classList.remove('pop');
+        sliderEmojiBubble.classList.remove('visible');
+      }, { once: true });
     }
     difficultySlider.addEventListener('input', updateSliderEmoji);
     difficultySlider.addEventListener('mousedown', show);
@@ -536,12 +536,19 @@ document.addEventListener('DOMContentLoaded', () => {
       menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
+          
+          const icon = link.querySelector('i');
+          if (icon) {
+            icon.classList.add('icon-glow');
+            icon.addEventListener('animationend', () => icon.classList.remove('icon-glow'), { once: true });
+          }
+
           const targetId = link.dataset.target;
           const targetScreen = document.getElementById(targetId);
           if (targetScreen) {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
-            menuTitle.textContent = link.querySelector('span').textContent;
+            menuTitle.textContent = link.textContent;
             menuBackBtn.style.display = 'flex';
           }
         });
