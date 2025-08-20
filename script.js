@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
   
+  // ПОВЕРНУЛИ АУДІО-ДВИГУН
   function playCurrentExerciseSound() {
     if (isMuted) return;
     const currentExercise = exercises[currentIndex];
@@ -142,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ОНОВЛЕНО: Іконки та галочки
   function updateUI() {
     const currentExercise = exercises[currentIndex];
     if (currentExercise) {
@@ -149,8 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
       exerciseNameEl.textContent = currentExercise.name;
     }
     timerEl.textContent = formatSecondsToTime(remainingTime);
-    pauseBtn.innerHTML = isPaused ? '<i class="bi bi-play-fill"></i>' : '<i class="bi bi-pause-fill"></i>';
-    const completedHTML = exercises.slice(0, currentIndex).map(ex => `<div class="completed-exercise">${ex.name}</div>`).join('');
+    pauseBtn.innerHTML = isPaused ? '<i class="bi bi-play-circle-fill"></i>' : '<i class="bi bi-pause-circle-fill"></i>';
+    const completedHTML = exercises.slice(0, currentIndex)
+      .map(ex => `<div class="completed-exercise"><i class="bi bi-check-square-fill"></i> ${ex.name}</div>`)
+      .join('');
     completedListEl.innerHTML = completedHTML;
   }
   
@@ -253,12 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveBgBtn) { saveBgBtn.addEventListener('click', () => { const bgUrl = bgUrlInput.value.trim(); if (bgUrl) { localStorage.setItem('customBackground', bgUrl); applyBackground(bgUrl); } }); }
   if (resetBgBtn) { resetBgBtn.addEventListener('click', () => { localStorage.removeItem('customBackground'); document.body.style.backgroundImage = 'none'; if (bgUrlInput) bgUrlInput.value = ''; }); }
 
+  // ОНОВЛЕНО: Додано "Біг" в стандартні програми
   function loadPrograms() {
     const savedPrograms = localStorage.getItem('workoutPrograms');
     if (savedPrograms) {
         workoutPrograms = JSON.parse(savedPrograms);
     } else {
-        workoutPrograms = { "HIIT BASIC": { exercises: [{name: "Стрибки джек", duration: 30, audio: 'jack.mp3'}, {name: "Берпі", duration: 45, audio: 'burpee.mp3'}] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] }, "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] } };
+        workoutPrograms = { "HIIT BASIC": { exercises: [{name: "Стрибки джек", duration: 30, audio: 'jack.m4a'}, {name: "Берпі", duration: 45, audio: 'burpee.m4a'}] }, "HIIT ULTRA": { exercises: [] }, "HIIT PRO": { exercises: [] }, "MIXED BASIC": { exercises: [] }, "DUMBBELL": { exercises: [] }, "BODYWEIGHT": { exercises: [] }, "Біг": { exercises: [] } };
     }
   }
   function savePrograms() { localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms)); }
@@ -369,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (workoutPrograms[newName]) { alert('Програма з такою назвою вже існує!'); return; }
           Object.defineProperty(workoutPrograms, newName, Object.getOwnPropertyDescriptor(workoutPrograms, currentlyEditingProgram));
           delete workoutPrograms[currentlyEditingProgram];
+          currentlyEditingProgram = newName; // Оновлюємо ім'я поточної програми
         }
         savePrograms(); renderProgramList(); alert(`Програму "${newName}" збережено!`);
         const allMenus = sideMenu.querySelectorAll('.menu-screen');
@@ -494,7 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
             menuTitle.textContent = link.textContent;
-            menuBackBtn.style.display = 'block';
+            menuBackBtn.style.display = 'flex';
           }
         });
       });
