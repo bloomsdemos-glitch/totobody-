@@ -569,7 +569,7 @@ h2 {
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
 /* ================================================= */
-/* ===== ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v4.0 (FINAL) ===== */
+/* ===== ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v5.0 (REALISTIC) ===== */
 /* ================================================= */
 
 @keyframes pop-and-glow {
@@ -578,11 +578,18 @@ h2 {
   }
   50% {
     transform: scale(1.3);
-    text-shadow: 0 0 12px rgba(255, 193, 7, 0.9);
+    text-shadow: 
+      0 0 12px rgba(255, 193, 7, 0.9),
+      -1px -1px 2px rgba(0,0,0,0.6),
+       1px  1px 2px rgba(0,0,0,0.6);
   }
   100% {
     transform: scale(1);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255, 193, 7, 0.6);
+    text-shadow: 
+      0 1px 1px rgba(0, 0, 0, 0.4), 
+      0 0 8px rgba(255, 193, 7, 0.6),
+     -1px -1px 1px rgba(0,0,0,0.6),
+      1px  1px 1px rgba(0,0,0,0.6);
   }
 }
 
@@ -592,7 +599,7 @@ h2 {
   font-size: 2.2rem;
 }
 
-/* --- СТАН КНОПКИ ЗА ЗАМОВЧУВАННЯМ (ОПУКЛА) --- */
+/* --- СТАН КНОПКИ ЗА ЗАМОВЧУВАННЯМ (ОПУКЛА, МАТЕРІАЛ) --- */
 .star-rating span {
   display: flex;
   justify-content: center;
@@ -601,32 +608,40 @@ h2 {
   height: 45px;
   cursor: pointer;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(0,0,0,0.15));
   box-shadow:
-    1px 1px 3px rgba(0, 0, 0, 0.1),
-    inset 1px 1px 1px rgba(255, 255, 255, 0.4);
+    inset -2px -2px 4px rgba(255,255,255,0.4),  /* світло зверху */
+    inset  2px  2px 4px rgba(0,0,0,0.4),        /* тінь знизу */
+    1px 1px 3px rgba(0, 0, 0, 0.2);
   transition: transform 0.1s ease-out, box-shadow 0.1s ease-in-out;
   
-  /* --- СТАН ЗІРОЧКИ ВСЕРЕДИНІ (СІРА, ВТИСНУТА) --- */
+  /* --- ЗІРОЧКА ВСЕРЕДИНІ (СІРА, ВТИСНУТА) --- */
   color: var(--inactive-gray);
   opacity: 0.8;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4); /* Dark emboss effect */
+  text-shadow:
+     1px  1px 2px rgba(0, 0, 0, 0.6),   /* тінь знизу */
+    -1px -1px 2px rgba(255, 255, 255, 0.6); /* світло зверху */
 }
 
 /* --- СТАН КНОПКИ В МОМЕНТ НАТИСКАННЯ (ВТИСНУТА) --- */
 .star-rating span:active {
   box-shadow:
-    inset 1px 1px 3px rgba(0, 0, 0, 0.2);
+    inset 2px 2px 4px rgba(0,0,0,0.5),
+    inset -2px -2px 4px rgba(255,255,255,0.3);
   transform: scale(0.95);
   transition: transform 0.05s ease-out, box-shadow 0.05s ease-in-out;
 }
 
-/* --- СТАН КНОПКИ ПІСЛЯ АКТИВАЦІЇ (ОПУКЛА, АЛЕ З ЖОВТОЮ ЗІРКОЮ) --- */
+/* --- СТАН КНОПКИ ПІСЛЯ АКТИВАЦІЇ (ЖОВТА ЗІРКА З ПІДСВІТКОЮ) --- */
 .star-rating span.active {
-  /* --- СТАН ЗІРОЧКИ ВСЕРЕДИНІ (ЖОВТА, ВТИСНУТА, СЯЮЧА) --- */
   color: #FFC107;
   opacity: 1;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255, 193, 7, 0.6); /* Зберігаємо emboss + додаємо світіння */
+  text-shadow:
+    0 0 4px rgba(255, 193, 7, 0.9),
+    0 0 10px rgba(255, 193, 7, 0.7),
+   -1px -1px 1px rgba(0,0,0,0.6),
+    1px  1px 1px rgba(0,0,0,0.6);
+  filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.9)); /* LED glow */
   animation: pop-and-glow 0.5s ease-out forwards;
 }
 
