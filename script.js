@@ -465,21 +465,27 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderEmojiBubble.style.left = `${thumbPosition}px`;
     sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
   }
-  if (difficultySlider) {
+// Повний JS код з попереднього повідомлення, АЛЕ з однією зміною у `hideAndPop`:
+
+if (difficultySlider) {
     const show = () => sliderEmojiBubble.classList.add('visible');
     const hideAndPop = () => {
+      // Спочатку запускаємо анімацію
       sliderEmojiBubble.classList.add('pop');
+      // І слухаємо, коли вона закінчиться
       sliderEmojiBubble.addEventListener('animationend', () => {
+        // І ТІЛЬКИ ПОТІМ прибираємо класи
         sliderEmojiBubble.classList.remove('pop');
         sliderEmojiBubble.classList.remove('visible');
-      }, { once: true });
+      }, { once: true }); // {once: true} означає, що цей слухач спрацює один раз і самознищиться
     }
     difficultySlider.addEventListener('input', updateSliderEmoji);
     difficultySlider.addEventListener('mousedown', show);
     difficultySlider.addEventListener('touchstart', show, {passive: true});
     difficultySlider.addEventListener('mouseup', hideAndPop);
     difficultySlider.addEventListener('touchend', hideAndPop);
-  }
+}
+
 
   function setupEmojiRating(container) {
     if (!container) return;
