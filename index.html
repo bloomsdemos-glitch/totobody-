@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
 
@@ -229,6 +229,31 @@
     </div>
   </div>
 
-  <script src="script.js?v=21"></script>
+  <div id="danceModal" class="modal-overlay">
+    <div class="modal-content glassmorphism">
+      <button class="close-button">&times;</button>
+      <h2>Вибери тривалість</h2>
+      <div class="dance-options">
+        <button class="dance-option-btn" data-duration="300">
+          <span class="time">5</span>
+          <span class="unit">хв</span>
+        </button>
+        <button class="dance-option-btn" data-duration="600">
+          <span class="time">10</span>
+          <span class="unit">хв</span>
+        </button>
+        <button class="dance-option-btn" data-duration="900">
+          <span class="time">15</span>
+          <span class="unit">хв</span>
+        </button>
+        <button class="dance-option-btn" data-duration="1800">
+          <span class="time">30</span>
+          <span class="unit">хв</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=22"></script>
 </body>
 </html>
