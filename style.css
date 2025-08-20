@@ -438,7 +438,7 @@ h2 {
   opacity: 0.6; font-size: 1.2rem;
 }
 .menu-screen li a .icon-glow {
-  animation: icon-glow 0.9s ease-out;
+  animation: icon-glow 1.2s linear;
 }
 @keyframes icon-glow {
   0% { transform: scale(1); text-shadow: none; }
