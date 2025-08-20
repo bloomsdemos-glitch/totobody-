@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=19">
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
@@ -90,7 +90,7 @@
     </section>
     <button id="restDayBtn" class="fab" data-action="add-rest-day"><i class="bi bi-emoji-smile"></i></button>
     <div id="goalProgress" class="goal-bar">
-        <span>🎯Мета: Схуднути до 65 кг</span>
+        <span>Мета: Схуднути до 65 кг</span>
         <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
     </div>
   </main>
@@ -193,6 +193,40 @@
     </div>
   </div>
 
-  <script src="script.js?v=19"></script>
+  <div id="restDayModal" class="modal-overlay">
+    <div class="modal-content glassmorphism">
+      <button class="close-button">&times;</button>
+      <h2>Як пройшов твій день?</h2>
+      <div class="setting-item">
+        <label>Загальна активність:</label>
+        <div class="input-with-icon">
+          <i class="bi bi-person-walking"></i>
+          <input type="number" id="stepsInput" placeholder="Кроки">
+        </div>
+        <div class="input-with-icon">
+          <i class="bi bi-fire"></i>
+          <input type="number" id="restDayCaloriesInput" placeholder="Калорії">
+        </div>
+      </div>
+      <div class="setting-item">
+        <label>Який сьогодні настрій?</label>
+        <div id="moodRating" class="emoji-rating">
+          <span data-value="🤩">🤩</span>
+          <span data-value="🙂">🙂</span>
+          <span data-value="🫤">🫤</span>
+          <span data-value="😟">😟</span>
+          <span data-value="🤬">🤬</span>
+        </div>
+      </div>
+      <div class="setting-actions">
+        <button id="saveRestDayBtn" class="menu-button btn-with-icon">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>Зберегти</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=20"></script>
 </body>
 </html>
