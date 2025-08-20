@@ -69,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const restDayCaloriesInput = document.getElementById('restDayCaloriesInput');
   const moodRating = document.getElementById('moodRating');
   const saveRestDayBtn = document.getElementById('saveRestDayBtn');
-  // Нові DOM-елементи для "DANCE"
   const danceModal = document.getElementById('danceModal');
   const closeDanceModalBtn = danceModal.querySelector('.close-button');
   const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
+  const historyListEl = document.getElementById('historyList');
 
 
   let isMuted = false;
@@ -209,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function confirmExitTraining() { if (!isStarted) { showScreen('homeScreen'); return; } if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); } }
   
-  // ОНОВЛЕНО: Тепер приймає готовий масив вправ
   function startWorkout(workoutData) {
     let count = 3;
     countdownNumberEl.textContent = count;
@@ -295,7 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modalStartBtn.addEventListener('click', startFunction);
   }
   
-  // ОНОВЛЕНО: Обробник для всіх плиток на головному екрані
   workoutTiles.forEach(tile => {
     tile.addEventListener('click', () => {
         const programName = tile.dataset.program;
@@ -600,7 +598,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // ЛОГІКА ДЛЯ РЕЖИМУ "DANCE"
   if (closeDanceModalBtn) {
     closeDanceModalBtn.addEventListener('click', () => danceModal.classList.remove('active'));
   }
@@ -623,9 +620,76 @@ document.addEventListener('DOMContentLoaded', () => {
           ]
         };
         danceModal.classList.remove('active');
-        setTimeout(() => startWorkout(danceWorkout), 300); // Невелика затримка для плавного закриття
+        setTimeout(() => startWorkout(danceWorkout), 300);
       });
     });
+  }
+
+  // ==================================
+  // ===== ЛОГІКА ІСТОРІЇ ТРЕНУВАНЬ =====
+  // ==================================
+
+  function renderHistory() {
+    if (!historyListEl) return;
+
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    historyListEl.innerHTML = ''; 
+
+    if (history.length === 0) {
+      historyListEl.innerHTML = '<p style="text-align: center; opacity: 0.7;">Твоя історія ще порожня. Час потренуватись! 💪</p>';
+      return;
+    }
+
+    const groupedByDay = history.reduce((acc, record) => {
+      const date = new Date(record.date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' });
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(record);
+      return acc;
+    }, {});
+
+    const sortedDays = Object.keys(groupedByDay).sort((a, b) => {
+        const dateA = new Date(groupedByDay[a][0].date);
+        const dateB = new Date(groupedByDay[b][0].date);
+        return dateB - dateA;
+    });
+
+    for (const day of sortedDays) {
+      const dayRecords = groupedByDay[day];
+      const dayGroupEl = document.createElement('div');
+      dayGroupEl.className = 'history-day-group';
+
+      const dateHeader = document.createElement('h4');
+      dateHeader.textContent = day;
+      dayGroupEl.appendChild(dateHeader);
+
+      const totalCaloriesForDay = dayRecords.reduce((sum, record) => sum + (record.calories || 0), 0);
+      
+      const programsForDay = dayRecords
+          .filter(r => r.type === 'workout')
+          .map(r => r.program)
+          .join(', ');
+
+      const tagsForDay = dayRecords.flatMap(r => r.tags).join(' ');
+
+      const li = document.createElement('li');
+      li.className = 'history-item';
+      li.innerHTML = `
+        <div class="history-item-header">
+          <span class="history-item-programs">${programsForDay || 'День відпочинку'}</span>
+          <span class="history-item-calories">${totalCaloriesForDay} kcal</span>
+        </div>
+        <div class="history-item-tags">${tagsForDay}</div>
+      `;
+      
+      li.addEventListener('click', () => {
+          alert(`Детальна статистика за ${day} вже скоро!`);
+      });
+
+      dayGroupEl.appendChild(li);
+      historyListEl.appendChild(dayGroupEl);
+    }
   }
 
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
@@ -643,7 +707,11 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.addEventListener('animationend', () => icon.classList.remove('icon-glow'), { once: true });
           }
           const targetId = link.dataset.target;
+          if (targetId === 'historyMenu') {
+            renderHistory();
+          }
           const targetScreen = document.getElementById(targetId);
+
           if (targetScreen) {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
