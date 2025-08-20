@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 
@@ -28,12 +28,12 @@
         <h3 id="menuTitle">Меню</h3>
         <div id="mainMenu" class="menu-screen active">
           <ul>
-            <li><a href="#" data-target="statsSettingsMenu">Статистика<i class="bi bi-clipboard-data"></i></a></li>
-            <li><a href="#" data-target="calendarMenu">Календар<i class="bi bi-calendar2-date"></i></a></li>
-            <li><a href="#" data-target="goalSettingsMenu">Мета<i class="bi bi-bullseye"></i></a></li>
-            <li><a href="#" data-target="workoutSettingsMenu">Налаштування тренувань<i class="bi bi-gear-wide-connected"></i></a></li>
-            <li><a href="#" data-target="appSettingsMenu">Налаштування додатку<i class="bi bi-magic"></i></a></li>
-            <li><a href="#" data-target="historyMenu">Історія тренувань<i class="bi bi-archive"></i></a></li>
+            <li><a href="#" data-target="statsSettingsMenu"><i class="bi bi-clipboard-data"></i>Статистика</a></li>
+            <li><a href="#" data-target="calendarMenu"><i class="bi bi-calendar2-date"></i>Календар</a></li>
+            <li><a href="#" data-target="goalSettingsMenu"><i class="bi bi-bullseye"></i>Мета</a></li>
+            <li><a href="#" data-target="workoutSettingsMenu"><i class="bi bi-gear-wide-connected"></i>Налаштування тренувань</a></li>
+            <li><a href="#" data-target="appSettingsMenu"><i class="bi bi-magic"></i>Налаштування додатку</a></li>
+            <li><a href="#" data-target="historyMenu"><i class="bi bi-archive"></i>Історія тренувань</a></li>
           </ul>
         </div>
         <div id="workoutSettingsMenu" class="menu-screen"><ul id="program-list" class="program-list"></ul><button id="addNewProgramBtn" class="menu-button">Додати нову програму</button></div>
@@ -96,22 +96,40 @@
   </main>
   
   <div id="trainingScreen" class="screen">
-    <button id="trainingBackBtn" class="back-button"><i class="bi bi-arrow-left-circle-fill"></i></button>
-    <div class="controls">
-      <button id="prevExercise" class="icon-button"><i class="bi bi-skip-start-fill"></i></button>
-      <button id="pauseBtn" class="icon-button pause-button"><i class="bi bi-pause-fill"></i></button>
-      <button id="stopBtn" class="icon-button"><i class="bi bi-stop-circle-fill"></i></button>
-      <button id="nextExercise" class="icon-button"><i class="bi bi-skip-end-fill"></i></button>
-      <button id="muteBtn" class="icon-button"><i class="bi bi-volume-up-fill"></i></button>
-    </div>
+    <button id="trainingBackBtn" class="back-button"><i class="bi bi-box-arrow-left"></i></button>
     <h2 id="trainingProgramName">HIIT BASIC</h2>
     <div class="exercise-display"><div class="marquee"><span id="exerciseName">Присідання</span></div></div>
     <div id="timer" class="timer-display">00:30</div>
+    <div class="controls">
+      <button id="prevExercise" class="icon-button"><i class="bi bi-arrow-up-left-square-fill"></i></button>
+      <button id="pauseBtn" class="icon-button pause-button"><i class="bi bi-play-circle-fill"></i></button>
+      <button id="stopBtn" class="icon-button"><i class="bi bi-sign-stop-fill"></i></button>
+      <button id="nextExercise" class="icon-button"><i class="bi bi-arrow-up-right-square-fill"></i></button>
+      <button id="muteBtn" class="icon-button"><i class="bi bi-volume-up-fill"></i></button>
+    </div>
     <div id="completedExercises"></div>
   </div>
 
-  <div id="workoutModal" class="modal-overlay"><div class="modal-content glassmorphism"><button class="close-button">&times;</button><h2 id="modalProgramName"></h2><div class="modal-info"><p>Програма включає (рандомні):</p><ul id="modalExerciseList"></ul></div><div class="modal-actions"><button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-magic"></i></button><button id="modalStartBtn" class="start-btn">Почати тренування</button></div></div></div>
+  <div id="workoutModal" class="modal-overlay">
+    <div class="modal-content glassmorphism">
+      <button class="close-button">&times;</button>
+      <h2 id="modalProgramName"></h2>
+      <div class="modal-info">
+        <p>Програма включає (рандомні):</p>
+        <ul id="modalExerciseList"></ul>
+      </div>
+      <div class="modal-actions">
+        <button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-magic"></i></button>
+        <button id="modalStartBtn" class="start-btn btn-with-icon">
+          <i class="bi bi-arrow-up-right-square-fill"></i>
+          <span>Почати</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
+  
   <div id="exerciseModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
       <button class="close-button">&times;</button>
@@ -137,13 +155,22 @@
   <div id="finishModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
       <h2 id="finishModalTitle">Чудова робота!</h2>
-      <div class="setting-item"><label for="caloriesInput">Спалені калорії:</label><input type="number" id="caloriesInput" placeholder="Введи з фітнес-трекера..."></div>
-      <div class="setting-item"><label for="difficultySlider">Наскільки було складно?</label><div class="difficulty-slider-container"><div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div><input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider"></div></div>
+      <div class="setting-item">
+        <label for="caloriesInput">Спалені калорії:</label>
+        <input type="number" id="caloriesInput" placeholder="kcal">
+      </div>
+      <div class="setting-item">
+        <label for="difficultySlider">Наскільки було складно?</label>
+        <div class="difficulty-slider-container">
+          <div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div>
+          <input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider">
+        </div>
+      </div>
       <div class="setting-item"><label>Рівень енергії:</label><div id="energyRating" class="emoji-rating"><span data-value="0">😵‍💫</span><span data-value="1">🥱</span><span data-value="2">🫤</span><span data-value="3">👌🏻</span><span data-value="4">⚡️</span><span data-value="5" class="active">🔥</span></div></div>
       <div class="setting-item"><label>Твоя оцінка тренування:</label><div id="starRating" class="star-rating"><span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span></div></div>
       
       <div class="expand-section">
-        <button id="expandTagsBtn" class="menu-button secondary">+</button>
+        <button id="expandTagsBtn" class="menu-button secondary"><i class="bi bi-plus-circle-dotted"></i></button>
       </div>
       <div id="extraTagsSection" class="extra-tags-section">
         <div class="tags-rating">
@@ -155,12 +182,16 @@
           <span data-tag="fire">💥</span>
         </div>
       </div>
+      
       <div class="setting-actions">
-        <button id="saveWorkoutLogBtn" class="menu-button">Зберегти результат</button>
+        <button id="saveWorkoutLogBtn" class="menu-button btn-with-icon">
+          <i class="bi bi-check-circle"></i>
+          <span>Зберегти</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <script src="script.js?v=16"></script>
+  <script src="script.js?v=17"></script>
 </body>
 </html>
