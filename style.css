@@ -221,11 +221,13 @@ h2 {
   border-radius: 50%;
   z-index: 10;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 24px;          /* розмір іконки */
+  line-height: 1;           /* щоб не роздувало */
   color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;         /* якщо вміст лізе назовні */
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   backdrop-filter: blur(5px);
@@ -233,6 +235,7 @@ h2 {
   box-shadow: 2px 2px 5px var(--glass-shadow);
   transition: all 0.2s ease-out;
 }
+
 .fab:active {
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
   transform: scale(0.95);
