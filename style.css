@@ -493,7 +493,7 @@ h2 {
   font-size: 2.2rem; transition: left 0.1s linear, opacity 0.2s ease; opacity: 0; pointer-events: none; z-index: 5;
 }
 .slider-emoji-bubble.visible { opacity: 1; }
-.slider-emoji-bubble.pop { animation: pop-effect 0.8s ease-out; }
+.slider-emoji-bubble.pop { animation: pop-effect 1.5s ease-out; }
 @keyframes pop-effect {
   0% { transform: translateX(-50%) scale(1); }
   50% { transform: translateX(-50%) scale(1.4); opacity: 1; }
