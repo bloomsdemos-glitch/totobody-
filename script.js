@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const trainingScreen = document.getElementById('trainingScreen');
   const trainingBackBtn = document.getElementById('trainingBackBtn');
   const muteBtn = document.getElementById('muteBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn'); // Нова кнопка
   const trainingProgramNameEl = document.getElementById('trainingProgramName');
   const exerciseNameEl = document.getElementById('exerciseName');
   const timerEl = document.getElementById('timer');
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const extraTagsSection = document.getElementById('extraTagsSection');
 
   let isMuted = false;
+  let isShuffleActive = false; // Нова змінна стану
 
   function parseTimeToSeconds(timeString) {
     if (!timeString || !timeString.includes(':')) {
@@ -116,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   function buildWorkout(programName) {
     const programData = workoutPrograms[programName] || {};
-    const exercises = programData.exercises || [];
+    let exercises = programData.exercises ? [...programData.exercises] : [];
+    
     if (exercises.length > 0) {
       const workout = exercises.map(ex => ({ name: ex.name, duration: ex.duration || 30, audio: ex.audio }));
       workout.push({ name: 'Кінець тренування', duration: 3 });
@@ -212,6 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function _actuallyStartWorkout(programName) {
     currentProgram = programName;
     exercises = buildWorkout(programName);
+    
+    // ЛОГІКА SHUFFLE
+    if (isShuffleActive && exercises.length > 1) {
+      const lastExercise = exercises.pop(); // Відкладаємо "Кінець тренування"
+      for (let i = exercises.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [exercises[i], exercises[j]] = [exercises[j], exercises[i]];
+      }
+      exercises.push(lastExercise); // Повертаємо "Кінець тренування" в самий кінець
+    }
+
     currentIndex = 0;
     remainingTime = exercises[0]?.duration || 30;
     isStarted = true; isPaused = false;
@@ -238,6 +252,21 @@ document.addEventListener('DOMContentLoaded', () => {
       isMuted = !isMuted;
       saveMuteState();
       updateMuteButtonUI();
+    });
+  }
+  
+  // ЛОГІКА ДЛЯ КНОПКИ SHUFFLE
+  function updateShuffleButtonUI() {
+    if (!shuffleBtn) return;
+    shuffleBtn.classList.toggle('shuffle-active', isShuffleActive);
+  }
+  function saveShuffleState() { localStorage.setItem('isShuffleActive', isShuffleActive); }
+  function loadShuffleState() { isShuffleActive = localStorage.getItem('isShuffleActive') === 'true'; }
+  if(shuffleBtn) {
+    shuffleBtn.addEventListener('click', () => {
+      isShuffleActive = !isShuffleActive;
+      saveShuffleState();
+      updateShuffleButtonUI();
     });
   }
 
@@ -268,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   function savePrograms() { localStorage.setItem('workoutPrograms', JSON.stringify(workoutPrograms)); }
-  function renderProgramList() { if (!programListEl) return; programListEl.innerHTML = ''; for (const programName in workoutPrograms) { const li = document.createElement('li'); li.className = 'program-list-item'; li.dataset.programName = programName; li.innerHTML = `<span>${programName}</span><span class="arrow">></span>`; li.addEventListener('click', () => { openProgramEditor(programName); }); programListEl.appendChild(li); } }
+  function renderProgramList() { if (!programListEl) return; programListEl.innerHTML = ''; for (const programName in workoutPrograms) { const li = document.createElement('li'); li.className = 'program-list-item'; li.dataset.programName = programName; li.innerHTML = `<span>${programName}</span><i class="bi bi-sliders"></i>`; li.addEventListener('click', () => { openProgramEditor(programName); }); programListEl.appendChild(li); } }
   
   function renderExerciseList(programName) {
     if (!exerciseListEl) return;
@@ -438,7 +467,19 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderEmojiBubble.style.left = `${thumbPosition}px`;
     sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
   }
-  if (difficultySlider) { difficultySlider.addEventListener('input', updateSliderEmoji); }
+  if (difficultySlider) {
+    const show = () => sliderEmojiBubble.classList.add('visible');
+    const hideAndPop = () => {
+      sliderEmojiBubble.classList.remove('visible');
+      sliderEmojiBubble.classList.add('pop');
+      setTimeout(() => sliderEmojiBubble.classList.remove('pop'), 400);
+    }
+    difficultySlider.addEventListener('input', updateSliderEmoji);
+    difficultySlider.addEventListener('mousedown', show);
+    difficultySlider.addEventListener('touchstart', show, {passive: true});
+    difficultySlider.addEventListener('mouseup', hideAndPop);
+    difficultySlider.addEventListener('touchend', hideAndPop);
+  }
 
   function setupEmojiRating(container) {
     if (!container) return;
@@ -500,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (targetScreen) {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
-            menuTitle.textContent = link.textContent;
+            menuTitle.textContent = link.querySelector('span').textContent;
             menuBackBtn.style.display = 'flex';
           }
         });
@@ -533,6 +574,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProgramList();
   loadMuteState();
   updateMuteButtonUI();
+  loadShuffleState();
+  updateShuffleButtonUI();
   if (difficultySlider) { updateSliderEmoji(); }
   showScreen('homeScreen');
 });
