@@ -271,6 +271,30 @@ h2 {
   height: 100vh;
   position: relative;
 }
+/* НОВИЙ СТИЛЬ ДЛЯ КНОПКИ MUTE */
+.mute-btn {
+  position: absolute;
+  top: 95px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-color);
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.mute-btn:active {
+  background: rgba(255, 255, 255, 0.4);
+}
 #trainingProgramName {
   font-size: 1rem;
   opacity: 0.7;
@@ -643,7 +667,6 @@ h2 {
   border-radius: var(--border-radius-small);
   min-height: 100px;
 }
-/* ОСНОВНІ ЗМІНИ ТУТ */
 .exercise-list-item {
   display: flex;
   justify-content: space-between;
@@ -666,13 +689,13 @@ h2 {
 .exercise-item-info .duration {
   font-size: 0.8rem;
   opacity: 0.6;
-  font-family: monospace; /* Системний шрифт для часу */
+  font-family: monospace;
 }
 .exercise-item-actions button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem; /* Розмір для Bootstrap Icons */
+  font-size: 1.2rem;
   margin-left: 12px;
   opacity: 0.6;
   transition: opacity 0.2s ease;
