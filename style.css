@@ -87,7 +87,6 @@ h2 {
   padding: 5px;
   color: var(--text-color);
 }
-/* НОВИЙ СТИЛЬ ДЛЯ СКЛЯНИХ КНОПОК */
 .glass-icon-btn {
   width: 50px;
   height: 50px;
@@ -116,8 +115,7 @@ h2 {
   left: 20px;
   background: none;
   border: none;
-  font-size: 1.5rem; /* Збільшив для іконки */
-  font-family: var(--font-family);
+  font-size: 1.8rem;
   color: var(--text-color);
   opacity: 0.7;
   cursor: pointer;
@@ -224,32 +222,12 @@ h2 {
   cursor: pointer;
   box-shadow: var(--shadow-distance) var(--shadow-distance) var(--shadow-blur) var(--shadow-dark), calc(var(--shadow-distance) * -1) calc(var(--shadow-distance) * -1) var(--shadow-blur) var(--shadow-light);
   transition: all 0.2s ease-out;
+  font-size: 1.8rem;
+  color: var(--text-color);
 }
 .fab:active {
   box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
   transform: scale(0.95);
-}
-.fab::before,
-.fab::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--text-color);
-  transition: all 0.2s ease-out;
-}
-.fab::before {
-  width: 20px;
-  height: 2px;
-}
-.fab::after {
-  width: 2px;
-  height: 20px;
-}
-.fab:hover::before,
-.fab:hover::after {
-  transform: translate(-50%, -50%) rotate(90deg);
 }
 .goal-bar {
   position: fixed;
@@ -291,29 +269,6 @@ h2 {
   height: 100vh;
   position: relative;
 }
-.mute-btn {
-  position: absolute;
-  top: 95px;
-  right: 20px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--text-color);
-  font-size: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-.mute-btn:active {
-  background: rgba(255, 255, 255, 0.4);
-}
 #trainingProgramName {
   font-size: 1rem;
   opacity: 0.7;
@@ -344,6 +299,15 @@ h2 {
   margin-bottom: 20px;
   flex-shrink: 0;
 }
+/* ОНОВЛЕНО: Загальний стиль для всіх кнопок керування */
+.controls .icon-button {
+  font-size: 2.5rem; /* Збільшуємо розмір іконок */
+  opacity: 0.8;
+  padding: 10px;
+}
+.controls .pause-button {
+  font-size: 3.5rem; /* Робимо кнопку плей/пауза більшою */
+}
 #completedExercises {
   width: 90%;
   margin: 20px auto;
@@ -365,11 +329,14 @@ h2 {
   font-size: 1rem;
   opacity: 0.8;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
 }
-.completed-exercise::before {
-  content: '✓⃝';
+/* ОНОВЛЕНО: Стиль для іконки-галочки */
+.completed-exercise i {
   margin-right: 10px;
-  color: var(--primary-color);
+  color: var(--text-color);
+  font-size: 1.2rem;
 }
 .modal-overlay {
   position: fixed;
@@ -469,13 +436,20 @@ h2 {
   transform: scale(0.98);
   box-shadow: none;
 }
+/* ОНОВЛЕНО: Стиль кнопки налаштувань плитки */
 .settings-btn {
-  font-size: 1.8rem;
+  font-size: 1.5rem; /* Зменшуємо розмір іконки */
   background: none;
   border: none;
   cursor: pointer;
   margin-right: 15px;
   opacity: 0.7;
+  padding: 5px;
+  color: var(--text-color);
+  transition: opacity 0.2s ease;
+}
+.settings-btn:hover {
+  opacity: 1;
 }
 .countdown-overlay {
   position: fixed;
@@ -561,8 +535,11 @@ h2 {
   padding: 0;
   margin: 0;
 }
+/* ОНОВЛЕНО: Стилі для пунктів меню з іконками */
 .menu-screen li a {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px;
   margin-bottom: 10px;
   text-decoration: none;
@@ -571,6 +548,9 @@ h2 {
   border-radius: var(--border-radius-small);
   transition: background 0.2s ease;
   font-weight: 600;
+}
+.menu-screen li a i {
+  opacity: 0.6;
 }
 .menu-screen li a:active {
   background: rgba(255, 255, 255, 0.2);
@@ -593,22 +573,14 @@ h2 {
   cursor: pointer;
   transition: all 0.2s ease-out;
   padding: 0;
-  font-size: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .back-btn:active {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(0.95);
-}
-.back-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 55%;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid var(--text-color);
-  border-left: 2px solid var(--text-color);
-  transform: translate(-50%, -50%) rotate(-45deg);
 }
 .setting-item {
   display: flex;
