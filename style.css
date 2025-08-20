@@ -221,7 +221,7 @@ h2 {
   border-radius: 50%;
   z-index: 10;
   cursor: pointer;
-  font-size: 24px;          /* базовий розмір, якщо буде текстова іконка */
+  font-size: 24px;
   line-height: 1;
   color: var(--text-color);
   display: flex;
@@ -235,13 +235,11 @@ h2 {
   box-shadow: 2px 2px 5px var(--glass-shadow);
   transition: all 0.2s ease-out;
 }
-
 .fab svg {
   width: 24px;
   height: 24px;
-  flex-shrink: 0;  /* не стискати іконку */
+  flex-shrink: 0;
 }
-
 .fab:active {
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
   transform: scale(0.95);
@@ -365,49 +363,22 @@ h2 {
   font-size: 1.2rem;
 }
 .modal-overlay {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  background: rgba(0, 0, 0, 0.2);
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  z-index: 1000;
-  opacity: 0; 
-  visibility: hidden; 
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2);
+  display: flex; justify-content: center; align-items: center; z-index: 1000;
+  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-
-.modal-overlay.active { 
-  opacity: 1; 
-  visibility: visible; 
-}
-
+.modal-overlay.active { opacity: 1; visibility: visible; }
 .modal-content {
-  width: 90%; 
-  max-width: 400px; 
-  padding: 25px; 
-  border-radius: var(--border-radius-main); 
-  position: relative;
-  opacity: 0; 
-  transform: scale(0.95); 
-  transition: opacity 0.2s ease-out, transform 0.2s ease-out; 
-  will-change: transform, opacity;
+  width: 90%; max-width: 400px; padding: 25px; border-radius: var(--border-radius-main); position: relative;
+  opacity: 0; transform: scale(0.95); transition: opacity 0.2s ease-out, transform 0.2s ease-out; will-change: transform, opacity;
 }
-
-.modal-overlay.active .modal-content { 
-  opacity: 1; 
-  transform: scale(1); 
-}
-
+.modal-overlay.active .modal-content { opacity: 1; transform: scale(1); }
 .glassmorphism {
-  background: var(--glass-bg); 
-  backdrop-filter: blur(15px); 
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--glass-border); 
-  box-shadow: 0 8px 32px 0 var(--glass-shadow);
+  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border); box-shadow: 0 8px 32px 0 var(--glass-shadow);
+}
+#finishModal h2 {
+  margin-bottom: 25px;
 }
 .close-button {
   position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem;
@@ -537,7 +508,6 @@ h2 {
   position: relative;
   padding-top: 30px;
 }
-
 .slider-emoji-bubble {
   position: absolute;
   top: -8px;
@@ -549,68 +519,32 @@ h2 {
   pointer-events: none;
   z-index: 5;
 }
-
 .slider-emoji-bubble.visible {
   opacity: 1;
 }
-
 .slider-emoji-bubble.pop {
-  /* Важливо: анімація тепер має власні властивості, щоб бути видимою */
   animation: pop-effect 1s linear;
-  opacity: 1; /* Примусово робимо видимим на час анімації */
+  opacity: 1;
 }
-
 @keyframes pop-effect {
-  0% {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(-50%) scale(1.4);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-  }
+  0% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.4); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
-
 .difficulty-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 12px;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 12px;
   background: linear-gradient(90deg, #2ed573, #ffb400, #ff4757, #b33939);
-  border-radius: 6px;
-  outline: none;
-  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+  border-radius: 6px; outline: none; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
 }
-
 .difficulty-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 30px;
-  height: 30px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 50%;
-  cursor: pointer;
-  margin-top: -9px;
-  box-shadow: 0 2px 5px var(--glass-shadow);
+  -webkit-appearance: none; appearance: none; width: 30px; height: 30px; background: var(--glass-bg);
+  border: 1px solid var(--glass-border); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  border-radius: 50%; cursor: pointer; margin-top: -9px; box-shadow: 0 2px 5px var(--glass-shadow);
 }
-
 .difficulty-slider::-moz-range-thumb {
-  width: 30px;
-  height: 30px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 5px var(--glass-shadow);
+  width: 30px; height: 30px; background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 50%; cursor: pointer; box-shadow: 0 2px 5px var(--glass-shadow);
 }
-
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
@@ -629,23 +563,12 @@ h2 {
 .expand-section {
   text-align: center; margin: 30px 0 15px 0;
 }
-/* ОНОВЛЕНО: Стиль для кнопки "+" */
 #expandTagsBtn {
-  background: transparent;
-  border: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 2.2rem;
-  padding: 0;
-  color: var(--text-color);
-  transition: all 0.2s ease-out;
+  background: transparent; border: none; width: 50px; height: 50px; border-radius: 50%;
+  font-size: 2.2rem; padding: 0; color: var(--text-color); transition: all 0.2s ease-out;
   opacity: 0.7;
 }
-#expandTagsBtn:active {
-  opacity: 1;
-  transform: scale(0.95);
-}
+#expandTagsBtn:active { opacity: 1; transform: scale(0.95); }
 .extra-tags-section {
   max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
 }
@@ -653,3 +576,26 @@ h2 {
 .tags-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .tags-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; padding: 5px; border-radius: 12px; }
 .tags-rating span.active { transform: scale(1.2); opacity: 1; background: rgba(255, 255, 255, 0.2); }
+
+/* НОВІ СТИЛІ для полів вводу з іконками */
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-small);
+  padding: 0 12px;
+  margin-bottom: 10px; /* Додано для відступу між полями */
+}
+.input-with-icon i {
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+.input-with-icon input {
+  border: none;
+  background: transparent;
+  padding: 12px 0;
+  flex-grow: 1;
+  width: 100%;
+}
