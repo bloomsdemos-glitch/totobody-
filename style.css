@@ -568,124 +568,88 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* /* ================================================= */
-/*  ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v5.1 (LED, raised by default) */
-/* ================================================= */
+/* ===== ТАКТИЛЬНІ КНОПКИ-ЗІРОЧКИ v5.0 (LED) ===== */
 
-@keyframes press-pop {
-  0%   { transform: translateY(0) scale(1); box-shadow: 0 10px 22px rgba(0,0,0,0.22); }
-  40%  { transform: translateY(3px) scale(0.98); box-shadow: 0 4px 10px rgba(0,0,0,0.20); }
-  100% { transform: translateY(0) scale(1); box-shadow: 0 10px 22px rgba(0,0,0,0.22); }
+@keyframes pop-and-glow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-/* layout */
 .star-rating {
   display: flex;
-  gap: 12px;
+  justify-content: space-around;
   font-size: 2.2rem;
 }
 
-/* base button (RAISED always) */
+/* --- КНОПКА (базовий стан — піднята, matte glass) --- */
 .star-rating span {
   --size: 45px;
-  display: inline-flex;
-  align-items: center;
+  display: flex;
   justify-content: center;
+  align-items: center;
   width: var(--size);
   height: var(--size);
-  border-radius: 50%;
-  position: relative;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  /* raised material look */
-  background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18));
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); /* matte glass look */
+  backdrop-filter: blur(12px);
   box-shadow:
-    0 10px 22px rgba(0,0,0,0.22),     /* main shadow under the button */
-    0 2px 4px rgba(0,0,0,0.10),       /* subtle fill shadow */
-    inset 0 1px 0 rgba(255,255,255,0.02); /* tiny specular inside */
-  transition: transform 150ms cubic-bezier(.2,.9,.3,1), box-shadow 150ms;
-}
-
-/* the visible star glyph — keep it above the halo */
-.star-rating span .icon {
+    0 2px 6px rgba(0,0,0,0.25),
+    inset 0 1px 2px rgba(255,255,255,0.06);
+  transition: transform .15s ease, box-shadow .15s ease;
   position: relative;
-  z-index: 2;
+
+  /* зірочка сіра всередині */
   color: var(--inactive-gray);
-  transition: color 160ms ease, text-shadow 160ms ease;
-  /* slight embossed look when inactive */
-  text-shadow: 0 1px 0 rgba(0,0,0,0.35), -0.6px -0.6px 0 rgba(255,255,255,0.03);
+  opacity: 0.9;
 }
 
-/* subtle top-left sheen so button reads as a cap */
-.star-rating span::before {
+/* --- Натискання (анімаційна втиснутість) --- */
+.star-rating span:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.22),
+              inset 0 1px 1px rgba(255,255,255,0.05);
+}
+
+/* --- Активна кнопка (LED увімкнено) --- */
+.star-rating span.active {
+  animation: pop-and-glow 0.35s ease-out;
+}
+
+/* --- Зірочка при активації --- */
+.star-rating span.active {
+  color: #FFD642;
+  text-shadow:
+    0 0 6px rgba(255,214,66,0.95),
+    0 0 12px rgba(255,180,0,0.75),
+    0 0 20px rgba(255,160,0,0.45);
+  filter: drop-shadow(0 0 1px rgba(0,0,0,0.7)); /* контур щоб форма не зникала */
+}
+
+/* --- Світловий ореол (halo) навколо зірочки --- */
+.star-rating span.active::after {
   content: '';
   position: absolute;
   inset: 0;
+  margin: auto;
+  width: 85%;
+  height: 85%;
   border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  background: radial-gradient(120% 80% at 30% 25%, rgba(255,255,255,0.04), transparent 35%);
-}
-
-/* LED halo — by default hidden (doesn't color whole button) */
-.star-rating span::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1; /* sits above button background but below .icon (z-index:2) */
-  transition: width .22s ease, height .22s ease, opacity .22s ease, filter .22s ease;
-  opacity: 0;
-}
-
-/* PRESSED while held (temporary) */
-.star-rating span:active {
-  transform: translateY(3px) scale(0.99);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.20); /* shallower shadow while pressed */
-}
-
-/* optional nicer pop on click — needs JS to add .tap, but :active is fine alone */
-.star-rating span.tap {
-  animation: press-pop 320ms cubic-bezier(.2,.9,.3,1);
-}
-
-/* SELECTED state: star lights up, button remains raised */
-.star-rating span.active .icon {
-  color: #FFC107;
-  /* small bright core on the glyph */
-  text-shadow:
-    0 0 2px rgba(255,193,7,0.95),
-    -1px -1px 0 rgba(0,0,0,0.55),
-     1px  1px 0 rgba(0,0,0,0.45);
-}
-
-/* halo for the LED — narrow, controlled, blurred (doesn't yellow whole button) */
-.star-rating span.active::after {
-  width: calc(var(--size) * 0.9);
-  height: calc(var(--size) * 0.9);
+  background: radial-gradient(circle,
+    rgba(255,214,66,1) 0%,
+    rgba(255,214,66,0.55) 25%,
+    rgba(255,214,66,0.25) 45%,
+    transparent 70%);
+  filter: blur(10px);
   opacity: 1;
-  /* radial gradient that fades quickly to transparent */
-  background: radial-gradient(circle, 
-    rgba(255,193,7,0.95) 0%,
-    rgba(255,193,7,0.45) 18%,
-    rgba(255,193,7,0.12) 38%,
-    transparent 60%);
-  filter: blur(6px);
-}
-
-/* if you want stronger "LED beam" add an extra soft outer shadow on the icon when active */
-.star-rating span.active .icon {
-  /* subtle outer glow (keeps glow around glyph, not on whole button) */
-  text-shadow:
-    0 0 6px rgba(255,193,7,0.90),
-    0 0 10px rgba(255,193,7,0.55),
-    -1px -1px 0 rgba(0,0,0,0.55);
+  z-index: 0;
 }
 
 
