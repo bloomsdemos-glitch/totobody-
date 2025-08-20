@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentProgram = '', exercises = [], currentIndex = 0, remainingTime = 0, timerInterval = null, isPaused = true, isStarted = false;
   
-  // ПОВЕРНУЛИ АУДІО-ДВИГУН
   function playCurrentExerciseSound() {
     if (isMuted) return;
     const currentExercise = exercises[currentIndex];
@@ -143,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ОНОВЛЕНО: Іконки та галочки
   function updateUI() {
     const currentExercise = exercises[currentIndex];
     if (currentExercise) {
@@ -152,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     timerEl.textContent = formatSecondsToTime(remainingTime);
     pauseBtn.innerHTML = isPaused ? '<i class="bi bi-play-circle-fill"></i>' : '<i class="bi bi-pause-circle-fill"></i>';
+    pauseBtn.classList.toggle('active-green', !isPaused);
+    pauseBtn.classList.toggle('active-blue', isPaused);
     const completedHTML = exercises.slice(0, currentIndex)
       .map(ex => `<div class="completed-exercise"><i class="bi bi-check-square-fill"></i> ${ex.name}</div>`)
       .join('');
@@ -228,6 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateMuteButtonUI() {
     if (!muteBtn) return;
     muteBtn.innerHTML = isMuted ? '<i class="bi bi-volume-mute-fill"></i>' : '<i class="bi bi-volume-up-fill"></i>';
+    muteBtn.classList.toggle('mute-btn-muted', isMuted);
+    muteBtn.classList.toggle('active-green', !isMuted);
   }
   function saveMuteState() { localStorage.setItem('isMuted', isMuted); }
   function loadMuteState() { isMuted = localStorage.getItem('isMuted') === 'true'; }
@@ -257,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveBgBtn) { saveBgBtn.addEventListener('click', () => { const bgUrl = bgUrlInput.value.trim(); if (bgUrl) { localStorage.setItem('customBackground', bgUrl); applyBackground(bgUrl); } }); }
   if (resetBgBtn) { resetBgBtn.addEventListener('click', () => { localStorage.removeItem('customBackground'); document.body.style.backgroundImage = 'none'; if (bgUrlInput) bgUrlInput.value = ''; }); }
 
-  // ОНОВЛЕНО: Додано "Біг" в стандартні програми
   function loadPrograms() {
     const savedPrograms = localStorage.getItem('workoutPrograms');
     if (savedPrograms) {
@@ -348,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (addProgramMenu) addProgramMenu.classList.add('active');
       if (menuTitle) menuTitle.textContent = 'Нова програма';
       if (newProgramNameInput) newProgramNameInput.value = '';
-      if (menuBackBtn) menuBackBtn.style.display = 'block';
+      if (menuBackBtn) menuBackBtn.style.display = 'flex';
     });
   }
 
@@ -374,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (workoutPrograms[newName]) { alert('Програма з такою назвою вже існує!'); return; }
           Object.defineProperty(workoutPrograms, newName, Object.getOwnPropertyDescriptor(workoutPrograms, currentlyEditingProgram));
           delete workoutPrograms[currentlyEditingProgram];
-          currentlyEditingProgram = newName; // Оновлюємо ім'я поточної програми
+          currentlyEditingProgram = newName;
         }
         savePrograms(); renderProgramList(); alert(`Програму "${newName}" збережено!`);
         const allMenus = sideMenu.querySelectorAll('.menu-screen');
