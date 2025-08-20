@@ -62,6 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveWorkoutLogBtn = document.getElementById('saveWorkoutLogBtn');
   const expandTagsBtn = document.getElementById('expandTagsBtn');
   const extraTagsSection = document.getElementById('extraTagsSection');
+  const restDayBtn = document.getElementById('restDayBtn');
+  
+  // Нові DOM-елементи для "Дня тюленя"
+  const restDayModal = document.getElementById('restDayModal');
+  const closeRestDayModalBtn = document.getElementById('closeRestDayModal');
+  const stepsInput = document.getElementById('stepsInput');
+  const restDayCaloriesInput = document.getElementById('restDayCaloriesInput');
+  const moodRating = document.getElementById('moodRating');
+  const saveRestDayBtn = document.getElementById('saveRestDayBtn');
 
   let isMuted = false;
   let isShuffleActive = false;
@@ -278,7 +287,17 @@ document.addEventListener('DOMContentLoaded', () => {
     modalStartBtn.addEventListener('click', startFunction);
   }
   
-  workoutTiles.forEach(tile => { tile.addEventListener('click', () => { const programName = tile.dataset.program; if (programName) { setTimeout(() => { openWorkoutModal(programName); }, 150); } }); });
+  workoutTiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+        const programName = tile.dataset.program;
+        const action = tile.dataset.action;
+        if (programName) {
+            setTimeout(() => openWorkoutModal(programName), 150);
+        } else if (action === 'add-program') {
+            // Тут можна додати логіку для кнопки "Нова програма" з головного екрану, якщо потрібно
+        }
+    });
+  });
 
   if (closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if (workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
@@ -465,27 +484,21 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderEmojiBubble.style.left = `${thumbPosition}px`;
     sliderEmojiBubble.textContent = difficultyEmojis[Math.round(value) - 1];
   }
-// Повний JS код з попереднього повідомлення, АЛЕ з однією зміною у `hideAndPop`:
-
-if (difficultySlider) {
+  if (difficultySlider) {
     const show = () => sliderEmojiBubble.classList.add('visible');
     const hideAndPop = () => {
-      // Спочатку запускаємо анімацію
       sliderEmojiBubble.classList.add('pop');
-      // І слухаємо, коли вона закінчиться
       sliderEmojiBubble.addEventListener('animationend', () => {
-        // І ТІЛЬКИ ПОТІМ прибираємо класи
         sliderEmojiBubble.classList.remove('pop');
         sliderEmojiBubble.classList.remove('visible');
-      }, { once: true }); // {once: true} означає, що цей слухач спрацює один раз і самознищиться
+      }, { once: true });
     }
     difficultySlider.addEventListener('input', updateSliderEmoji);
     difficultySlider.addEventListener('mousedown', show);
     difficultySlider.addEventListener('touchstart', show, {passive: true});
     difficultySlider.addEventListener('mouseup', hideAndPop);
     difficultySlider.addEventListener('touchend', hideAndPop);
-}
-
+  }
 
   function setupEmojiRating(container) {
     if (!container) return;
@@ -493,6 +506,7 @@ if (difficultySlider) {
     emojis.forEach(emoji => { emoji.addEventListener('click', () => { emojis.forEach(e => e.classList.remove('active')); emoji.classList.add('active'); }); });
   }
   setupEmojiRating(energyRating);
+  setupEmojiRating(moodRating); // Активуємо новий селектор настрою
 
   if (starRating) {
     const stars = starRating.querySelectorAll('span');
@@ -523,7 +537,7 @@ if (difficultySlider) {
     saveWorkoutLogBtn.addEventListener('click', () => {
       const calories = parseInt(caloriesInput.value, 10) || 0;
       const allCollectedTags = collectAllTags();
-      const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), program: currentProgram, calories: calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
+      const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'workout', program: currentProgram, calories: calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
       const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
       history.push(workoutLog);
       localStorage.setItem('workoutHistory', JSON.stringify(history));
@@ -533,6 +547,57 @@ if (difficultySlider) {
     });
   }
   
+  // ЛОГІКА ДЛЯ "ДНЯ ТЮЛЕНЯ"
+  if (restDayBtn) {
+    restDayBtn.addEventListener('click', () => {
+      if (restDayModal) {
+        stepsInput.value = '';
+        restDayCaloriesInput.value = '';
+        if (moodRating) {
+          moodRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
+        }
+        restDayModal.classList.add('active');
+      }
+    });
+  }
+
+  if (closeRestDayModalBtn) {
+    closeRestDayModalBtn.addEventListener('click', () => restDayModal.classList.remove('active'));
+  }
+
+  if (restDayModal) {
+    restDayModal.addEventListener('click', (event) => {
+      if (event.target === restDayModal) {
+        restDayModal.classList.remove('active');
+      }
+    });
+  }
+
+  if (saveRestDayBtn) {
+    saveRestDayBtn.addEventListener('click', () => {
+      const steps = parseInt(stepsInput.value, 10) || 0;
+      const calories = parseInt(restDayCaloriesInput.value, 10) || 0;
+      const activeMoodEl = moodRating.querySelector('span.active');
+      const mood = activeMoodEl ? activeMoodEl.dataset.value : null;
+      
+      const restDayLog = {
+        sessionId: new Date().getTime(),
+        date: new Date().toISOString(),
+        type: 'rest',
+        steps: steps,
+        calories: calories,
+        tags: mood ? [mood] : []
+      };
+
+      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+      history.push(restDayLog);
+      localStorage.setItem('workoutHistory', JSON.stringify(history));
+      alert('День відпочинку збережено!');
+      restDayModal.classList.remove('active');
+    });
+  }
+
+
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
       burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
@@ -542,13 +607,11 @@ if (difficultySlider) {
       menuLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          
           const icon = link.querySelector('i');
           if (icon) {
             icon.classList.add('icon-glow');
             icon.addEventListener('animationend', () => icon.classList.remove('icon-glow'), { once: true });
           }
-
           const targetId = link.dataset.target;
           const targetScreen = document.getElementById(targetId);
           if (targetScreen) {
@@ -578,6 +641,7 @@ if (difficultySlider) {
       });
   }
   
+  // --- Ініціалізація ---
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
