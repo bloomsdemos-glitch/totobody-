@@ -556,7 +556,7 @@ h2 {
 
 .slider-emoji-bubble.pop {
   /* Важливо: анімація тепер має власні властивості, щоб бути видимою */
-  animation: pop-effect 0.4s ease-out;
+  animation: pop-effect 1s linear;
   opacity: 1; /* Примусово робимо видимим на час анімації */
 }
 
