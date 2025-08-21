@@ -568,17 +568,26 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-//* ================================================= */
-/* ===== SOFT NEUMORPHIC GLOW v9.0 (ZEN) ======= */
+//* /* ================================================= */
+/* ===== DARK NEUMORPHIC GLOW v10.0 ============== */
 /* ================================================= */
 
+/* --- ТЕМНА ПАНЕЛЬ / ПІДКЛАДКА (RUNWAY) --- */
+.rating-runway {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 25px;
+  padding: 10px;
+  margin: 0 10px; /* Відступи по боках */
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- КОНТЕЙНЕР ДЛЯ ЗІРОК (фікс багу) --- */
 .star-rating {
   display: flex;
   justify-content: space-around;
-  padding: 10px 0;
 }
 
-/* --- СТАН ЗА ЗАМОВЧУВАННЯМ (М'ЯКА, ВИПУКЛА КНОПКА) --- */
+/* --- СТАН ЗА ЗАМОВЧУВАННЯМ (ТЕМНА, ВИПУКЛА КНОПКА) --- */
 .star-rating span {
   --size: 45px;
   display: flex;
@@ -589,18 +598,18 @@ h2 {
   cursor: pointer;
   border-radius: 50%;
   
-  /* Фон кнопки, трохи відрізняється від модалки для видимості */
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+  /* Матеріал: темний, матовий */
+  background: linear-gradient(145deg, #383838, #1d1d1d);
   
-  /* Neumorphic shadow для ефекту випуклості */
+  /* Neumorphic shadow для темного фону */
   box-shadow: 
-    -2px -2px 5px rgba(255, 255, 255, 0.5), /* Світла тінь зверху-зліва */
-    3px 3px 6px rgba(0, 0, 0, 0.1);      /* Темна тінь знизу-справа */
+    -3px -3px 6px rgba(255, 255, 255, 0.05), /* Світла тінь */
+    3px 3px 6px rgba(0, 0, 0, 0.3);          /* Темна тінь */
 
-  /* Сама зірочка: сіра, ніби частина кнопки */
+  /* Сама зірочка: темно-сіра */
   font-size: 2rem;
-  color: var(--inactive-gray, #a8acb3);
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.1); /* Легка тінь для глибини */
+  color: #555;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
   
   transition: all 0.2s ease-out;
 }
@@ -608,33 +617,29 @@ h2 {
 /* --- СТАН НАТИСКАННЯ (ВТИСНУТА КНОПКА) --- */
 .star-rating span:active {
   transform: scale(0.95);
-  /* Тінь інвертується для ефекту втиснення */
   box-shadow: 
-    inset 1px 1px 2px rgba(0, 0, 0, 0.15),
-    inset -1px -1px 3px rgba(255, 255, 255, 0.6);
-  color: var(--inactive-gray, #999);
+    inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+  color: #444;
 }
 
-/* --- АКТИВНИЙ СТАН (СВІТИТЬСЯ) --- */
+/* --- АКТИВНИЙ СТАН (ТЕПЛЕ СВІТІННЯ) --- */
 .star-rating span.active {
-  /* Кнопка залишається випуклою, але тінь стає кольоровою від світла */
+  /* Тінь кнопки стає кольоровою від світіння */
   box-shadow: 
-    -2px -2px 5px rgba(255, 255, 255, 0.5), /* Зберігаємо верхню тінь */
-    3px 3px 6px rgba(0, 0, 0, 0.1),      /* Зберігаємо нижню тінь */
-    0 0 15px rgba(200, 220, 255, 0.6);   /* Зовнішній ореол світіння (Outer Glow) */
+    -3px -3px 6px rgba(255, 255, 255, 0.05),
+    3px 3px 6px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 193, 7, 0.5); /* Зовнішній ореол світіння */
   
-  /* Зірочка стає білим джерелом світла */
-  color: #fff;
+  /* Зірочка стає яскравим джерелом теплого світла */
+  color: #FFD700; /* Gold color */
   
-  /* Стек тіней для імітації внутрішнього світіння (Inner Glow) */
+  /* Стек тіней для імітації потужного світіння */
   text-shadow:
-    0 0 4px #fff,
-    0 0 10px #fff,
-    0 0 20px rgba(200, 220, 255, 0.7);
+    0 0 2px #fff,
+    0 0 8px #FFD700,
+    0 0 15px #FFA500;
 }
-
-
-
 
 
 .expand-section {
