@@ -568,111 +568,87 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* /* ================================================= */
-/* === DARK GLASS-NEUMORPHIC LED BUTTONS v13.0 ==== */
+/* ================================================= */
+/* === DARK GLASSMORPHIC STAR BUTTONS v2.0 ======== */
 /* ================================================= */
 
-/* --- ВИПУКЛИЙ RUNWAY --- */
+/* --- ПАНЕЛЬКА (тепер випукла, ніби glass card) --- */
 .rating-runway {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(20, 20, 20, 0.35); 
   border-radius: 30px;
-  padding: 14px 16px; /* більше "повітря" всередині */
-  margin: 0 10px;
-
-  /* тепер замість "inset" робимо випуклість */
-  box-shadow: 
-    -6px -6px 10px rgba(255, 255, 255, 0.05),
-    6px 6px 12px rgba(0,0,0,0.35);
-}
-
-/* --- FLEX-розкладка для більшого простору --- */
-.star-rating {
+  padding: 14px 18px;
   display: flex;
-  justify-content: space-around;
-  gap: 22px; /* додатковий простір між кнопками */
+  justify-content: center;
+  gap: 18px;
+  
+  /* Glassmorphism + делікатна refraction-тінь */
+  box-shadow:
+    inset -2px -2px 4px rgba(255,255,255,0.05),
+    inset 2px 2px 6px rgba(0,0,0,0.25),
+    0 4px 12px rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
 }
 
-/* --- КНОПКА (трохи менша) --- */
+/* --- КНОПКИ-ЗІРОЧКИ --- */
 .star-rating span {
-  --size: 50px; /* було 55px → мінус ~10% */
+  --size: 42px; /* трохи менші ніж було */
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--size);
-  height: var(--size);
   cursor: pointer;
-  border-radius: 50%;
-  font-size: 1.8rem; /* зменшена зірочка */
 
-  background: linear-gradient(145deg, #383838, #1d1d1d);
+  /* Матове темне скло */
+  background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
 
-  box-shadow: 
-    -3px -3px 6px rgba(255, 255, 255, 0.05),
-    3px 3px 6px rgba(0, 0, 0, 0.3);
-
-  color: #555;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
-
-  transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
-
-  position: relative;
-  overflow: hidden;
-}
-
-/* --- ВНУТРІШНІЙ СКЛЯНИЙ КОНТУР --- */
-.star-rating span::before {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-}
-
-/* --- ЗОВНІШНІЙ REFRACTION КОНТУР --- */
-.star-rating span::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  /* Neumorphic випуклість */
   box-shadow:
-    0 1px 2px rgba(255, 255, 255, 0.08),
-    0 -1px 2px rgba(0, 0, 0, 0.25);
-  pointer-events: none;
+    -3px -3px 6px rgba(255, 255, 255, 0.07),
+    3px 3px 6px rgba(0, 0, 0, 0.35);
+
+  transition: all 0.18s ease-out;
+  
+  /* Сіренька зірочка */
+  color: #555;
+  font-size: 1.6rem;
+  line-height: 1;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+/* --- FIX для Bootstrap-іконок --- */
+.star-rating span i,
+.star-rating span svg {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1;
+  width: auto;
+  height: auto;
 }
 
 /* --- ЕФЕКТ НАТИСКАННЯ --- */
 .star-rating span:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
   box-shadow:
-    inset 2px 2px 6px rgba(0, 0, 0, 0.4),
-    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+    inset 2px 2px 4px rgba(0,0,0,0.45),
+    inset -2px -2px 4px rgba(255,255,255,0.06);
   color: #444;
-  text-shadow: none;
 }
 
-/* --- АКТИВНИЙ СТАН (LED) --- */
+/* --- АКТИВНА КНОПКА (LED-зірочка) --- */
 .star-rating span.active {
-  color: #FFD700;
-  box-shadow: 
-    -3px -3px 6px rgba(255, 255, 255, 0.05),
-    3px 3px 6px rgba(0, 0, 0, 0.3),
-    0 0 18px rgba(255, 193, 7, 0.5);
-
+  color: #FFD700; /* Тепле золоте світло */
   text-shadow:
     0 0 2px #fff,
     0 0 6px #FFD700,
     0 0 14px #FFA500;
-}
 
-/* --- ОРЕОЛ СВІТІННЯ ВСЕРЕДИНІ СКЛА --- */
-.star-rating span.active::before {
-  border: 1px solid rgba(255, 200, 80, 0.25);
+  /* Орел навколо кнопки */
   box-shadow:
-    inset 0 0 6px rgba(255, 200, 80, 0.25),
-    0 0 10px rgba(255, 193, 7, 0.35);
+    -3px -3px 6px rgba(255, 255, 255, 0.07),
+    3px 3px 6px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(255, 193, 7, 0.55);
 }
 
 
