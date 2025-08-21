@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=23">
+  <link rel="stylesheet" href="style.css?v=24">
 </head>
 <body>
 
@@ -159,11 +159,10 @@
   <div id="finishModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
       <h2 id="finishModalTitle">Чудова робота!</h2>
-     <div class="setting-item calories-input-wrapper">
-  <i class="bi bi-fire"></i>
-  <input type="number" id="caloriesInput" placeholder="kcal">
-</div>
-
+      <div class="setting-item calories-input-wrapper">
+        <i class="bi bi-fire"></i>
+        <input type="number" id="caloriesInput" placeholder="kcal">
+      </div>
       <div class="setting-item">
         <label for="difficultySlider">Наскільки було складно?</label>
         <div class="difficulty-slider-container">
@@ -172,16 +171,15 @@
         </div>
       </div>
       <div class="setting-item"><label>Рівень енергії:</label><div id="energyRating" class="emoji-rating"><span data-value="0">😵‍💫</span><span data-value="1">🥱</span><span data-value="2">🫤</span><span data-value="3">👌🏻</span><span data-value="4">⚡️</span><span data-value="5" class="active">🔥</span></div></div>
-      <div class="setting-item"><label>Твоя оцінка тренування:</label><div class="rating-runway">
-  <div id="starRating" class="star-rating">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-  </div>
-</div>
-
+      <div class="rating-runway">
+        <div id="starRating" class="star-rating">
+          <span data-value="1">★</span>
+          <span data-value="2">★</span>
+          <span data-value="3">★</span>
+          <span data-value="4">★</span>
+          <span data-value="5">★</span>
+        </div>
+      </div>
       
       <div class="expand-section">
         <button id="expandTagsBtn" class="menu-button"><i class="bi bi-plus-circle-dotted"></i></button>
@@ -266,7 +264,18 @@
       </div>
     </div>
   </div>
+  
+  <div id="dayDetailModal" class="modal-overlay">
+    <div class="day-detail-content">
+      <button id="closeDayDetailBtn" class="close-button">&times;</button>
+      <h2 id="detailDate"></h2>
+      <div id="detailTotals" class="detail-totals">
+        </div>
+      <div id="detailSessions" class="detail-sessions">
+        </div>
+    </div>
+  </div>
 
-  <script src="script.js?v=23"></script>
+  <script src="script.js?v=24"></script>
 </body>
 </html>
