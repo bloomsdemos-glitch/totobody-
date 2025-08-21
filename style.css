@@ -568,28 +568,26 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-//* /* ================================================= */
-/* ===== DARK NEUMORPHIC GLOW v10.0 ============== */
+/* ================================================= */
+/* === DARK GLASS-NEUMORPHIC LED BUTTONS v12.0 ==== */
 /* ================================================= */
 
-/* --- ТЕМНА ПАНЕЛЬ / ПІДКЛАДКА (RUNWAY) --- */
 .rating-runway {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 25px;
   padding: 10px;
-  margin: 0 10px; /* Відступи по боках */
+  margin: 0 10px;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* --- КОНТЕЙНЕР ДЛЯ ЗІРОК (фікс багу) --- */
 .star-rating {
   display: flex;
   justify-content: space-around;
 }
 
-/* --- СТАН ЗА ЗАМОВЧУВАННЯМ (ТЕМНА, ВИПУКЛА КНОПКА) --- */
+/* --- СТАН ЗА ЗАМОВЧУВАННЯМ (dark-glass кнопка) --- */
 .star-rating span {
-  --size: 45px;
+  --size: 55px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -597,48 +595,78 @@ h2 {
   height: var(--size);
   cursor: pointer;
   border-radius: 50%;
-  
-  /* Матеріал: темний, матовий */
-  background: linear-gradient(145deg, #383838, #1d1d1d);
-  
-  /* Neumorphic shadow для темного фону */
-  box-shadow: 
-    -3px -3px 6px rgba(255, 255, 255, 0.05), /* Світла тінь */
-    3px 3px 6px rgba(0, 0, 0, 0.3);          /* Темна тінь */
-
-  /* Сама зірочка: темно-сіра */
   font-size: 2rem;
+
+  background: linear-gradient(145deg, #383838, #1d1d1d);
+
+  /* Neumorphic тіні */
+  box-shadow: 
+    -3px -3px 6px rgba(255, 255, 255, 0.05),
+    3px 3px 6px rgba(0, 0, 0, 0.3);
+
   color: #555;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
-  
-  transition: all 0.2s ease-out;
+
+  transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
+
+  position: relative;
+  overflow: hidden;
 }
 
-/* --- СТАН НАТИСКАННЯ (ВТИСНУТА КНОПКА) --- */
+/* --- ВНУТРІШНІЙ "скляний" контур --- */
+.star-rating span::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+/* --- ЗОВНІШНІЙ "refraction" контур --- */
+.star-rating span::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.08),
+    0 -1px 2px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* --- ЕФЕКТ НАТИСКАННЯ --- */
 .star-rating span:active {
-  transform: scale(0.95);
-  box-shadow: 
-    inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+  transform: scale(0.92);
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.4),
     inset -2px -2px 4px rgba(255, 255, 255, 0.05);
   color: #444;
+  text-shadow: none;
 }
 
-/* --- АКТИВНИЙ СТАН (ТЕПЛЕ СВІТІННЯ) --- */
+/* --- АКТИВНИЙ СТАН (LED-світіння) --- */
 .star-rating span.active {
-  /* Тінь кнопки стає кольоровою від світіння */
+  color: #FFD700;
   box-shadow: 
     -3px -3px 6px rgba(255, 255, 255, 0.05),
     3px 3px 6px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(255, 193, 7, 0.5); /* Зовнішній ореол світіння */
-  
-  /* Зірочка стає яскравим джерелом теплого світла */
-  color: #FFD700; /* Gold color */
-  
-  /* Стек тіней для імітації потужного світіння */
+    0 0 18px rgba(255, 193, 7, 0.5);
+
   text-shadow:
     0 0 2px #fff,
-    0 0 8px #FFD700,
-    0 0 15px #FFA500;
+    0 0 6px #FFD700,
+    0 0 14px #FFA500;
+}
+
+/* --- "Ореол" для glow всередині скла --- */
+.star-rating span.active::before {
+  border: 1px solid rgba(255, 200, 80, 0.25);
+  box-shadow:
+    inset 0 0 6px rgba(255, 200, 80, 0.25),
+    0 0 10px rgba(255, 193, 7, 0.35);
 }
 
 
