@@ -31,6 +31,7 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  transition: background 0.4s ease-out; /* Плавний перехід для фону */
 }
 .screen {
   display: none;
@@ -365,7 +366,7 @@ h2 {
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2);
   display: flex; justify-content: center; align-items: center; z-index: 1000;
-  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease, background 0.3s ease;
 }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 .modal-content {
@@ -464,7 +465,6 @@ h2 {
   width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: var(--border-radius-small);
   background: rgba(255, 255, 255, 0.1); color: var(--text-color); font-family: var(--font-family); font-size: 1rem;
 }
-#caloriesInput { max-width: 50%; align-self: center; text-align: center; }
 .setting-actions { display: flex; gap: 10px; margin-top: 10px; }
 .menu-button {
   padding: 12px; border: none; border-radius: var(--border-radius-small); background: var(--primary-color);
@@ -491,27 +491,36 @@ h2 {
 }
 .exercise-item-actions button:hover { opacity: 1; }
 .menu-button.danger { background: #ff4757; }
+.setting-item.calories-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+.setting-item.calories-input-wrapper i.bi-fire {
+  font-size: 1.6rem;
+  opacity: 0.7;
+}
 #caloriesInput {
-  max-width: 40%; /* Зменшена ширина */
+  max-width: 40%;
   align-self: center;
   text-align: center;
-  padding: 10px; /* Трохи менший padding */
+  padding: 10px;
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius-small);
   background: rgba(255, 255, 255, 0.1);
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: 1rem;
-  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1); /* Ефект внутрішньої глибини */
-  margin: 5px 0; /* Менші вертикальні відступи */
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 5px 0;
 }
-
 #caloriesInput::placeholder {
   color: var(--text-color);
   opacity: 0.6;
-  text-align: center; /* Центруємо плейсхолдер */
+  text-align: center;
 }
-
 .difficulty-slider-container { position: relative; padding-top: 30px; }
 .slider-emoji-bubble {
   position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
@@ -521,33 +530,6 @@ h2 {
 .slider-emoji-bubble.pop { animation: pop-effect 1.5s ease-out; }
 @keyframes pop-effect {
   0% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.4); opacity: 1; }
-  100% { transform: translateX(-50%) scale(1); opacity: 1; }
-}
-.difficulty-slider-container {
-  position: relative;
-  padding-top: 30px;
-}
-.slider-emoji-bubble {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.2rem;
-  transition: left 0.1s linear, opacity 0.2s ease;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-.slider-emoji-bubble.visible {
-  opacity: 1;
-}
-.slider-emoji-bubble.pop {
-  animation: pop-effect 1s linear;
-  opacity: 1;
-}
-@keyframes pop-effect {
-  0% { transform: translateX(-50%) scale(1); opacity: 1; }
   50% { transform: translateX(-50%) scale(1.4); opacity: 1; }
   100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
@@ -568,114 +550,68 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* /* /* ================================================= */
-/* === DARK GLASS-NEUMORPHIC STAR BUTTONS v13.2 ==== */
-/* ================================================= */
-
-/* --- ПАНЕЛЬКА (glass-card) --- */
 .rating-runway {
-  background: rgba(225, 226, 228, 0.35); /* світліший #CBCCCF */
+  background: rgba(25, 25, 25, 0.35);
   border-radius: 22px;
-  padding: 14px 20px;
+  padding: 14px;
   display: flex;
   justify-content: center;
-
-  /* REFRACTION */
   box-shadow:
-    0 2px 6px rgba(0,0,0,0.35),
-    0 0 0 1px rgba(255,255,255,0.1),
-    inset 0 0 0 1px rgba(255,255,255,0.08);
+    0 2px 4px rgba(0,0,0,0.35),
+    0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
   backdrop-filter: blur(10px) saturate(130%);
 }
-
-/* --- КОНТЕЙНЕР ДЛЯ ЗІРОК --- */
 .star-rating {
   display: flex;
-  gap: 18px;
+  gap: 16px;
 }
-
-/* --- ЗІРКИ (кнопки) --- */
 .star-rating span {
-  --size: 45px; 
+  --size: 40px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--size);
-  height: var(--size);
   cursor: pointer;
-  border-radius: 50%;
-  font-size: 1.6rem;
-
-  background: linear-gradient(145deg, #383838, #1d1d1d);
-
+  background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
   box-shadow:
-    -2px -2px 5px rgba(255, 255, 255, 0.05),
-     2px  2px 5px rgba(0, 0, 0, 0.3);
-
+    inset -1px -1px 2px rgba(255,255,255,0.08),
+    inset 1px 1px 2px rgba(0,0,0,0.4),
+    0 1px 2px rgba(0,0,0,0.4);
+  transition: all 0.2s ease-out;
+}
+.star-rating span i {
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1;
   color: #555;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
-  transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
-  position: relative;
-  overflow: hidden;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  transition: all 0.2s ease-out;
 }
-
-/* --- ВНУТРІШНІЙ "скляний" контур --- */
-.star-rating span::before {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-}
-
-/* --- ЗОВНІШНІЙ "refraction" контур --- */
-.star-rating span::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow:
-    0 1px 2px rgba(255, 255, 255, 0.08),
-    0 -1px 2px rgba(0, 0, 0, 0.25);
-  pointer-events: none;
-}
-
-/* --- НАТИСКАННЯ --- */
 .star-rating span:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
   box-shadow:
-    inset 2px 2px 6px rgba(0, 0, 0, 0.4),
-    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-  color: #444;
-  text-shadow: none;
+    inset 2px 2px 3px rgba(0,0,0,0.5),
+    inset -2px -2px 3px rgba(255,255,255,0.06);
 }
-
-/* --- АКТИВНА (LED-світіння) --- */
-.star-rating span.active {
+.star-rating span:active i {
+  color: #444;
+}
+.star-rating span.active i {
   color: #FFD700;
-  box-shadow:
-    -2px -2px 5px rgba(255, 255, 255, 0.05),
-     2px  2px 5px rgba(0, 0, 0, 0.3),
-     inset 0 0 10px rgba(255, 193, 7, 0.4);
-
   text-shadow:
     0 0 2px #fff,
     0 0 6px #FFD700,
     0 0 14px #FFA500;
 }
-
-/* --- Ореол для glow --- */
-.star-rating span.active::before {
-  border: 1px solid rgba(255, 200, 80, 0.25);
-  box-shadow:
-    inset 0 0 6px rgba(255, 200, 80, 0.25),
-    0 0 10px rgba(255, 193, 7, 0.35);
+.star-rating span.active {
+   box-shadow:
+    inset -1px -1px 2px rgba(255,255,255,0.1),
+    inset 1px 1px 2px rgba(0,0,0,0.4),
+    0 0 14px rgba(255,193,7,0.55);
 }
-
-
 .expand-section {
   text-align: center; margin: 30px 0 15px 0;
 }
@@ -748,30 +684,22 @@ h2 {
     font-size: 1rem;
     opacity: 0.7;
 }
-
-/* ================================== */
-/* ===== СТИЛІ ІСТОРІЇ ТРЕНУВАНЬ ===== */
-/* ================================== */
-
 .history-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .history-day-group {
   margin-bottom: 25px;
   border-left: 3px solid rgba(0, 122, 255, 0.2);
   padding-left: 15px;
 }
-
 .history-day-group h4 {
   margin: 0 0 10px 0;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-color);
 }
-
 .history-item {
   background: rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius-small);
@@ -780,45 +708,100 @@ h2 {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-
 .history-item:active {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(0.98);
 }
-
 .history-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
-
 .history-item-programs {
   font-weight: 600;
   font-size: 1rem;
   max-width: 70%;
 }
-
 .history-item-calories {
   font-weight: 700;
   font-size: 1rem;
   color: var(--primary-color);
 }
-
 .history-item-tags {
   font-size: 1.2rem;
   opacity: 0.8;
 }
-.setting-item.calories-input-wrapper {
+body.details-view-active {
+  background: #000;
+}
+
+.day-detail-content {
+  width: 90%;
+  max-width: 400px;
+  min-height: 300px;
+  max-height: 80vh;
+  
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  padding: 25px;
   display: flex;
-  flex-direction: column; /* Ставимо елементи в колонку */
-  align-items: center;    /* Центруємо по горизонталі */
-  gap: 5px;               /* Невеликий відступ між іконкою та полем */
+  flex-direction: column;
+}
+.day-detail-content .close-button {
+  color: #fff;
+  opacity: 0.8;
+}
+.day-detail-content::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+}
+.day-detail-content::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 1px; height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), transparent);
+}
+#detailDate {
+  text-align: center;
+  margin: 0 0 15px 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+.detail-totals {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.1rem;
 }
-
-.setting-item.calories-input-wrapper i.bi-fire {
-  font-size: 1.6rem; /* Трохи збільшимо іконку */
-  opacity: 0.7;
+.detail-sessions {
+  overflow-y: auto;
 }
-
+.session-item {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-small);
+  padding: 15px;
+  margin-bottom: 10px;
+}
+.session-header {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.session-tags {
+  font-size: 1.4rem;
+  margin-top: 10px;
+}
