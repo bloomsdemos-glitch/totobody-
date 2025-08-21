@@ -568,26 +568,33 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* ================================================= */
-/* === DARK GLASS-NEUMORPHIC LED BUTTONS v12.0 ==== */
+/* /* ================================================= */
+/* === DARK GLASS-NEUMORPHIC LED BUTTONS v13.0 ==== */
 /* ================================================= */
 
+/* --- ВИПУКЛИЙ RUNWAY --- */
 .rating-runway {
   background: rgba(0, 0, 0, 0.15);
-  border-radius: 25px;
-  padding: 10px;
+  border-radius: 30px;
+  padding: 14px 16px; /* більше "повітря" всередині */
   margin: 0 10px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+
+  /* тепер замість "inset" робимо випуклість */
+  box-shadow: 
+    -6px -6px 10px rgba(255, 255, 255, 0.05),
+    6px 6px 12px rgba(0,0,0,0.35);
 }
 
+/* --- FLEX-розкладка для більшого простору --- */
 .star-rating {
   display: flex;
   justify-content: space-around;
+  gap: 22px; /* додатковий простір між кнопками */
 }
 
-/* --- СТАН ЗА ЗАМОВЧУВАННЯМ (dark-glass кнопка) --- */
+/* --- КНОПКА (трохи менша) --- */
 .star-rating span {
-  --size: 55px;
+  --size: 50px; /* було 55px → мінус ~10% */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -595,11 +602,10 @@ h2 {
   height: var(--size);
   cursor: pointer;
   border-radius: 50%;
-  font-size: 2rem;
+  font-size: 1.8rem; /* зменшена зірочка */
 
   background: linear-gradient(145deg, #383838, #1d1d1d);
 
-  /* Neumorphic тіні */
   box-shadow: 
     -3px -3px 6px rgba(255, 255, 255, 0.05),
     3px 3px 6px rgba(0, 0, 0, 0.3);
@@ -613,7 +619,7 @@ h2 {
   overflow: hidden;
 }
 
-/* --- ВНУТРІШНІЙ "скляний" контур --- */
+/* --- ВНУТРІШНІЙ СКЛЯНИЙ КОНТУР --- */
 .star-rating span::before {
   content: "";
   position: absolute;
@@ -624,7 +630,7 @@ h2 {
   pointer-events: none;
 }
 
-/* --- ЗОВНІШНІЙ "refraction" контур --- */
+/* --- ЗОВНІШНІЙ REFRACTION КОНТУР --- */
 .star-rating span::after {
   content: "";
   position: absolute;
@@ -639,7 +645,7 @@ h2 {
 
 /* --- ЕФЕКТ НАТИСКАННЯ --- */
 .star-rating span:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
   box-shadow:
     inset 2px 2px 6px rgba(0, 0, 0, 0.4),
     inset -2px -2px 4px rgba(255, 255, 255, 0.05);
@@ -647,7 +653,7 @@ h2 {
   text-shadow: none;
 }
 
-/* --- АКТИВНИЙ СТАН (LED-світіння) --- */
+/* --- АКТИВНИЙ СТАН (LED) --- */
 .star-rating span.active {
   color: #FFD700;
   box-shadow: 
@@ -661,7 +667,7 @@ h2 {
     0 0 14px #FFA500;
 }
 
-/* --- "Ореол" для glow всередині скла --- */
+/* --- ОРЕОЛ СВІТІННЯ ВСЕРЕДИНІ СКЛА --- */
 .star-rating span.active::before {
   border: 1px solid rgba(255, 200, 80, 0.25);
   box-shadow:
