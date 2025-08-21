@@ -568,90 +568,114 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* /* /* ================================================= */
-/* === DARK GLASSMORPHIC STAR BUTTONS v2 (FIXED) === */
+/* ================================================= */
+/* === DARK GLASS-NEUMORPHIC STAR BUTTONS v13.0 ==== */
 /* ================================================= */
 
-/* --- ПАНЕЛЬКА (glass-card, випукла) --- */
+/* --- ПАНЕЛЬКА (glass-card) --- */
 .rating-runway {
   background: rgba(25, 25, 25, 0.35);
   border-radius: 22px;
-  padding: 14px; /* Трохи зменшимо, щоб було щільніше */
-  
-  /* Glassmorphism + refraction contour */
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+
+  /* Скляна карточка з легким refraction */
   box-shadow:
-    0 2px 4px rgba(0,0,0,0.35),
-    0 0 0 1px rgba(255,255,255,0.08),
-    inset 0 0 0 1px rgba(255,255,255,0.05);
+    0 2px 6px rgba(0,0,0,0.35),
+    0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
   backdrop-filter: blur(10px) saturate(130%);
 }
 
-/* --- FIX #1: КОНТЕЙНЕР ДЛЯ ЗІРОК (тепер він flex) --- */
+/* --- КОНТЕЙНЕР ДЛЯ ЗІРОК --- */
 .star-rating {
-  display: flex; /* Це розставить зірки в ряд */
-  gap: 16px; /* Простір між кнопками */
+  display: flex;
+  gap: 18px;
 }
 
-/* --- КНОПКИ-ЗІРКИ --- */
+/* --- ЗІРКИ (кнопки) --- */
 .star-rating span {
-  --size: 40px;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
+  --size: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: var(--size);
+  height: var(--size);
   cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.8rem;
 
-  /* Темне матове скло */
-  background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+  background: linear-gradient(145deg, #383838, #1d1d1d);
 
-  /* Refraction-ефект по контуру */
+  /* Neumorphic "випуклість" */
   box-shadow:
-    inset -1px -1px 2px rgba(255,255,255,0.08),
-    inset 1px 1px 2px rgba(0,0,0,0.4),
-    0 1px 2px rgba(0,0,0,0.4);
+    -3px -3px 6px rgba(255, 255, 255, 0.05),
+     3px  3px 6px rgba(0, 0, 0, 0.3);
 
-  transition: all 0.2s ease-out;
+  color: #555;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+
+  transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
+
+  position: relative;
+  overflow: hidden;
 }
 
-/* --- FIX #2: СТИЛІ ДЛЯ ІКОНКИ (замість тексту) --- */
-.star-rating span i {
-  display: block; /* Важливо для стабільності */
-  font-size: 1.4rem;
-  line-height: 1;
-  color: #555; /* Пасивна зірочка */
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-  transition: all 0.2s ease-out; /* Плавність для кольору і тіні */
+/* --- ВНУТРІШНІЙ "скляний" контур --- */
+.star-rating span::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.04);
+  pointer-events: none;
 }
 
+/* --- ЗОВНІШНІЙ "refraction" контур --- */
+.star-rating span::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.08),
+    0 -1px 2px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
 
 /* --- НАТИСКАННЯ --- */
 .star-rating span:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
   box-shadow:
-    inset 2px 2px 3px rgba(0,0,0,0.5),
-    inset -2px -2px 3px rgba(255,255,255,0.06);
-}
-
-.star-rating span:active i {
+    inset 2px 2px 6px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
   color: #444;
+  text-shadow: none;
 }
 
-/* --- АКТИВНИЙ LED-СТАН --- */
-.star-rating span.active i {
+/* --- АКТИВНА (LED-світіння) --- */
+.star-rating span.active {
   color: #FFD700;
+  box-shadow:
+    -3px -3px 6px rgba(255, 255, 255, 0.05),
+     3px  3px 6px rgba(0, 0, 0, 0.3),
+     0 0 18px rgba(255, 193, 7, 0.5);
+
   text-shadow:
     0 0 2px #fff,
     0 0 6px #FFD700,
     0 0 14px #FFA500;
 }
 
-.star-rating span.active {
-   box-shadow:
-    inset -1px -1px 2px rgba(255,255,255,0.1),
-    inset 1px 1px 2px rgba(0,0,0,0.4),
-    0 0 14px rgba(255,193,7,0.55);
+/* --- Ореол для glow всередині скла --- */
+.star-rating span.active::before {
+  border: 1px solid rgba(255, 200, 80, 0.25);
+  box-shadow:
+    inset 0 0 6px rgba(255, 200, 80, 0.25),
+    0 0 10px rgba(255, 193, 7, 0.35);
 }
 
 
