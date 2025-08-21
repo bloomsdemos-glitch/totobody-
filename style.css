@@ -568,8 +568,8 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* ================================================= */
-/* === DARK GLASS-NEUMORPHIC STAR BUTTONS v13.0 ==== */
+/* /* ================================================= */
+/* === DARK GLASS-NEUMORPHIC STAR BUTTONS v13.1 ==== */
 /* ================================================= */
 
 /* --- ПАНЕЛЬКА (glass-card) --- */
@@ -580,11 +580,11 @@ h2 {
   display: flex;
   justify-content: center;
 
-  /* Скляна карточка з легким refraction */
+  /* 3. REFRACTION: Зроблено яскравішим (збільшено opacity) */
   box-shadow:
     0 2px 6px rgba(0,0,0,0.35),
-    0 0 0 1px rgba(255,255,255,0.06),
-    inset 0 0 0 1px rgba(255,255,255,0.04);
+    0 0 0 1px rgba(255,255,255,0.1),  /* було 0.06 */
+    inset 0 0 0 1px rgba(255,255,255,0.08); /* було 0.04 */
   backdrop-filter: blur(10px) saturate(130%);
 }
 
@@ -596,7 +596,8 @@ h2 {
 
 /* --- ЗІРКИ (кнопки) --- */
 .star-rating span {
-  --size: 50px;
+  /* 1. РОЗМІР: Зменшено з 50px до 45px */
+  --size: 45px; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -604,22 +605,20 @@ h2 {
   height: var(--size);
   cursor: pointer;
   border-radius: 50%;
-  font-size: 1.8rem;
+  font-size: 1.6rem; /* Трохи зменшимо іконку під новий розмір */
 
   background: linear-gradient(145deg, #383838, #1d1d1d);
 
-  /* Neumorphic "випуклість" */
+  /* 4. ТІНІ: Зроблено м'якшими (менша відстань і розмиття) */
   box-shadow:
-    -3px -3px 6px rgba(255, 255, 255, 0.05),
-     3px  3px 6px rgba(0, 0, 0, 0.3);
+    -2px -2px 5px rgba(255, 255, 255, 0.05), /* було -3px -3px 6px */
+     2px  2px 5px rgba(0, 0, 0, 0.3);       /* було  3px  3px 6px */
 
   color: #555;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
-
   transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
-
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Важливо, щоб внутрішнє світіння не вилазило */
 }
 
 /* --- ВНУТРІШНІЙ "скляний" контур --- */
@@ -659,10 +658,12 @@ h2 {
 /* --- АКТИВНА (LED-світіння) --- */
 .star-rating span.active {
   color: #FFD700;
+  
+  /* 2. СВІТІННЯ: Тепер внутрішнє (inset), а не зовнішнє */
   box-shadow:
-    -3px -3px 6px rgba(255, 255, 255, 0.05),
-     3px  3px 6px rgba(0, 0, 0, 0.3),
-     0 0 18px rgba(255, 193, 7, 0.5);
+    -2px -2px 5px rgba(255, 255, 255, 0.05),
+     2px  2px 5px rgba(0, 0, 0, 0.3),
+     inset 0 0 10px rgba(255, 193, 7, 0.4); /* Ось ця магія */
 
   text-shadow:
     0 0 2px #fff,
@@ -677,6 +678,7 @@ h2 {
     inset 0 0 6px rgba(255, 200, 80, 0.25),
     0 0 10px rgba(255, 193, 7, 0.35);
 }
+
 
 
 .expand-section {
