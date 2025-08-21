@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalStartBtn = document.getElementById('modalStartBtn');
   const modalSettingsBtn = document.getElementById('modalSettingsBtn');
   const closeModalBtn = workoutModal.querySelector('.close-button');
-  const workoutTiles = document.querySelectorAll('.neumorphic-tile'); // Оновлено для всіх плиток
+  const workoutTiles = document.querySelectorAll('.neumorphic-tile');
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
   const datetimeDisplayEl = document.getElementById('datetime-display');
@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeDanceModalBtn = danceModal.querySelector('.close-button');
   const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
   const historyListEl = document.getElementById('historyList');
+  const dayDetailModal = document.getElementById('dayDetailModal');
+  const closeDayDetailBtn = document.getElementById('closeDayDetailBtn');
+  const detailDateEl = document.getElementById('detailDate');
+  const detailTotalsEl = document.getElementById('detailTotals');
+  const detailSessionsEl = document.getElementById('detailSessions');
 
 
   let isMuted = false;
@@ -625,21 +630,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==================================
-  // ===== ЛОГІКА ІСТОРІЇ ТРЕНУВАНЬ =====
-  // ==================================
-
   function renderHistory() {
     if (!historyListEl) return;
-
     const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
     historyListEl.innerHTML = ''; 
-
     if (history.length === 0) {
       historyListEl.innerHTML = '<p style="text-align: center; opacity: 0.7;">Твоя історія ще порожня. Час потренуватись! 💪</p>';
       return;
     }
-
     const groupedByDay = history.reduce((acc, record) => {
       const date = new Date(record.date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' });
       if (!acc[date]) {
@@ -648,31 +646,24 @@ document.addEventListener('DOMContentLoaded', () => {
       acc[date].push(record);
       return acc;
     }, {});
-
     const sortedDays = Object.keys(groupedByDay).sort((a, b) => {
         const dateA = new Date(groupedByDay[a][0].date);
         const dateB = new Date(groupedByDay[b][0].date);
         return dateB - dateA;
     });
-
     for (const day of sortedDays) {
       const dayRecords = groupedByDay[day];
       const dayGroupEl = document.createElement('div');
       dayGroupEl.className = 'history-day-group';
-
       const dateHeader = document.createElement('h4');
       dateHeader.textContent = day;
       dayGroupEl.appendChild(dateHeader);
-
       const totalCaloriesForDay = dayRecords.reduce((sum, record) => sum + (record.calories || 0), 0);
-      
       const programsForDay = dayRecords
           .filter(r => r.type === 'workout')
           .map(r => r.program)
           .join(', ');
-
       const tagsForDay = dayRecords.flatMap(r => r.tags).join(' ');
-
       const li = document.createElement('li');
       li.className = 'history-item';
       li.innerHTML = `
@@ -682,15 +673,58 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="history-item-tags">${tagsForDay}</div>
       `;
-      
       li.addEventListener('click', () => {
-          alert(`Детальна статистика за ${day} вже скоро!`);
+          openDayDetails(day, dayRecords);
       });
-
       dayGroupEl.appendChild(li);
       historyListEl.appendChild(dayGroupEl);
     }
   }
+
+  function openDayDetails(day, dayRecords) {
+    detailDateEl.textContent = day;
+    const totalCalories = dayRecords.reduce((sum, r) => sum + (r.calories || 0), 0);
+    const totalSteps = dayRecords.reduce((sum, r) => sum + (r.steps || 0), 0);
+    detailTotalsEl.innerHTML = `
+      <span>🔥 ${totalCalories} kcal</span>
+      ${totalSteps > 0 ? `<span>🚶‍♂️ ${totalSteps} кроків</span>` : ''}
+    `;
+    detailSessionsEl.innerHTML = '';
+    dayRecords.forEach(record => {
+      const sessionDiv = document.createElement('div');
+      sessionDiv.className = 'session-item';
+      if (record.type === 'workout') {
+        sessionDiv.innerHTML = `
+          <div class="session-header">
+            <span>${record.program}</span>
+            <span>🔥 ${record.calories} kcal</span>
+          </div>
+          <div class="session-tags">${record.tags.join(' ')}</div>
+        `;
+      } else {
+        sessionDiv.innerHTML = `
+          <div class="session-header">
+            <span>🦥 День відпочинку</span>
+            <span>🔥 ${record.calories} kcal</span>
+          </div>
+          <div class="session-tags">${record.tags.join(' ')}</div>
+        `;
+      }
+      detailSessionsEl.appendChild(sessionDiv);
+    });
+    document.body.classList.add('details-view-active');
+    dayDetailModal.classList.add('active');
+  }
+
+  function closeDayDetails() {
+    document.body.classList.remove('details-view-active');
+    dayDetailModal.classList.remove('active');
+  }
+
+  if (closeDayDetailBtn) closeDayDetailBtn.addEventListener('click', closeDayDetails);
+  if (dayDetailModal) dayDetailModal.addEventListener('click', (e) => {
+    if (e.target === dayDetailModal) closeDayDetails();
+  });
 
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
@@ -711,7 +745,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderHistory();
           }
           const targetScreen = document.getElementById(targetId);
-
           if (targetScreen) {
             menuScreens.forEach(s => s.classList.remove('active'));
             targetScreen.classList.add('active');
