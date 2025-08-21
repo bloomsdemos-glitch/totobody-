@@ -78,6 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const detailDateEl = document.getElementById('detailDate');
   const detailTotalsEl = document.getElementById('detailTotals');
   const detailSessionsEl = document.getElementById('detailSessions');
+  const appHeader = document.querySelector('.app-header');
+  const goalBar = document.getElementById('goalProgress');
+  const dayDetailScreen = document.getElementById('dayDetailScreen');
+  const detailBackBtn = document.getElementById('detailBackBtn');
+  const detailDateEl = document.getElementById('detailDate');
+  const detailTitleEl = document.getElementById('detailTitle');
+  const detailStatsListEl = document.getElementById('detailStatsList');
 
 
   let isMuted = false;
@@ -103,19 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 
-  function showScreen(screenId) {
+    function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
     if (screenToShow) screenToShow.classList.add('active');
-    
-    // Показуємо/ховаємо хедер в залежності від екрану
-    const header = document.querySelector('.app-header');
-    if (screenId === 'homeScreen') {
-        header.style.display = 'flex';
+
+    // Керуємо видимістю і темою хедера/футера
+    if (screenId === 'dayDetailScreen') {
+      appHeader.classList.add('dark-theme');
+      goalBar.classList.add('dark-theme');
     } else {
-        header.style.display = 'none';
+      appHeader.classList.remove('dark-theme');
+      goalBar.classList.remove('dark-theme');
     }
   }
+
 
   if (datetimeDisplayEl) {
     function updateDateTime() {
@@ -677,6 +686,68 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     showScreen('dayDetailScreen');
   }
+
+  function openDayDetails(day, dayRecords) {
+    detailDateEl.textContent = day;
+    detailStatsListEl.innerHTML = ''; // Очищаємо список
+
+    // Збираємо всі дані за день в один об'єкт
+    const dayData = {
+        calories: 0,
+        difficulty: null,
+        energy: null,
+        steps: 0,
+        mood: null,
+        tags: [],
+        rating: 0,
+        hasWorkout: false
+    };
+
+    dayRecords.forEach(record => {
+        dayData.calories += record.calories || 0;
+        dayData.steps += record.steps || 0;
+        
+        if (record.type === 'workout') {
+            dayData.hasWorkout = true;
+            const difficultyTag = record.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t));
+            const energyTag = record.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t));
+            const ratingTag = record.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t));
+            const extraTags = record.tags.filter(t => !['😌', '🙂', '😮‍💨', '😵', '🥵', '💀', '😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥', '😟', '😕', '😐', '🙂', '🤩'].includes(t));
+
+            if (difficultyTag) dayData.difficulty = difficultyTag;
+            if (energyTag) dayData.energy = energyTag;
+            if (ratingTag) {
+                dayData.rating = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(ratingTag) + 1;
+            }
+            // Збираємо унікальні теги
+            extraTags.forEach(tag => {
+                if (!dayData.tags.includes(tag)) {
+                    dayData.tags.push(tag);
+                }
+            });
+        } else if (record.type === 'rest') {
+            const moodTag = record.tags.find(t => ['🤩', '😌', '🙂', '🫤', '😟', '😩', '🤬'].includes(t));
+            if (moodTag) dayData.mood = moodTag;
+        }
+    });
+
+    detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Вихідний •';
+
+    let statsHTML = '';
+    if (dayData.calories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалені калорії</span><span class="value">${dayData.calories}</span></li>`;
+    if (dayData.difficulty) statsHTML += `<li class="detail-stat-item"><i class="bi bi-triangle-half"></i><span class="label">Рівень складності</span><span class="value">${dayData.difficulty}</span></li>`;
+    if (dayData.energy) statsHTML += `<li class="detail-stat-item"><i class="bi bi-lightning-charge-fill"></i><span class="label">Енергія</span><span class="value">${dayData.energy}</span></li>`;
+    if (dayData.steps > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-person-walking"></i><span class="label">Кроки</span><span class="value">${dayData.steps}</span></li>`;
+    if (dayData.mood) statsHTML += `<li class="detail-stat-item"><i class="bi bi-emoji-smile"></i><span class="label">Настрій</span><span class="value">${dayData.mood}</span></li>`;
+    if (dayData.tags.length > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-node-plus-fill"></i><span class="label">Теґи</span><span class="value">${dayData.tags.join(' ')}</span></li>`;
+    if (dayData.rating > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-star"></i><span class="label">Оцінка</span><span class="value star-value">${'★'.repeat(dayData.rating)}${'☆'.repeat(5 - dayData.rating)}</span></li>`;
+
+    detailStatsListEl.innerHTML = statsHTML;
+    
+    sideMenu.classList.remove('open');
+    setTimeout(() => showScreen('dayDetailScreen'), 200);
+  }
+
 
   function renderHistory() {
     if (!historyListEl) return;
