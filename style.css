@@ -568,30 +568,33 @@ h2 {
 .emoji-rating { display: flex; justify-content: space-around; font-size: 2rem; }
 .emoji-rating span { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0.5; }
 .emoji-rating span.active { transform: scale(1.3); opacity: 1; }
-/* /* ================================================= */
-/* === DARK GLASSMORPHIC STAR BUTTONS v3.0 ======== */
+/* /* /* ================================================= */
+/* === DARK GLASSMORPHIC STAR BUTTONS v2 (FIXED) === */
 /* ================================================= */
 
 /* --- ПАНЕЛЬКА (glass-card, випукла) --- */
 .rating-runway {
   background: rgba(25, 25, 25, 0.35);
   border-radius: 22px;
-  padding: 14px 22px;
-  display: flex;
-  justify-content: center;
-  gap: 20px; /* простір між кнопками */
-
+  padding: 14px; /* Трохи зменшимо, щоб було щільніше */
+  
   /* Glassmorphism + refraction contour */
   box-shadow:
     0 2px 4px rgba(0,0,0,0.35),
-    0 0 0 1px rgba(255,255,255,0.08), /* зовнішній обвід */
+    0 0 0 1px rgba(255,255,255,0.08),
     inset 0 0 0 1px rgba(255,255,255,0.05);
   backdrop-filter: blur(10px) saturate(130%);
 }
 
+/* --- FIX #1: КОНТЕЙНЕР ДЛЯ ЗІРОК (тепер він flex) --- */
+.star-rating {
+  display: flex; /* Це розставить зірки в ряд */
+  gap: 16px; /* Простір між кнопками */
+}
+
 /* --- КНОПКИ-ЗІРКИ --- */
 .star-rating span {
-  --size: 40px; /* трохи зменшені */
+  --size: 40px;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
@@ -610,23 +613,18 @@ h2 {
     0 1px 2px rgba(0,0,0,0.4);
 
   transition: all 0.2s ease-out;
+}
 
-  /* Пасивна зірочка */
-  color: #555;
+/* --- FIX #2: СТИЛІ ДЛЯ ІКОНКИ (замість тексту) --- */
+.star-rating span i {
+  display: block; /* Важливо для стабільності */
   font-size: 1.4rem;
   line-height: 1;
+  color: #555; /* Пасивна зірочка */
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  transition: all 0.2s ease-out; /* Плавність для кольору і тіні */
 }
 
-/* --- FIX для Bootstrap-іконок --- */
-.star-rating span i,
-.star-rating span svg {
-  display: block;
-  font-size: 1.4rem;
-  line-height: 1;
-  width: auto;
-  height: auto;
-}
 
 /* --- НАТИСКАННЯ --- */
 .star-rating span:active {
@@ -634,19 +632,23 @@ h2 {
   box-shadow:
     inset 2px 2px 3px rgba(0,0,0,0.5),
     inset -2px -2px 3px rgba(255,255,255,0.06);
+}
+
+.star-rating span:active i {
   color: #444;
 }
 
 /* --- АКТИВНИЙ LED-СТАН --- */
-.star-rating span.active {
+.star-rating span.active i {
   color: #FFD700;
   text-shadow:
     0 0 2px #fff,
     0 0 6px #FFD700,
     0 0 14px #FFA500;
+}
 
-  /* Glow + refraction одночасно */
-  box-shadow:
+.star-rating span.active {
+   box-shadow:
     inset -1px -1px 2px rgba(255,255,255,0.1),
     inset 1px 1px 2px rgba(0,0,0,0.4),
     0 0 14px rgba(255,193,7,0.55);
