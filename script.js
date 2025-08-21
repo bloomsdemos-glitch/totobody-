@@ -846,17 +846,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
+    // Обробник для кнопки "назад" на екрані деталей
   if (detailBackBtn) {
     detailBackBtn.addEventListener('click', () => {
-        sideMenu.classList.add('open');
-        showScreen('homeScreen'); // Показуємо головний екран, але меню залишаємо відкритим
-        
-        // Робимо активним екран історії в меню
-        const menuScreens = sideMenu.querySelectorAll('.menu-screen');
-        menuScreens.forEach(s => s.classList.remove('active'));
-        document.getElementById('historyMenu').classList.add('active');
-        menuTitle.textContent = 'Історія тренувань';
-        menuBackBtn.style.display = 'flex';
+        showScreen('homeScreen'); // Просто повертаємось на головний екран
     });
   }
 
