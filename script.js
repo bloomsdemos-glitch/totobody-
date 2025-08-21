@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
   // --- DOM-елементи ---
+  const appHeader = document.querySelector('.app-header');
+  const goalBar = document.getElementById('goalProgress');
   const screens = document.querySelectorAll('.screen');
   const workoutModal = document.getElementById('workoutModal');
   const modalProgramNameEl = document.getElementById('modalProgramName');
@@ -76,13 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dayDetailScreen = document.getElementById('dayDetailScreen');
   const detailBackBtn = document.getElementById('detailBackBtn');
   const detailDateEl = document.getElementById('detailDate');
-  const detailTotalsEl = document.getElementById('detailTotals');
-  const detailSessionsEl = document.getElementById('detailSessions');
-  const appHeader = document.querySelector('.app-header');
-  const goalBar = document.getElementById('goalProgress');
-  const dayDetailScreen = document.getElementById('dayDetailScreen');
-  const detailBackBtn = document.getElementById('detailBackBtn');
-  const detailDateEl = document.getElementById('detailDate');
   const detailTitleEl = document.getElementById('detailTitle');
   const detailStatsListEl = document.getElementById('detailStatsList');
 
@@ -110,12 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 
-    function showScreen(screenId) {
+  function showScreen(screenId) {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
     if (screenToShow) screenToShow.classList.add('active');
 
-    // Керуємо видимістю і темою хедера/футера
     if (screenId === 'dayDetailScreen') {
       appHeader.classList.add('dark-theme');
       goalBar.classList.add('dark-theme');
@@ -124,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
       goalBar.classList.remove('dark-theme');
     }
   }
-
 
   if (datetimeDisplayEl) {
     function updateDateTime() {
@@ -272,10 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
-  if (stopBtn) stopBtn.addEventListener('click', finishWorkout); // Спрощено, щоб завжди відкривати модалку
-  if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
-  if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
+  if (stopBtn) stopBtn.addEventListener('click', finishWorkout);
+  if (trainingBackBtn) trainingBackBtn.addEventListener('click', () => showScreen('homeScreen'));
 
   function updateMuteButtonUI() {
     if (!muteBtn) return;
@@ -332,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
             danceModal.classList.add('active');
         } else if (action === 'add-program') {
             sideMenu.classList.add('open');
-            openProgramEditor(null); // Потрібно допрацювати логіку створення нової програми
+            openProgramEditor(null);
         }
     });
   });
@@ -653,102 +644,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function openDayDetails(day, dayRecords) {
-    detailDateEl.textContent = day;
-    const totalCalories = dayRecords.reduce((sum, r) => sum + (r.calories || 0), 0);
-    const totalSteps = dayRecords.reduce((sum, r) => sum + (r.steps || 0), 0);
-    detailTotalsEl.innerHTML = `
-      <span>🔥 ${totalCalories} kcal</span>
-      ${totalSteps > 0 ? `<span>🚶‍♂️ ${totalSteps} кроків</span>` : ''}
-    `;
-    detailSessionsEl.innerHTML = '';
-    dayRecords.forEach(record => {
-      const sessionDiv = document.createElement('div');
-      sessionDiv.className = 'session-item';
-      if (record.type === 'workout') {
-        sessionDiv.innerHTML = `
-          <div class="session-header">
-            <span>${record.program}</span>
-            <span>🔥 ${record.calories} kcal</span>
-          </div>
-          <div class="session-tags">${record.tags.join(' ')}</div>
-        `;
-      } else {
-        sessionDiv.innerHTML = `
-          <div class="session-header">
-            <span>🦥 День відпочинку</span>
-            <span>🔥 ${record.calories} kcal</span>
-          </div>
-          <div class="session-tags">${record.tags.join(' ')}</div>
-        `;
-      }
-      detailSessionsEl.appendChild(sessionDiv);
-    });
-    showScreen('dayDetailScreen');
-  }
-
-  function openDayDetails(day, dayRecords) {
-    detailDateEl.textContent = day;
-    detailStatsListEl.innerHTML = ''; // Очищаємо список
-
-    // Збираємо всі дані за день в один об'єкт
-    const dayData = {
-        calories: 0,
-        difficulty: null,
-        energy: null,
-        steps: 0,
-        mood: null,
-        tags: [],
-        rating: 0,
-        hasWorkout: false
-    };
-
-    dayRecords.forEach(record => {
-        dayData.calories += record.calories || 0;
-        dayData.steps += record.steps || 0;
-        
-        if (record.type === 'workout') {
-            dayData.hasWorkout = true;
-            const difficultyTag = record.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t));
-            const energyTag = record.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t));
-            const ratingTag = record.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t));
-            const extraTags = record.tags.filter(t => !['😌', '🙂', '😮‍💨', '😵', '🥵', '💀', '😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥', '😟', '😕', '😐', '🙂', '🤩'].includes(t));
-
-            if (difficultyTag) dayData.difficulty = difficultyTag;
-            if (energyTag) dayData.energy = energyTag;
-            if (ratingTag) {
-                dayData.rating = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(ratingTag) + 1;
-            }
-            // Збираємо унікальні теги
-            extraTags.forEach(tag => {
-                if (!dayData.tags.includes(tag)) {
-                    dayData.tags.push(tag);
-                }
-            });
-        } else if (record.type === 'rest') {
-            const moodTag = record.tags.find(t => ['🤩', '😌', '🙂', '🫤', '😟', '😩', '🤬'].includes(t));
-            if (moodTag) dayData.mood = moodTag;
-        }
-    });
-
-    detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Вихідний •';
-
-    let statsHTML = '';
-    if (dayData.calories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалені калорії</span><span class="value">${dayData.calories}</span></li>`;
-    if (dayData.difficulty) statsHTML += `<li class="detail-stat-item"><i class="bi bi-triangle-half"></i><span class="label">Рівень складності</span><span class="value">${dayData.difficulty}</span></li>`;
-    if (dayData.energy) statsHTML += `<li class="detail-stat-item"><i class="bi bi-lightning-charge-fill"></i><span class="label">Енергія</span><span class="value">${dayData.energy}</span></li>`;
-    if (dayData.steps > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-person-walking"></i><span class="label">Кроки</span><span class="value">${dayData.steps}</span></li>`;
-    if (dayData.mood) statsHTML += `<li class="detail-stat-item"><i class="bi bi-emoji-smile"></i><span class="label">Настрій</span><span class="value">${dayData.mood}</span></li>`;
-    if (dayData.tags.length > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-node-plus-fill"></i><span class="label">Теґи</span><span class="value">${dayData.tags.join(' ')}</span></li>`;
-    if (dayData.rating > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-star"></i><span class="label">Оцінка</span><span class="value star-value">${'★'.repeat(dayData.rating)}${'☆'.repeat(5 - dayData.rating)}</span></li>`;
-
-    detailStatsListEl.innerHTML = statsHTML;
-    
-    sideMenu.classList.remove('open');
-    setTimeout(() => showScreen('dayDetailScreen'), 200);
-  }
-
-
   function renderHistory() {
     if (!historyListEl) return;
     const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
@@ -800,6 +695,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function openDayDetails(day, dayRecords) {
+    detailDateEl.textContent = day;
+    detailTitleEl.textContent = '...'; // Placeholder
+    detailStatsListEl.innerHTML = '...'; // Placeholder
+    showScreen('dayDetailScreen');
+  }
+
+  if (detailBackBtn) {
+    detailBackBtn.addEventListener('click', () => {
+        showScreen('homeScreen');
+    });
+  }
+
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
       burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
@@ -846,13 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
-    // Обробник для кнопки "назад" на екрані деталей
-  if (detailBackBtn) {
-    detailBackBtn.addEventListener('click', () => {
-        showScreen('homeScreen'); // Просто повертаємось на головний екран
-    });
-  }
-
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
