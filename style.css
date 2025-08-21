@@ -574,7 +574,8 @@ h2 {
 
 /* --- ПАНЕЛЬКА (glass-card) --- */
 .rating-runway {
-  background: rgba(25, 25, 25, 0.35);
+  background: rgba(225, 226, 228, 0.35); /* #E1E2E4 з прозорістю */
+}
   border-radius: 22px;
   padding: 14px 20px;
   display: flex;
