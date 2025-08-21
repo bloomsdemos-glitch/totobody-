@@ -542,55 +542,111 @@ h2 {
     inset 0 0 0 1px rgba(255,255,255,0.05);
   backdrop-filter: blur(10px) saturate(130%);
 }
+/* /* /* ================================================= */
+/* === DARK GLASS-NEUMORPHIC STAR BUTTONS v13.2 ==== */
+/* ================================================= */
+
+/* --- ПАНЕЛЬКА (glass-card) --- */
+.rating-runway {
+  background: rgba(225, 226, 228, 0.35); /* світліший #CBCCCF */
+  border-radius: 22px;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+
+  /* REFRACTION */
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.35),
+    0 0 0 1px rgba(255,255,255,0.1),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px) saturate(130%);
+}
+
+/* --- КОНТЕЙНЕР ДЛЯ ЗІРОК --- */
 .star-rating {
   display: flex;
-  gap: 16px;
+  gap: 18px;
 }
+
+/* --- ЗІРКИ (кнопки) --- */
 .star-rating span {
-  --size: 40px;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
+  --size: 45px; 
   display: flex;
   justify-content: center;
   align-items: center;
+  width: var(--size);
+  height: var(--size);
   cursor: pointer;
-  background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+  border-radius: 50%;
+  font-size: 1.6rem;
+
+  background: linear-gradient(145deg, #383838, #1d1d1d);
+
   box-shadow:
-    inset -1px -1px 2px rgba(255,255,255,0.08),
-    inset 1px 1px 2px rgba(0,0,0,0.4),
-    0 1px 2px rgba(0,0,0,0.4);
-  transition: all 0.2s ease-out;
-}
-.star-rating span i {
-  display: block;
-  font-size: 1.4rem;
-  line-height: 1;
+    -2px -2px 5px rgba(255, 255, 255, 0.05),
+     2px  2px 5px rgba(0, 0, 0, 0.3);
+
   color: #555;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-  transition: all 0.2s ease-out;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  transition: all 0.22s cubic-bezier(0.25, 1.5, 0.5, 1);
+  position: relative;
+  overflow: hidden;
 }
-.star-rating span:active {
-  transform: scale(0.9);
+
+/* --- ВНУТРІШНІЙ "скляний" контур --- */
+.star-rating span::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+/* --- ЗОВНІШНІЙ "refraction" контур --- */
+.star-rating span::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 2px 2px 3px rgba(0,0,0,0.5),
-    inset -2px -2px 3px rgba(255,255,255,0.06);
+    0 1px 2px rgba(255, 255, 255, 0.08),
+    0 -1px 2px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
 }
-.star-rating span:active i {
+
+/* --- НАТИСКАННЯ --- */
+.star-rating span:active {
+  transform: scale(0.92);
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.4),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.05);
   color: #444;
+  text-shadow: none;
 }
-.star-rating span.active i {
+
+/* --- АКТИВНА (LED-світіння) --- */
+.star-rating span.active {
   color: #FFD700;
+  box-shadow:
+    -2px -2px 5px rgba(255, 255, 255, 0.05),
+     2px  2px 5px rgba(0, 0, 0, 0.3),
+     inset 0 0 10px rgba(255, 193, 7, 0.4);
+
   text-shadow:
     0 0 2px #fff,
     0 0 6px #FFD700,
     0 0 14px #FFA500;
 }
-.star-rating span.active {
-   box-shadow:
-    inset -1px -1px 2px rgba(255,255,255,0.1),
-    inset 1px 1px 2px rgba(0,0,0,0.4),
-    0 0 14px rgba(255,193,7,0.55);
+
+/* --- Ореол для glow --- */
+.star-rating span.active::before {
+  border: 1px solid rgba(255, 200, 80, 0.25);
+  box-shadow:
+    inset 0 0 6px rgba(255, 200, 80, 0.25),
+    0 0 10px rgba(255, 193, 7, 0.35);
 }
 .expand-section {
   text-align: center; margin: 30px 0 15px 0;
@@ -813,4 +869,167 @@ h2 {
 #historyList::-webkit-scrollbar-thumb:hover,
 .detail-sessions::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+/* ================================================= */
+/* ===== СТИЛІ ДЛЯ НОВОГО ЕКРАНУ ДЕТАЛЕЙ ДНЯ ===== */
+/* ================================================= */
+
+/* --- Змінюємо хедер/футер на темній темі --- */
+.app-header.dark-theme h1, 
+.app-header.dark-theme .datetime, 
+.app-header.dark-theme .icon-button {
+  color: #fff;
+}
+.app-header.dark-theme {
+    background: rgba(18, 18, 18, 0.5);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.goal-bar.dark-theme {
+    background: rgba(18, 18, 18, 0.5);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+.goal-bar.dark-theme span {
+  color: #fff;
+}
+
+
+/* --- Стилі для самого екрану --- */
+#dayDetailScreen {
+  background: #121212;
+  padding-top: 80px;
+  padding-bottom: 90px;
+  align-items: center;
+  justify-content: center;
+}
+.day-detail-card {
+  width: 95%;
+  max-width: 500px;
+  height: 100%;
+  background: rgba(28, 28, 30, 0.7);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 24px 24px 0 0;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.detail-header {
+  padding: 10px 15px;
+  flex-shrink: 0;
+}
+.detail-header .icon-button {
+  font-size: 1.8rem;
+  color: #fff;
+  opacity: 0.8;
+}
+.detail-content-area {
+  padding: 0 25px 20px 25px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.detail-date-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.detail-date-section i {
+  font-size: 1.8rem;
+  opacity: 0.7;
+}
+.detail-date-section span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.detail-title {
+  text-align: center;
+  font-weight: 400;
+  font-size: 1rem;
+  opacity: 0.7;
+  margin: 20px 0;
+}
+.detail-stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.detail-stat-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 1.1rem;
+}
+.detail-stat-item i {
+  font-size: 1.3rem;
+  margin-right: 15px;
+  width: 25px;
+  text-align: center;
+  opacity: 0.8;
+}
+.detail-stat-item .label {
+  opacity: 0.8;
+}
+.detail-stat-item .value {
+  margin-left: auto;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.detail-stat-item .star-value {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #FFD700;
+}
+.detail-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+.detail-navigation .icon-button {
+  font-size: 2rem;
+  color: #fff;
+  opacity: 0.7;
+}
+.detail-navigation .icon-button:active {
+  opacity: 1;
+  transform: scale(0.95);
+}
+
+/* --- СКРОЛБАР для історії в меню --- */
+#historyMenu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.history-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+/* --- Стилізація скролбарів --- */
+#historyList::-webkit-scrollbar,
+.detail-content-area::-webkit-scrollbar {
+  width: 6px;
+}
+#historyList::-webkit-scrollbar-track,
+.detail-content-area::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb,
+.detail-content-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb:hover,
+.detail-content-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
