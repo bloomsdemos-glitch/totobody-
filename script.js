@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeDanceModalBtn = danceModal.querySelector('.close-button');
   const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
   const historyListEl = document.getElementById('historyList');
-  const dayDetailModal = document.getElementById('dayDetailModal');
-  const closeDayDetailBtn = document.getElementById('closeDayDetailBtn');
+  const dayDetailScreen = document.getElementById('dayDetailScreen');
+  const detailBackBtn = document.getElementById('detailBackBtn');
   const detailDateEl = document.getElementById('detailDate');
   const detailTotalsEl = document.getElementById('detailTotals');
   const detailSessionsEl = document.getElementById('detailSessions');
@@ -107,8 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
     if (screenToShow) screenToShow.classList.add('active');
-    if (burgerBtn) {
-      burgerBtn.style.display = (screenId === 'trainingScreen') ? 'none' : 'flex';
+    
+    // Показуємо/ховаємо хедер в залежності від екрану
+    const header = document.querySelector('.app-header');
+    if (screenId === 'homeScreen') {
+        header.style.display = 'flex';
+    } else {
+        header.style.display = 'none';
     }
   }
 
@@ -212,7 +217,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else { alert('Тренування завершено! 💪'); showScreen('homeScreen'); }
   }
 
-  function confirmExitTraining() { if (!isStarted) { showScreen('homeScreen'); return; } if (confirm("Точно хочеш завершити тренування?")) { finishWorkout(); } }
+  function confirmExitTraining() { 
+    if (!isStarted) { 
+        showScreen('homeScreen'); 
+        return; 
+    } 
+    if (confirm("Точно хочеш завершити тренування?")) { 
+        finishWorkout(); 
+    } 
+  }
   
   function startWorkout(workoutData) {
     let count = 3;
@@ -250,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
-  if (stopBtn) stopBtn.addEventListener('click', confirmExitTraining);
+  if (stopBtn) stopBtn.addEventListener('click', finishWorkout); // Спрощено, щоб завжди відкривати модалку
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', confirmExitTraining);
   if (nextBtn) nextBtn.addEventListener('click', () => { if (!isStarted || currentIndex >= exercises.length - 1) return; currentIndex++; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
   if (prevBtn) prevBtn.addEventListener('click', () => { if (!isStarted || currentIndex <= 0) return; currentIndex--; remainingTime = exercises[currentIndex].duration || 30; updateUI(); playCurrentExerciseSound(); });
@@ -309,7 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (action === 'show-dance') {
             danceModal.classList.add('active');
         } else if (action === 'add-program') {
-            // Можна додати відкриття меню створення програми
+            sideMenu.classList.add('open');
+            openProgramEditor(null); // Потрібно допрацювати логіку створення нової програми
         }
     });
   });
@@ -630,6 +644,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function openDayDetails(day, dayRecords) {
+    detailDateEl.textContent = day;
+    const totalCalories = dayRecords.reduce((sum, r) => sum + (r.calories || 0), 0);
+    const totalSteps = dayRecords.reduce((sum, r) => sum + (r.steps || 0), 0);
+    detailTotalsEl.innerHTML = `
+      <span>🔥 ${totalCalories} kcal</span>
+      ${totalSteps > 0 ? `<span>🚶‍♂️ ${totalSteps} кроків</span>` : ''}
+    `;
+    detailSessionsEl.innerHTML = '';
+    dayRecords.forEach(record => {
+      const sessionDiv = document.createElement('div');
+      sessionDiv.className = 'session-item';
+      if (record.type === 'workout') {
+        sessionDiv.innerHTML = `
+          <div class="session-header">
+            <span>${record.program}</span>
+            <span>🔥 ${record.calories} kcal</span>
+          </div>
+          <div class="session-tags">${record.tags.join(' ')}</div>
+        `;
+      } else {
+        sessionDiv.innerHTML = `
+          <div class="session-header">
+            <span>🦥 День відпочинку</span>
+            <span>🔥 ${record.calories} kcal</span>
+          </div>
+          <div class="session-tags">${record.tags.join(' ')}</div>
+        `;
+      }
+      detailSessionsEl.appendChild(sessionDiv);
+    });
+    showScreen('dayDetailScreen');
+  }
+
   function renderHistory() {
     if (!historyListEl) return;
     const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
@@ -681,51 +729,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function openDayDetails(day, dayRecords) {
-    detailDateEl.textContent = day;
-    const totalCalories = dayRecords.reduce((sum, r) => sum + (r.calories || 0), 0);
-    const totalSteps = dayRecords.reduce((sum, r) => sum + (r.steps || 0), 0);
-    detailTotalsEl.innerHTML = `
-      <span>🔥 ${totalCalories} kcal</span>
-      ${totalSteps > 0 ? `<span>🚶‍♂️ ${totalSteps} кроків</span>` : ''}
-    `;
-    detailSessionsEl.innerHTML = '';
-    dayRecords.forEach(record => {
-      const sessionDiv = document.createElement('div');
-      sessionDiv.className = 'session-item';
-      if (record.type === 'workout') {
-        sessionDiv.innerHTML = `
-          <div class="session-header">
-            <span>${record.program}</span>
-            <span>🔥 ${record.calories} kcal</span>
-          </div>
-          <div class="session-tags">${record.tags.join(' ')}</div>
-        `;
-      } else {
-        sessionDiv.innerHTML = `
-          <div class="session-header">
-            <span>🦥 День відпочинку</span>
-            <span>🔥 ${record.calories} kcal</span>
-          </div>
-          <div class="session-tags">${record.tags.join(' ')}</div>
-        `;
-      }
-      detailSessionsEl.appendChild(sessionDiv);
-    });
-    document.body.classList.add('details-view-active');
-    dayDetailModal.classList.add('active');
-  }
-
-  function closeDayDetails() {
-    document.body.classList.remove('details-view-active');
-    dayDetailModal.classList.remove('active');
-  }
-
-  if (closeDayDetailBtn) closeDayDetailBtn.addEventListener('click', closeDayDetails);
-  if (dayDetailModal) dayDetailModal.addEventListener('click', (e) => {
-    if (e.target === dayDetailModal) closeDayDetails();
-  });
-
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
       burgerBtn.addEventListener('click', (e) => { e.stopPropagation(); sideMenu.classList.add('open'); });
@@ -772,6 +775,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
+  if (detailBackBtn) {
+    detailBackBtn.addEventListener('click', () => {
+        sideMenu.classList.add('open');
+        showScreen('homeScreen'); // Показуємо головний екран, але меню залишаємо відкритим
+        
+        // Робимо активним екран історії в меню
+        const menuScreens = sideMenu.querySelectorAll('.menu-screen');
+        menuScreens.forEach(s => s.classList.remove('active'));
+        document.getElementById('historyMenu').classList.add('active');
+        menuTitle.textContent = 'Історія тренувань';
+        menuBackBtn.style.display = 'flex';
+    });
+  }
+
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
