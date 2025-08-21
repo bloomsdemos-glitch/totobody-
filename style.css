@@ -91,24 +91,6 @@ h2 {
   padding: 5px;
   color: var(--text-color);
 }
-.glass-icon-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  box-shadow: 2px 2px 5px var(--glass-shadow);
-  transition: all 0.2s ease-out;
-}
-.glass-icon-btn:active {
-  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
-  transform: scale(0.95);
-}
 .header-placeholder {
   width: 45px;
   flex-shrink: 0;
@@ -125,6 +107,9 @@ h2 {
   cursor: pointer;
   z-index: 10;
   padding: 5px;
+}
+#dayDetailScreen .back-button {
+    color: #fff; /* Робимо кнопку назад білою на чорному екрані */
 }
 .neumorphic-icon-btn {
   width: 45px;
@@ -236,11 +221,6 @@ h2 {
   box-shadow: 2px 2px 5px var(--glass-shadow);
   transition: all 0.2s ease-out;
 }
-.fab svg {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
 .fab:active {
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
   transform: scale(0.95);
@@ -275,7 +255,7 @@ h2 {
   height: 100%;
   border-radius: 6px;
   transition: width 0.5s ease-in-out;
-  background: var(--progress-green);
+  background: var(--active-green);
   box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
 }
 #trainingScreen {
@@ -688,6 +668,14 @@ h2 {
   list-style: none;
   padding: 0;
   margin: 0;
+  /* Додаємо скрол */
+  flex-grow: 1;
+  overflow-y: auto;
+}
+#historyMenu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 .history-day-group {
   margin-bottom: 25px;
@@ -732,20 +720,19 @@ h2 {
   font-size: 1.2rem;
   opacity: 0.8;
 }
-body.details-view-active {
+#dayDetailScreen {
   background: #000;
+  align-items: center;
 }
-
 .day-detail-content {
   width: 90%;
   max-width: 400px;
-  min-height: 300px;
-  max-height: 80vh;
+  margin-top: 20px;
   
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 24px;
+  
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.2),
@@ -757,6 +744,8 @@ body.details-view-active {
   padding: 25px;
   display: flex;
   flex-direction: column;
+
+  border-radius: 24px 24px 0 0; /* Закруглення тільки зверху */
 }
 .day-detail-content .close-button {
   color: #fff;
@@ -786,7 +775,8 @@ body.details-view-active {
   font-size: 1.1rem;
 }
 .detail-sessions {
-  overflow-y: auto;
+  flex-grow: 1; /* Дозволяє блоку розтягуватись */
+  overflow-y: auto; /* Додаємо скрол, якщо контенту багато */
 }
 .session-item {
   background: rgba(0, 0, 0, 0.15);
@@ -804,4 +794,23 @@ body.details-view-active {
 .session-tags {
   font-size: 1.4rem;
   margin-top: 10px;
+}
+/* Стилізація скролбару */
+#historyList::-webkit-scrollbar,
+.detail-sessions::-webkit-scrollbar {
+  width: 6px;
+}
+#historyList::-webkit-scrollbar-track,
+.detail-sessions::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb,
+.detail-sessions::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb:hover,
+.detail-sessions::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
