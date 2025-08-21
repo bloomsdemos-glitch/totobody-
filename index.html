@@ -1,292 +1,378 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TOTOBODY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=26"> </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TOTOBODY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css?v=27">
+</head>
+
 <body>
+    <header class="app-header">
+        <button id="burgerBtn" class="icon-button"><i class="bi bi-list"></i></button>
+        <div class="title-container">
+            <h1>TOTOBODY ©</h1>
+            <p id="datetime-display" class="datetime"></p>
+        </div>
+        <div class="header-placeholder"></div>
+    </header>
 
-  <header class="app-header">
-    <button id="burgerBtn" class="icon-button"><i class="bi bi-list"></i></button>
-    <div class="title-container">
-      <h1>TOTOBODY ©</h1>
-      <p id="datetime-display" class="datetime"></p>
-    </div>
-    <div class="header-placeholder"></div>
-  </header>
-  
-  <div id="sideMenu" class="side-menu">
-      <div class="menu-overlay-close"></div>
-      <div class="glassmorphism-panel">
-        <button class="back-btn" id="menuBackBtn"><i class="bi bi-arrow-left-circle-fill"></i></button>
-        <h3 id="menuTitle">Меню</h3>
-        <div id="mainMenu" class="menu-screen active">
-          <ul>
-            <li><a href="#" data-target="statsSettingsMenu"><i class="bi bi-clipboard-data"></i>Статистика</a></li>
-            <li><a href="#" data-target="calendarMenu"><i class="bi bi-calendar2-date"></i>Календар</a></li>
-            <li><a href="#" data-target="goalSettingsMenu"><i class="bi bi-bullseye"></i>Мета</a></li>
-            <li><a href="#" data-target="workoutSettingsMenu"><i class="bi bi-gear-wide-connected"></i>Налаштування тренувань</a></li>
-            <li><a href="#" data-target="appSettingsMenu"><i class="bi bi-magic"></i>Налаштування додатку</a></li>
-            <li><a href="#" data-target="historyMenu"><i class="bi bi-archive"></i>Історія тренувань</a></li>
-          </ul>
-        </div>
-        <div id="workoutSettingsMenu" class="menu-screen"><ul id="program-list" class="program-list"></ul><button id="addNewProgramBtn" class="menu-button">Додати нову програму</button></div>
-        <div id="programEditMenu" class="menu-screen">
-          <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
-          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
-          <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
-        </div>
-        <div id="statsSettingsMenu" class="menu-screen"><p>Тут буде статистика.</p></div>
-        <div id="goalSettingsMenu" class="menu-screen"><p>Тут будуть налаштування мети.</p></div>
-        <div id="appSettingsMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="bgUrlInput">URL фонового зображення:</label><input type="text" id="bgUrlInput" placeholder="Встав сюди посилання...">
-            <div class="setting-actions"><button id="saveBgBtn" class="menu-button">Зберегти</button><button id="resetBgBtn" class="menu-button secondary">Скинути</button></div>
-          </div>
-        </div>
-        <div id="calendarMenu" class="menu-screen"><p>Тут буде твій календар тренувань.</p></div>
-        <div id="historyMenu" class="menu-screen">
-          <ul id="historyList" class="history-list">
-            </ul>
-        </div>
-        <div id="addProgramMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="newProgramNameInput">Назва нової програми:</label><input type="text" id="newProgramNameInput" placeholder="Наприклад, HIIT ULTIMATE...">
-            <div class="setting-actions"><button id="saveNewProgramBtn" class="menu-button">Зберегти</button></div>
-          </div>
-        </div>
-      </div>
-  </div>
+    <div id="sideMenu" class="side-menu">
+        <div class="menu-overlay-close"></div>
+        <div class="glassmorphism-panel">
+            <button class="back-btn" id="menuBackBtn"><i class="bi bi-arrow-left-circle-fill"></i></button>
+            <h3 id="menuTitle">Меню</h3>
 
-  <main id="homeScreen" class="screen active">
-    <section class="carousel-section">
-      <h2>HIIT</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="HIIT BASIC"><div class="tile-icon">🤸‍♂️</div><div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT ULTRA"><div class="tile-icon">🔥</div><div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT PRO"><div class="tile-icon">🏆</div><div class="tile-label"><strong>HIIT PRO</strong></div></button>
-        <button class="neumorphic-tile add-new" data-action="add-program"><div class="tile-icon">+</div><div class="tile-label"><strong>Нова</strong><span>програма</span></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-      <h2>Різне</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="MIXED BASIC"><div class="tile-icon">💪</div><div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="DUMBBELL"><div class="tile-icon">🏋️‍♂️</div><div class="tile-label"><strong>ГАНТЕЛЬ</strong></div></button>
-        <button class="neumorphic-tile" data-program="BODYWEIGHT"><div class="tile-icon">🧘‍♂️</div><div class="tile-label"><strong>ФІЗИЧНЕ</strong></div></button>
-        <button class="neumorphic-tile" data-action="show-dance"><div class="tile-icon">🕺</div><div class="tile-label"><strong>DANCE</strong></div></button>
-        <button class="neumorphic-tile" data-program="Біг"><div class="tile-icon">🏃🏻‍♂️</div><div class="tile-label"><strong>БІГ</strong></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-        <h2>Інструменти</h2>
-        <div class="carousel-track">
-          <button class="neumorphic-tile" data-action="show-stats"><div class="tile-icon">📊</div><div class="tile-label"><strong>STATS</strong></div></button>
-          <button class="neumorphic-tile" data-action="show-calendar"><div class="tile-icon">🗓️</div><div class="tile-label"><strong>КАЛЕНДАР</strong></div></button>
-        </div>
-    </section>
-    <button id="restDayBtn" class="fab"><i class="bi bi-emoji-smile"></i></button>
-    <div id="goalProgress" class="goal-bar">
-        <span>Мета: Схуднути до 65 кг</span>
-        <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
-    </div>
-  </main>
-  
-  <div id="trainingScreen" class="screen">
-    <button id="trainingBackBtn" class="back-button"><i class="bi bi-box-arrow-left"></i></button>
-    <h2 id="trainingProgramName">HIIT BASIC</h2>
-    <div class="exercise-display"><div class="marquee"><span id="exerciseName">Присідання</span></div></div>
-    <div id="timer" class="timer-display">00:30</div>
-    <div class="controls">
-      <button id="prevExercise" class="icon-button"><i class="bi bi-arrow-counterclockwise"></i></button>
-      <button id="pauseBtn" class="icon-button pause-button"><i class="bi bi-play-circle-fill"></i></button>
-      <button id="stopBtn" class="icon-button"><i class="bi bi-sign-stop-fill"></i></button>
-      <button id="nextExercise" class="icon-button"><i class="bi bi-arrow-clockwise"></i></button>
-      <button id="shuffleBtn" class="icon-button"><i class="bi bi-shuffle"></i></button>
-      <button id="muteBtn" class="icon-button"><i class="bi bi-volume-up-fill"></i></button>
-    </div>
-    <div id="completedExercises"></div>
-  </div>
+            <div id="mainMenu" class="menu-screen active">
+                <ul>
+                    <li><a href="#" data-target="statsSettingsMenu"><i class="bi bi-clipboard-data"></i>Статистика</a></li>
+                    <li><a href="#" data-target="calendarMenu"><i class="bi bi-calendar2-date"></i>Календар</a></li>
+                    <li><a href="#" data-target="goalSettingsMenu"><i class="bi bi-bullseye"></i>Мета</a></li>
+                    <li><a href="#" data-target="workoutSettingsMenu"><i class="bi bi-gear-wide-connected"></i>Налаштування тренувань</a></li>
+                    <li><a href="#" data-target="appSettingsMenu"><i class="bi bi-magic"></i>Налаштування додатку</a></li>
+                    <li><a href="#" data-target="historyMenu"><i class="bi bi-archive"></i>Історія тренувань</a></li>
+                </ul>
+            </div>
 
-  <div id="dayDetailScreen" class="screen">
-    <div class="day-detail-card">
-      <div class="detail-header">
-        <button id="detailBackBtn" class="icon-button"><i class="bi bi-box-arrow-left"></i></button>
-      </div>
-      <div id="detailContent" class="detail-content-area">
-        <div class="detail-date-section">
-          <i class="bi bi-calendar-event"></i>
-          <span id="detailDate"></span>
-        </div>
-        <h3 id="detailTitle" class="detail-title"></h3>
-        <ul id="detailStatsList" class="detail-stats-list">
-          </ul>
-      </div>
-      <div class="detail-navigation">
-        <button id="prevDayBtn" class="icon-button"><i class="bi bi-chevron-left"></i></button>
-        <button id="editDayBtn" class="icon-button"><i class="bi bi-pencil-square"></i></button>
-        <button id="nextDayBtn" class="icon-button"><i class="bi bi-chevron-right"></i></button>
-      </div>
-    </div>
-  </div>
+            <div id="workoutSettingsMenu" class="menu-screen">
+                <ul id="program-list" class="program-list"></ul>
+                <button id="addNewProgramBtn" class="menu-button">Додати нову програму</button>
+            </div>
 
+            <div id="programEditMenu" class="menu-screen">
+                <div class="setting-item">
+                    <label for="programNameInput">Назва програми:</label>
+                    <input type="text" id="programNameInput">
+                </div>
+                <div class="setting-item">
+                    <label>Вправи:</label>
+                    <ul id="exercise-list" class="exercise-list"></ul>
+                    <button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button>
+                </div>
+                <div class="setting-actions">
+                    <button id="saveProgramBtn" class="menu-button">Зберегти зміни</button>
+                    <button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button>
+                </div>
+            </div>
 
-  <div id="workoutModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="modalProgramName"></h2>
-      <div class="modal-info">
-        <p>Програма включає:</p>
-        <ul id="modalExerciseList"></ul>
-      </div>
-      <div class="modal-actions">
-        <button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-magic"></i></button>
-        <button id="modalStartBtn" class="start-btn btn-with-icon">
-          <i class="bi bi-play-fill"></i>
-          <span>Почати</span>
-        </button>
-      </div>
-    </div>
-  </div>
+            <div id="statsSettingsMenu" class="menu-screen">
+                <p>Тут буде статистика.</p>
+            </div>
 
-  <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
-  
-  <div id="exerciseModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="exerciseModalTitle">Нова вправа</h2>
-      <div class="setting-item">
-        <label for="exerciseNameInput">Назва вправи:</label>
-        <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
-      </div>
-      <div class="setting-item">
-        <label for="exerciseDurationInput">Тривалість (хх:сс):</label>
-        <input type="text" id="exerciseDurationInput" placeholder="00:45">
-      </div>
-      <div class="setting-item">
-        <label for="exerciseAudioInput">Назва аудіофайлу (напр., burpee.m4a):</label>
-        <input type="text" id="exerciseAudioInput" placeholder="Введи точну назву файлу...">
-      </div>
-      <div class="setting-actions">
-        <button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button>
-      </div>
-    </div>
-  </div>
-  
-  <div id="finishModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <h2 id="finishModalTitle">Чудова робота!</h2>
-      <div class="setting-item calories-input-wrapper">
-        <i class="bi bi-fire"></i>
-        <input type="number" id="caloriesInput" placeholder="kcal">
-      </div>
-      <div class="setting-item">
-        <label for="difficultySlider">Наскільки було складно?</label>
-        <div class="difficulty-slider-container">
-          <div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div>
-          <input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider">
-        </div>
-      </div>
-      <div class="setting-item"><label>Рівень енергії:</label><div id="energyRating" class="emoji-rating"><span data-value="0">😵‍💫</span><span data-value="1">🥱</span><span data-value="2">🫤</span><span data-value="3">👌🏻</span><span data-value="4">⚡️</span><span data-value="5" class="active">🔥</span></div></div>
-      <div class="rating-runway">
-        <div id="starRating" class="star-rating">
-          <span data-value="1">★</span>
-          <span data-value="2">★</span>
-          <span data-value="3">★</span>
-          <span data-value="4">★</span>
-          <span data-value="5">★</span>
-        </div>
-      </div>
-      
-      <div class="expand-section">
-        <button id="expandTagsBtn" class="menu-button"><i class="bi bi-plus-circle-dotted"></i></button>
-      </div>
-      <div id="extraTagsSection" class="extra-tags-section">
-        <div class="tags-rating">
-          <span data-tag="coffee">☕️</span>
-          <span data-tag="battery">🔋</span>
-          <span data-tag="banana">🍌</span>
-          <span data-tag="cookie">🍪</span>
-          <span data-tag="sleepy">😴</span>
-          <span data-tag="fire">💥</span>
-        </div>
-      </div>
-      
-      <div class="setting-actions">
-        <button id="saveWorkoutLogBtn" class="menu-button btn-with-icon">
-          <i class="bi bi-check-circle-fill"></i>
-          <span>Зберегти</span>
-        </button>
-      </div>
-    </div>
-  </div>
+            <div id="goalSettingsMenu" class="menu-screen">
+                <p>Тут будуть налаштування мети.</p>
+            </div>
 
-  <div id="restDayModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button id="closeRestDayModal" class="close-button">&times;</button>
-      <h2>Як пройшов твій день?</h2>
-      <div class="setting-item">
-        <label>Загальна активність:</label>
-        <div class="input-with-icon">
-          <i class="bi bi-person-walking"></i>
-          <input type="number" id="stepsInput" placeholder="Кроки">
-        </div>
-        <div class="input-with-icon">
-          <i class="bi bi-fire"></i>
-          <input type="number" id="restDayCaloriesInput" placeholder="Калорії">
-        </div>
-      </div>
-      <div class="setting-item">
-        <label>Який сьогодні настрій?</label>
-        <div id="moodRating" class="emoji-rating">
-          <span data-value="🤩">🤩</span>
-          <span data-value="😌">😌</span>
-          <span data-value="🙂">🙂</span>
-          <span data-value="🫤">🫤</span>
-          <span data-value="😟">😟</span>
-          <span data-value="😩">😩</span>
-          <span data-value="🤬">🤬</span>
-        </div>
-      </div>
-      <div class="setting-actions">
-        <button id="saveRestDayBtn" class="menu-button btn-with-icon">
-          <i class="bi bi-check-circle-fill"></i>
-          <span>Зберегти</span>
-        </button>
-      </div>
-    </div>
-  </div>
+            <!-- Оновлені налаштування додатку -->
+            <div id="appSettingsMenu" class="menu-screen">
+                <div class="setting-item">
+                    <label>Фони для екранів:</label>
+                    <div class="background-settings-group">
+                        <div class="bg-setting-item">
+                            <label for="trainingBgInput">Фон тренування:</label>
+                            <input type="text" id="trainingBgInput" placeholder="URL для тренувального екрану">
+                            <button class="bg-control-btn" data-action="save" data-target="training">💾</button>
+                            <button class="bg-control-btn" data-action="reset" data-target="training">🔄</button>
+                        </div>
+                        <div class="bg-setting-item">
+                            <label for="statsBgInput">Фон статистики:</label>
+                            <input type="text" id="statsBgInput" placeholder="URL для екрану статистики">
+                            <button class="bg-control-btn" data-action="save" data-target="stats">💾</button>
+                            <button class="bg-control-btn" data-action="reset" data-target="stats">🔄</button>
+                        </div>
+                        <div class="bg-setting-item">
+                            <label for="calendarBgInput">Фон календаря:</label>
+                            <input type="text" id="calendarBgInput" placeholder="URL для екрану календаря">
+                            <button class="bg-control-btn" data-action="save" data-target="calendar">💾</button>
+                            <button class="bg-control-btn" data-action="reset" data-target="calendar">🔄</button>
+                        </div>
+                        <div class="bg-setting-item">
+                            <label for="dayDetailBgInput">Фон деталей дня:</label>
+                            <input type="text" id="dayDetailBgInput" placeholder="URL для DayDetailScreen">
+                            <button class="bg-control-btn" data-action="save" data-target="dayDetail">💾</button>
+                            <button class="bg-control-btn" data-action="reset" data-target="dayDetail">🔄</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <label>Іконки плиток:</label>
+                    <div class="tile-icons-settings">
+                        <p class="setting-description">Можливість замінити емодзі на png/svg іконки буде додана в наступному оновленні.</p>
+                    </div>
+                </div>
+            </div>
 
-  <div id="danceModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2>Вибери тривалість</h2>
-      <div class="dance-options">
-        <button class="dance-option-btn" data-duration="300">
-          <span class="time">5</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="600">
-          <span class="time">10</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="900">
-          <span class="time">15</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="1800">
-          <span class="time">30</span>
-          <span class="unit">хв</span>
-        </button>
-      </div>
-    </div>
-  </div>
+            <div id="calendarMenu" class="menu-screen">
+                <p>Тут буде твій календар тренувань.</p>
+            </div>
 
-  <script src="script.js?v=26"></script>
+            <!-- Оновлене меню історії з боковим скролером -->
+            <div id="historyMenu" class="menu-screen">
+                <div class="history-scroll-container">
+                    <ul id="historyList" class="history-list">
+                        <!-- Історія буде тут -->
+                    </ul>
+                </div>
+            </div>
+
+            <div id="addProgramMenu" class="menu-screen">
+                <div class="setting-item">
+                    <label for="newProgramNameInput">Назва нової програми:</label>
+                    <input type="text" id="newProgramNameInput" placeholder="Наприклад, HIIT ULTIMATE...">
+                    <div class="setting-actions">
+                        <button id="saveNewProgramBtn" class="menu-button">Зберегти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Головний екран -->
+    <main id="homeScreen" class="screen active">
+        <section class="carousel-section">
+            <h2>HIIT</h2>
+            <div class="carousel-track">
+                <button class="neumorphic-tile" data-program="HIIT BASIC">
+                    <div class="tile-icon">🤸‍♂️</div>
+                    <div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div>
+                </button>
+                <button class="neumorphic-tile" data-program="HIIT ULTRA">
+                    <div class="tile-icon">🔥</div>
+                    <div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div>
+                </button>
+                <button class="neumorphic-tile" data-program="HIIT PRO">
+                    <div class="tile-icon">🏆</div>
+                    <div class="tile-label"><strong>HIIT PRO</strong></div>
+                </button>
+                <button class="neumorphic-tile add-new" data-action="add-program">
+                    <div class="tile-icon">+</div>
+                    <div class="tile-label"><strong>Нова</strong><span>програма</span></div>
+                </button>
+            </div>
+        </section>
+
+        <section class="carousel-section">
+            <h2>Різне</h2>
+            <div class="carousel-track">
+                <button class="neumorphic-tile" data-program="MIXED BASIC">
+                    <div class="tile-icon">💪</div>
+                    <div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div>
+                </button>
+                <button class="neumorphic-tile" data-program="DUMBBELL">
+                    <div class="tile-icon">🏋️‍♂️</div>
+                    <div class="tile-label"><strong>ГАНТЕЛЬ</strong></div>
+                </button>
+                <button class="neumorphic-tile" data-program="BODYWEIGHT">
+                    <div class="tile-icon">🧘‍♂️</div>
+                    <div class="tile-label"><strong>ФІЗИЧНЕ</strong></div>
+                </button>
+                <button class="neumorphic-tile" data-action="show-dance">
+                    <div class="tile-icon">🕺</div>
+                    <div class="tile-label"><strong>DANCE</strong></div>
+                </button>
+                <button class="neumorphic-tile" data-program="Біг">
+                    <div class="tile-icon">🏃🏻‍♂️</div>
+                    <div class="tile-label"><strong>БІГ</strong></div>
+                </button>
+            </div>
+        </section>
+
+        <section class="carousel-section">
+            <h2>Інструменти</h2>
+            <div class="carousel-track">
+                <button class="neumorphic-tile" data-action="show-stats">
+                    <div class="tile-icon">📊</div>
+                    <div class="tile-label"><strong>STATS</strong></div>
+                </button>
+                <button class="neumorphic-tile" data-action="show-calendar">
+                    <div class="tile-icon">🗓️</div>
+                    <div class="tile-label"><strong>КАЛЕНДАР</strong></div>
+                </button>
+            </div>
+        </section>
+
+        <button id="restDayBtn" class="fab"><i class="bi bi-emoji-smile"></i></button>
+
+        <div id="goalProgress" class="goal-bar">
+            <span>Мета: Схуднути до 65 кг</span>
+            <div class="progress-line-bg">
+                <div class="progress-line-fg" style="width: 75%;"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Екран тренування -->
+    <div id="trainingScreen" class="screen">
+        <button id="trainingBackBtn" class="back-button"><i class="bi bi-box-arrow-left"></i></button>
+        <h2 id="trainingProgramName">HIIT BASIC</h2>
+        <div class="exercise-display">
+            <div class="marquee"><span id="exerciseName">Присідання</span></div>
+        </div>
+        <div id="timer" class="timer-display">00:30</div>
+        <div class="controls">
+            <button id="prevExercise" class="icon-button"><i class="bi bi-arrow-counterclockwise"></i></button>
+            <button id="pauseBtn" class="icon-button pause-button"><i class="bi bi-play-circle-fill"></i></button>
+            <button id="stopBtn" class="icon-button"><i class="bi bi-sign-stop-fill"></i></button>
+            <button id="nextExercise" class="icon-button"><i class="bi bi-arrow-clockwise"></i></button>
+            <button id="shuffleBtn" class="icon-button"><i class="bi bi-shuffle"></i></button>
+            <button id="muteBtn" class="icon-button"><i class="bi bi-volume-up-fill"></i></button>
+        </div>
+        <div id="completedExercises"></div>
+    </div>
+
+    <!-- Новий повноцінний екран деталей дня -->
+    <div id="dayDetailScreen" class="screen">
+        <header class="app-header">
+            <button id="detailBackBtn" class="icon-button"><i class="bi bi-box-arrow-left"></i></button>
+            <div class="title-container">
+                <h1>TOTOBODY ©</h1>
+                <p id="datetime-display-detail" class="datetime"></p>
+            </div>
+            <div class="header-placeholder"></div>
+        </header>
+
+        <div class="day-detail-content">
+            <div class="day-detail-card">
+                <div class="detail-content-area">
+                    <div class="detail-date-section">
+                        <i class="bi bi-calendar-event"></i>
+                        <span id="detailDate" class="detail-date-text"></span>
+                    </div>
+                    
+                    <hr class="detail-divider">
+                    
+                    <h3 id="detailTitle" class="detail-title">День тренування</h3>
+                    
+                    <ul id="detailStatsList" class="detail-stats-list">
+                        <!-- Статистика буде додана тут -->
+                    </ul>
+                </div>
+
+                <div class="detail-navigation">
+                    <button id="prevDayBtn" class="day-nav-btn"><i class="bi bi-chevron-left"></i></button>
+                    <button id="editDayBtn" class="day-nav-btn"><i class="bi bi-pencil-square"></i></button>
+                    <button id="nextDayBtn" class="day-nav-btn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="goalProgress" class="goal-bar dark-theme">
+            <span>Мета: Схуднути до 65 кг</span>
+            <div class="progress-line-bg">
+                <div class="progress-line-fg" style="width: 75%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальні вікна -->
+    <div id="workoutModal" class="modal-overlay">
+        <div class="modal-content glassmorphism">
+            <button class="close-button">&times;</button>
+            <h2 id="modalProgramName"></h2>
+            <div class="modal-info">
+                <p>Програма включає:</p>
+                <ul id="modalExerciseList"></ul>
+            </div>
+            <div class="modal-actions">
+                <button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-magic"></i></button>
+                <button id="modalStartBtn" class="start-btn btn-with-icon">
+                    <i class="bi bi-play-fill"></i>
+                    <span>Почати</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdownScreen" class="countdown-overlay">
+        <div id="countdownNumber" class="countdown-number">3</div>
+    </div>
+
+    <div id="exerciseModal" class="modal-overlay">
+        <div class="modal-content glassmorphism">
+            <button class="close-button">&times;</button>
+            <h2 id="exerciseModalTitle">Нова вправа</h2>
+            <div class="setting-item">
+                <label for="exerciseNameInput">Назва вправи:</label>
+                <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
+            </div>
+            <div class="setting-item">
+                <label for="exerciseDurationInput">Тривалість (хх:сс):</label>
+                <input type="text" id="exerciseDurationInput" placeholder="00:45">
+            </div>
+            <div class="setting-item">
+                <label for="exerciseAudioInput">Назва аудіофайлу (напр., burpee.m4a):</label>
+                <input type="text" id="exerciseAudioInput" placeholder="Введи точну назву файлу...">
+            </div>
+            <div class="setting-actions">
+                <button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Оновлене модальне вікно фінішу з підсвічуванням калорій -->
+    <div id="finishModal" class="modal-overlay">
+        <div class="modal-content glassmorphism">
+            <h2 id="finishModalTitle">Чудова робота!</h2>
+            
+            <div class="setting-item calories-input-wrapper">
+                <i id="caloriesIcon" class="bi bi-fire calories-icon"></i>
+                <input type="number" id="caloriesInput" placeholder="kcal">
+            </div>
+            
+            <div class="setting-item">
+                <label for="difficultySlider">Наскільки було складно?</label>
+                <div class="difficulty-slider-container">
+                    <div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div>
+                    <input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider">
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label>Рівень енергії:</label>
+                <div id="energyRating" class="emoji-rating">
+                    <span data-value="0">😵‍💫</span>
+                    <span data-value="1">🥱</span>
+                    <span data-value="2">🫤</span>
+                    <span data-value="3">👌🏻</span>
+                    <span data-value="4">⚡️</span>
+                    <span data-value="5" class="active">🔥</span>
+                </div>
+            </div>
+            
+            <div class="rating-runway">
+                <div id="starRating" class="star-rating">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                </div>
+            </div>
+            
+            <div class="expand-section">
+                <button id="expandTagsBtn" class="menu-button"><i class="bi bi-plus-circle-dotted"></i></button>
+            </div>
+            
+            <div id="extraTagsSection" class="extra-tags-section">
+                <div class="tags-rating">
+                    <span data-tag="coffee">☕</span>
+                    <span data-tag="water">💧</span>
+                    <span data-tag="music">🎵</span>
+                    <span data-tag="outdoor">🌞</span>
+                </div>
+            </div>
+            
+            <div class="setting-actions">
+                <button id="saveWorkoutLogBtn" class="menu-button">Зберегти результат</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=27"></script>
 </body>
 </html>
