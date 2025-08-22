@@ -837,3 +837,173 @@ h2 {
   font-size: 1.6rem; /* Трохи збільшимо іконку */
   opacity: 0.7;
 }
+/* ================================================= */
+/* ===== СТИЛІ ДЛЯ НОВОГО ЕКРАНУ ДЕТАЛЕЙ ДНЯ ===== */
+/* ================================================= */
+
+/* --- Змінюємо хедер/футер на темній темі --- */
+.app-header.dark-theme h1, 
+.app-header.dark-theme .datetime, 
+.app-header.dark-theme .icon-button {
+  color: #fff;
+}
+.app-header.dark-theme {
+    background: rgba(18, 18, 18, 0.5);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.goal-bar.dark-theme {
+    background: rgba(18, 18, 18, 0.5);
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+.goal-bar.dark-theme span {
+  color: #fff;
+}
+
+/* --- Стилі для самого екрану --- */
+#dayDetailScreen {
+  background: #121212;
+  padding-top: 80px;
+  padding-bottom: 90px;
+  align-items: center;
+  justify-content: flex-start; /* Вирівнюємо картку по верху */
+}
+
+.day-detail-card {
+  width: 95%;
+  max-width: 500px;
+  flex-grow: 1; /* Картка займає весь доступний простір по висоті */
+  margin-bottom: -90px; /* Компенсуємо padding-bottom екрану */
+  background: rgba(28, 28, 30, 0.7);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 24px 24px 0 0; /* Закруглення тільки зверху */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.detail-header {
+  padding: 10px 15px;
+  flex-shrink: 0; /* Хедер не стискається */
+}
+.detail-header .icon-button {
+  font-size: 1.8rem;
+  color: #fff;
+  opacity: 0.8;
+}
+
+.detail-content-area {
+  padding: 0 25px 20px 25px;
+  flex-grow: 1; /* Основний контент займає весь вільний простір */
+  overflow-y: auto; /* Вмикає скрол, коли контенту багато */
+}
+
+.detail-date-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+.detail-date-section i {
+  font-size: 1.8rem;
+  opacity: 0.7;
+}
+.detail-date-section span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.detail-title {
+  text-align: center;
+  font-weight: 400;
+  font-size: 1rem;
+  opacity: 0.7;
+  margin: 20px 0;
+}
+
+.detail-stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.detail-stat-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 1.1rem;
+}
+.detail-stat-item i {
+  font-size: 1.3rem;
+  margin-right: 15px;
+  width: 25px;
+  text-align: center;
+  opacity: 0.8;
+}
+.detail-stat-item .label {
+  opacity: 0.8;
+}
+.detail-stat-item .value {
+  margin-left: auto;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.detail-stat-item .star-value {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #FFD700;
+}
+
+.detail-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0,0,0,0.2);
+  flex-shrink: 0; /* Навігація не стискається */
+}
+.detail-navigation .icon-button {
+  font-size: 2rem;
+  color: #fff;
+  opacity: 0.7;
+}
+.detail-navigation .icon-button:active {
+  opacity: 1;
+  transform: scale(0.95);
+}
+
+/* --- СКРОЛБАР для історії в меню --- */
+#historyMenu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.history-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+/* --- Стилізація скролбарів --- */
+#historyList::-webkit-scrollbar,
+.detail-content-area::-webkit-scrollbar {
+  width: 6px;
+}
+#historyList::-webkit-scrollbar-track,
+.detail-content-area::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb,
+.detail-content-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+#historyList::-webkit-scrollbar-thumb:hover,
+.detail-content-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
