@@ -684,46 +684,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const groupedByDay = history.reduce((acc, record) => {
       const date = new Date(record.date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' });
       if (!acc[date]) {
-        acc[date] = [];
+        acc[date] = { records: [], hasWorkout: false };
       }
-      acc[date].push(record);
+      acc[date].records.push(record);
+      if (record.type === 'workout') {
+        acc[date].hasWorkout = true;
+      }
       return acc;
     }, {});
     const sortedDays = Object.keys(groupedByDay).sort((a, b) => {
-        const dateA = new Date(groupedByDay[a][0].date);
-        const dateB = new Date(groupedByDay[b][0].date);
-        return dateB - dateA;
+      const dateA = new Date(groupedByDay[a].records[0].date);
+      const dateB = new Date(groupedByDay[b].records[0].date);
+      return dateB - dateA;
     });
+
     for (const day of sortedDays) {
-      const dayRecords = groupedByDay[day];
-      const dayGroupEl = document.createElement('div');
-      dayGroupEl.className = 'history-day-group';
-      const dateHeader = document.createElement('h4');
-      dateHeader.textContent = day;
-      dayGroupEl.appendChild(dateHeader);
-      const totalCaloriesForDay = dayRecords.reduce((sum, record) => sum + (record.calories || 0), 0);
-      const programsForDay = dayRecords
-          .filter(r => r.type === 'workout')
-          .map(r => r.program)
-          .join(', ');
-      const tagsForDay = dayRecords.flatMap(r => r.tags).join(' ');
+      const dayData = groupedByDay[day];
       const li = document.createElement('li');
-      li.className = 'history-item';
+      li.className = 'history-item'; // Використовуємо той самий клас для стилю
       li.innerHTML = `
         <div class="history-item-header">
-          <span class="history-item-programs">${programsForDay || 'День відпочинку'}</span>
-          <span class="history-item-calories">${totalCaloriesForDay} kcal</span>
+          <span class="history-item-programs">${day}</span>
+          <span class="history-item-calories">${dayData.hasWorkout ? '• Тренування •' : '• Відпочинок •'}</span>
         </div>
-        <div class="history-item-tags">${tagsForDay}</div>
       `;
       li.addEventListener('click', () => {
-          openDayDetails(day, dayRecords);
-
+          openDayDetails(day, dayData.records);
       });
-      dayGroupEl.appendChild(li);
-      historyListEl.appendChild(dayGroupEl);
+      historyListEl.appendChild(li);
     }
   }
+
   
     function openDayDetails(day, dayRecords) {
     // Перевіряємо, чи є дані для відображення
