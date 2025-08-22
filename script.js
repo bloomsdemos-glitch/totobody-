@@ -114,11 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (screenId === 'dayDetailScreen') {
       appHeader.classList.add('dark-theme');
       goalBar.classList.add('dark-theme');
+      burgerBtn.style.display = 'none'; // <-- ОСЬ ТУТ МИ ХОВАЄМО КНОПКУ
     } else {
       appHeader.classList.remove('dark-theme');
       goalBar.classList.remove('dark-theme');
+      burgerBtn.style.display = 'flex'; // <-- А ТУТ ПОВЕРТАЄМО ЇЇ НА ВСІХ ІНШИХ ЕКРАНАХ
     }
   }
+
 
 
   if (datetimeDisplayEl) {
