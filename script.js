@@ -269,6 +269,30 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pauseBtn) pauseBtn.addEventListener('click', () => { if (!isStarted) return; isPaused = !isPaused; updateUI(); });
   if (stopBtn) stopBtn.addEventListener('click', finishWorkout);
   if (trainingBackBtn) trainingBackBtn.addEventListener('click', () => showScreen('homeScreen'));
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        remainingTime = exercises[currentIndex].duration || 30;
+        updateUI();
+        playCurrentExerciseSound();
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < exercises.length - 1) {
+        currentIndex++;
+        remainingTime = exercises[currentIndex].duration || 30;
+        updateUI();
+        playCurrentExerciseSound();
+      } else {
+        finishWorkout();
+      }
+    });
+  }
+
 
   function updateMuteButtonUI() {
     if (!muteBtn) return;
