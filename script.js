@@ -814,6 +814,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
+  // Обробник для кнопки "назад" на екрані деталей
+  if (detailBackBtn) {
+    detailBackBtn.addEventListener('click', () => {
+        showScreen('homeScreen');
+    });
+  }
+
+  // ===== ІНІЦІАЛІЗАЦІЯ (перший запуск додатку) =====
   const savedBg = localStorage.getItem('customBackground');
   if (savedBg) {
     applyBackground(savedBg);
