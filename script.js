@@ -80,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const detailDateEl = document.getElementById('detailDate');
   const detailTitleEl = document.getElementById('detailTitle');
   const detailStatsListEl = document.getElementById('detailStatsList');
+  // --- DOM-елементи для вікна підтвердження ---
+  const confirmationPrompt = document.getElementById('confirmationPrompt');
+  const promptMessage = document.getElementById('promptMessage');
+  const promptActions = document.getElementById('promptActions');
 
 
   let isMuted = false;
@@ -591,18 +595,40 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.from(tags);
   }
 
+    // --- ОНОВЛЕНА ЛОГІКА ЗБЕРЕЖЕННЯ ТРЕНУВАННЯ ---
   if (saveWorkoutLogBtn) {
     saveWorkoutLogBtn.addEventListener('click', () => {
-      const calories = parseInt(caloriesInput.value, 10) || 0;
-      const allCollectedTags = collectAllTags();
-      const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'workout', program: currentProgram, calories: calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
       const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-      history.push(workoutLog);
-      localStorage.setItem('workoutHistory', JSON.stringify(history));
-      alert('Результат збережено! Красунчик!');
-      finishModal.classList.remove('active');
-      showScreen('homeScreen');
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayRecord = history.find(r => r.date.startsWith(todayStr));
+
+      const saveWorkout = (historyData) => {
+        const calories = parseInt(caloriesInput.value, 10) || 0;
+        const allCollectedTags = collectAllTags();
+        const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'workout', program: currentProgram, calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
+        
+        const otherRecords = historyData.filter(r => !r.date.startsWith(todayStr));
+        otherRecords.push(workoutLog);
+        localStorage.setItem('workoutHistory', JSON.stringify(otherRecords));
+        
+        alert('Результат збережено! Красунчик!');
+        finishModal.classList.remove('active');
+        showScreen('homeScreen');
+      };
+
+      if (todayRecord && todayRecord.type === 'rest') {
+        // Сценарій А: Був день відпочинку, пропонуємо перезаписати
+        showConfirmationPrompt('То сьогодні все ж вирішив потренуватись? Вносимо зміни?', [
+          { text: 'Ой', class: '', onClick: () => {} },
+          { text: 'Так', class: 'primary', onClick: () => saveWorkout(history) }
+        ]);
+      } else {
+        // Якщо конфлікту немає, просто зберігаємо
+        saveWorkout(history);
+      }
     });
+  }
+
   }
   
   if (restDayBtn) {
@@ -630,21 +656,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+    // --- ОНОВЛЕНА ЛОГІКА ЗБЕРЕЖЕННЯ ДНЯ ВІДПОЧИНКУ ---
   if (saveRestDayBtn) {
     saveRestDayBtn.addEventListener('click', () => {
-      const steps = parseInt(stepsInput.value, 10) || 0;
-      const calories = parseInt(restDayCaloriesInput.value, 10) || 0;
-      const activeMoodEl = moodRating.querySelector('span.active');
-      const mood = activeMoodEl ? activeMoodEl.dataset.value : null;
-      
-      const restDayLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'rest', steps: steps, calories: calories, tags: mood ? [mood] : [] };
       const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-      history.push(restDayLog);
-      localStorage.setItem('workoutHistory', JSON.stringify(history));
-      alert('День відпочинку збережено!');
-      restDayModal.classList.remove('active');
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayRecord = history.find(r => r.date.startsWith(todayStr));
+
+      if (todayRecord && todayRecord.type === 'workout') {
+        // Сценарій Б: Тренування вже є, питаємо, що робити
+        showConfirmationPrompt('Так ти ж сьогодні займався. Забув чи що?', [
+          { text: 'Ой', class: '', onClick: () => {} },
+          { text: 'Хмм', class: 'primary', onClick: () => {
+              const day = new Date(todayRecord.date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' });
+              openDayDetails(day, [todayRecord]);
+              restDayModal.classList.remove('active');
+            }
+          }
+        ]);
+      } else {
+        // Якщо конфлікту немає, просто зберігаємо
+        const steps = parseInt(stepsInput.value, 10) || 0;
+        const calories = parseInt(restDayCaloriesInput.value, 10) || 0;
+        const activeMoodEl = moodRating.querySelector('span.active');
+        const mood = activeMoodEl ? activeMoodEl.dataset.value : null;
+        
+        const restDayLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'rest', steps, calories, tags: mood ? [mood] : [] };
+        
+        // Якщо сьогодні вже був день відпочинку, перезаписуємо його
+        const otherRecords = history.filter(r => !r.date.startsWith(todayStr));
+        otherRecords.push(restDayLog);
+        localStorage.setItem('workoutHistory', JSON.stringify(otherRecords));
+        
+        alert('День відпочинку збережено!');
+        restDayModal.classList.remove('active');
+      }
     });
   }
+
   
   if (closeDanceModalBtn) {
     closeDanceModalBtn.addEventListener('click', () => danceModal.classList.remove('active'));
@@ -783,6 +832,29 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         showScreen('dayDetailScreen');
     }, 200);
+  }
+  function hideConfirmationPrompt() {
+    if (confirmationPrompt) confirmationPrompt.classList.remove('active');
+  }
+
+  function showConfirmationPrompt(message, buttons) {
+    if (!confirmationPrompt || !promptMessage || !promptActions) return;
+
+    promptMessage.textContent = message;
+    promptActions.innerHTML = ''; // Очищуємо старі кнопки
+
+    buttons.forEach(btnInfo => {
+      const button = document.createElement('button');
+      button.className = `prompt-btn ${btnInfo.class || ''}`;
+      button.textContent = btnInfo.text;
+      button.onclick = () => {
+        btnInfo.onClick();
+        hideConfirmationPrompt();
+      };
+      promptActions.appendChild(button);
+    });
+
+    confirmationPrompt.classList.add('active');
   }
 
 
