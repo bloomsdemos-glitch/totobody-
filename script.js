@@ -73,6 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeDanceModalBtn = danceModal.querySelector('.close-button');
   const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
   const historyListEl = document.getElementById('historyList');
+  const appHeader = document.querySelector('.app-header');
+  const goalBar = document.getElementById('goalProgress');
+  const dayDetailScreen = document.getElementById('dayDetailScreen');
+  const detailBackBtn = document.getElementById('detailBackBtn');
+  const detailDateEl = document.getElementById('detailDate');
+  const detailTitleEl = document.getElementById('detailTitle');
+  const detailStatsListEl = document.getElementById('detailStatsList');
 
 
   let isMuted = false;
@@ -102,7 +109,17 @@ document.addEventListener('DOMContentLoaded', () => {
     screens.forEach(s => s.classList.remove('active'));
     const screenToShow = document.getElementById(screenId);
     if (screenToShow) screenToShow.classList.add('active');
+
+    // Керуємо темою хедера/футера
+    if (screenId === 'dayDetailScreen') {
+      appHeader.classList.add('dark-theme');
+      goalBar.classList.add('dark-theme');
+    } else {
+      appHeader.classList.remove('dark-theme');
+      goalBar.classList.remove('dark-theme');
+    }
   }
+
 
   if (datetimeDisplayEl) {
     function updateDateTime() {
@@ -673,12 +690,83 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="history-item-tags">${tagsForDay}</div>
       `;
       li.addEventListener('click', () => {
-          alert(`Детальна статистика за ${day} вже скоро!`);
+          openDayDetails(day, dayRecords);
+
       });
       dayGroupEl.appendChild(li);
       historyListEl.appendChild(dayGroupEl);
     }
   }
+  
+    function openDayDetails(day, dayRecords) {
+    // Перевіряємо, чи є дані для відображення
+    if (!dayRecords) {
+        console.error("Немає даних для відображення за цей день");
+        return;
+    }
+
+    // Збираємо всі дані за день в один об'єкт
+    const dayData = {
+        date: day,
+        calories: 0,
+        difficulty: null,
+        energy: null,
+        steps: 0,
+        mood: null,
+        tags: new Set(),
+        rating: 0,
+        hasWorkout: false
+    };
+
+    dayRecords.forEach(record => {
+        dayData.calories += record.calories || 0;
+        dayData.steps += record.steps || 0;
+        
+        if (record.type === 'workout') {
+            dayData.hasWorkout = true;
+            if (record.tags) {
+                const difficultyTag = record.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t));
+                const energyTag = record.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t));
+                const ratingTag = record.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t));
+                const extraTags = record.tags.filter(t => !['😌', '🙂', '😮‍💨', '😵', '🥵', '💀', '😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥', '😟', '😕', '😐', '🙂', '🤩'].includes(t));
+
+                if (difficultyTag) dayData.difficulty = difficultyTag;
+                if (energyTag) dayData.energy = energyTag;
+                if (ratingTag) {
+                    dayData.rating = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(ratingTag) + 1;
+                }
+                extraTags.forEach(tag => dayData.tags.add(tag));
+            }
+        } else if (record.type === 'rest') {
+            if (record.tags) {
+                const moodTag = record.tags.find(t => ['🤩', '😌', '🙂', '🫤', '😟', '😩', '🤬'].includes(t));
+                if (moodTag) dayData.mood = moodTag;
+            }
+        }
+    });
+
+    // Заповнюємо дані в HTML
+    detailDateEl.textContent = day;
+    detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Вихідний •';
+
+    let statsHTML = '';
+    if (dayData.calories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалені калорії</span><span class="value">${dayData.calories} kcal</span></li>`;
+    if (dayData.difficulty) statsHTML += `<li class="detail-stat-item"><i class="bi bi-triangle-half"></i><span class="label">Складність</span><span class="value">${dayData.difficulty}</span></li>`;
+    if (dayData.energy) statsHTML += `<li class="detail-stat-item"><i class="bi bi-lightning-charge-fill"></i><span class="label">Енергія</span><span class="value">${dayData.energy}</span></li>`;
+    if (dayData.steps > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-person-walking"></i><span class="label">Кроки</span><span class="value">${dayData.steps}</span></li>`;
+    if (dayData.mood) statsHTML += `<li class="detail-stat-item"><i class="bi bi-emoji-smile"></i><span class="label">Настрій</span><span class="value">${dayData.mood}</span></li>`;
+    if (dayData.tags.size > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-node-plus-fill"></i><span class="label">Теґи</span><span class="value">${Array.from(dayData.tags).join(' ')}</span></li>`;
+    if (dayData.rating > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-star-fill"></i><span class="label">Оцінка</span><span class="value star-value">${'★'.repeat(dayData.rating)}</span></li>`;
+
+    detailStatsListEl.innerHTML = statsHTML;
+    
+    // Перемикаємо екран
+    sideMenu.classList.remove('open');
+    setTimeout(() => {
+        showScreen('dayDetailScreen');
+    }, 200);
+  }
+
 
   if (burgerBtn && sideMenu && mainMenu && menuBackBtn && menuTitle) {
       const menuOverlayClose = sideMenu.querySelector('.menu-overlay-close');
