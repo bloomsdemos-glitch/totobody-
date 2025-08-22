@@ -1007,3 +1007,82 @@ h2 {
 .detail-content-area::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
+/* ================================================= */
+/* ===== СТИЛІ ДЛЯ ВІКНА ПІДТВЕРДЖЕННЯ (PROMPT) ===== */
+/* ================================================= */
+
+.prompt-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1100; /* Має бути вище за інші модалки */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none; /* Невидимий по дефолту */
+}
+
+.prompt-content {
+  width: 100%;
+  background: var(--bg-color);
+  padding: 20px 25px 30px 25px; /* Більше відступ знизу */
+  border-top-left-radius: var(--border-radius-main);
+  border-top-right-radius: var(--border-radius-main);
+  transform: translateY(100%); /* Схований знизу */
+  transition: transform 0.4s ease-in-out;
+  will-change: transform;
+}
+
+.prompt-overlay.active {
+  pointer-events: auto; /* Можна клікати, коли активний */
+}
+
+.prompt-overlay.active .prompt-content {
+  transform: translateY(0); /* Виїжджає нагору */
+}
+
+.neumorphic-prompt {
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1), 
+              inset 4px 4px 6px var(--shadow-light), 
+              inset -4px -4px 6px var(--shadow-dark);
+}
+
+.prompt-message {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.prompt-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.prompt-btn {
+  flex-grow: 1;
+  padding: 15px;
+  border-radius: var(--border-radius-small);
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--bg-color);
+  color: var(--text-color);
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  transition: all 0.2s ease-out;
+}
+
+.prompt-btn:active {
+  box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
+  transform: scale(0.98);
+}
+
+.prompt-btn.primary {
+  background: var(--primary-color);
+  color: white;
+}
+
