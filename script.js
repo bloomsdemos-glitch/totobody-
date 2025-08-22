@@ -844,6 +844,31 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('homeScreen');
     });
   }
+  // --- Обробники для навігації на екрані деталей ---
+  const prevDayBtn = document.getElementById('prevDayBtn');
+  const nextDayBtn = document.getElementById('nextDayBtn');
+  const editDayBtn = document.getElementById('editDayBtn');
+
+  if (prevDayBtn) {
+    prevDayBtn.addEventListener('click', () => {
+      console.log('Натиснута кнопка "Попередній день"');
+      // Тут буде логіка переходу на попередній день
+    });
+  }
+
+  if (nextDayBtn) {
+    nextDayBtn.addEventListener('click', () => {
+      console.log('Натиснута кнопка "Наступний день"');
+      // Тут буде логіка переходу на наступний день
+    });
+  }
+
+  if (editDayBtn) {
+    editDayBtn.addEventListener('click', () => {
+      console.log('Натиснута кнопка "Редагувати"');
+      // Тут буде логіка редагування запису
+    });
+  }
 
   // ===== ІНІЦІАЛІЗАЦІЯ (перший запуск додатку) =====
   const savedBg = localStorage.getItem('customBackground');
