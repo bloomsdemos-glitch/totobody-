@@ -813,9 +813,17 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       });
-      menuBackBtn.addEventListener('click', () => {
+       menuBackBtn.addEventListener('click', () => {
         const activeScreen = sideMenu.querySelector('.menu-screen.active');
         if (activeScreen && activeScreen.id !== 'mainMenu') {
+            
+            // --- ОСЬ НАШ ФІКС ---
+            // Якщо ми виходимо з історії, очищуємо її, щоб вона не "протікала"
+            if (activeScreen.id === 'historyMenu') {
+              historyListEl.innerHTML = '';
+            }
+            // --- КІНЕЦЬ ФІКСУ ---
+
             activeScreen.classList.remove('active');
             if (activeScreen.id === 'programEditMenu' || activeScreen.id === 'addProgramMenu') {
                 workoutSettingsMenu.classList.add('active');
@@ -830,6 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
              setTimeout(() => { menuBackBtn.style.display = 'none'; }, 300);
         }
       });
+
   }
   
   // Обробник для кнопки "назад" на екрані деталей
