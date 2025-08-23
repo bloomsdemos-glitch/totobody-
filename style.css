@@ -919,13 +919,40 @@ h2 {
 
 .detail-title {
   text-align: center;
-  font-weight: 400;
-  font-size: 1rem;
-  opacity: 0.7;
+  font-weight: 600; /* Зробили жирнішим */
+  font-size: 1.2rem; /* Зробили більшим */
+  opacity: 0.9;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative; /* Потрібно для позиціонування іконки */
 }
+
+/* --- Стилі для заголовків з іконками --- */
+.detail-title.workout-day {
+  color: #408558;
+}
+
+.detail-title.rest-day {
+  color: #F8D849;
+}
+
+.detail-title::before {
+  font-family: "bootstrap-icons" !important;
+  font-size: 1.8rem;
+  color: #D1D1D1;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.detail-title.workout-day::before {
+  content: "\f4d8"; /* Іконка bi-person-arms-up */
+}
+
+.detail-title.rest-day::before {
+  content: "\f1f6"; /* Іконка bi-calendar-check */
+}
+
 
 .detail-date-section {
   display: flex;
