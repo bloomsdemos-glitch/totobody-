@@ -595,6 +595,31 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.from(tags);
   }
   
+    if (saveWorkoutLogBtn) {
+    saveWorkoutLogBtn.addEventListener('click', () => {
+      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      // Готуємо дані нового тренування
+      const calories = parseInt(caloriesInput.value, 10) || 0;
+      const allCollectedTags = collectAllTags();
+      const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'workout', program: currentProgram, calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
+      
+      // Видаляємо ВСІ попередні записи за сьогодні (і відпочинок, і старі тренування)
+      const otherDaysHistory = history.filter(r => !r.date.startsWith(todayStr));
+      
+      // Додаємо новий запис про тренування
+      otherDaysHistory.push(workoutLog);
+      
+      // Зберігаємо оновлену історію
+      localStorage.setItem('workoutHistory', JSON.stringify(otherDaysHistory));
+      
+      alert('Результат збережено! Красунчик!');
+      finishModal.classList.remove('active');
+      showScreen('homeScreen');
+    });
+  }
+
   if (restDayBtn) {
     restDayBtn.addEventListener('click', () => {
       if (restDayModal) {
