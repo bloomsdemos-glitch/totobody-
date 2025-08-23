@@ -14,7 +14,8 @@
 
   <header class="app-header">
     <button id="burgerBtn" class="icon-button neumorphic-icon-btn"><i class="bi bi-list"></i></button>
-    <button id="detailBackBtn" class="icon-button neumorphic-icon-btn" style="display: none;"><i class="bi bi-box-arrow-left"></i></button>
+        <button id="detailBackBtn" class="icon-button neumorphic-icon-btn header-back-btn" style="display: none;"><i class="bi bi-box-arrow-left"></i></button>
+
     <div class="title-container">
       <h1>TOTOBODY ©</h1>
       <p id="datetime-display" class="datetime"></p>
@@ -141,10 +142,17 @@
         <span id="detailDate"></span>
       </div>
       
-      <ul id="detailStatsList" class="detail-stats-list"></ul>
+      <ul id="detailStatsList" class="detail-stats-list">
+        </ul>
+
+      <div class="detail-notes-section">
+        <textarea id="notesTextarea" placeholder="Швидкі нотатки..."></textarea>
+        <div class="notes-actions">
+          <button id="saveNoteBtn" class="icon-button"><i class="bi bi-check-circle"></i></button>
+        </div>
+      </div>
 
     </div>
-
 
     <div class="detail-navigation">
       <button id="prevDayBtn" class="icon-button"><i class="bi bi-chevron-left"></i></button>
@@ -152,6 +160,7 @@
       <button id="nextDayBtn" class="icon-button"><i class="bi bi-chevron-right"></i></button>
     </div>
   </div>
+
 
   <div id="workoutModal" class="modal-overlay">
     <div class="modal-content glassmorphism">
