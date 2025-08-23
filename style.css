@@ -883,7 +883,12 @@ h2 {
 .app-header.dark-theme {
     background: rgba(18, 18, 18, 0.6);
     border-bottom-color: rgba(255, 255, 255, 0.1);
+.app-header.dark-theme .neumorphic-icon-btn {
+  background: rgba(36, 36, 38, 0.7); /* Темний фон */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3), -2px -2px 5px rgba(50,50,52,0.5);
+  color: #fff; /* Біла іконка */
 }
+
 .goal-bar.dark-theme {
     background: rgba(18, 18, 18, 0.6);
     border-top-color: rgba(255, 255, 255, 0.1);
