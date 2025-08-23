@@ -924,14 +924,37 @@ h2 {
 
 .detail-title {
   text-align: center;
-  font-weight: 600; /* Зробили жирнішим */
-  font-size: 1.2rem; /* Зробили більшим */
+  font-weight: 600;
+  font-size: 1.2rem;
   opacity: 0.9;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  position: relative; /* Потрібно для позиціонування іконки */
+  margin-bottom: 15px; /* Зменшили відступ */
+  padding-bottom: 0;   /* Прибрали лінію */
+  border-bottom: none; /* Прибрали лінію */
+  position: relative;
 }
+
+.detail-date-section {
+  display: flex;
+  flex-direction: row; /* Ставимо в рядок */
+  justify-content: center; /* Центруємо */
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* Перенесли лінію сюди */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #aaa; /* Зробили сірішим */
+}
+.detail-date-section i {
+  font-size: 1.2rem; /* Трохи менша іконка */
+  opacity: 0.7;
+}
+.detail-date-section span {
+  font-size: 1rem; /* Змінили розмір для гармонії */
+  font-weight: 500; /* Змінили жирність для гармонії */
+}
+
 
 /* --- Стилі для заголовків з іконками --- */
 .detail-title.workout-day {
@@ -951,29 +974,13 @@ h2 {
 }
 
 .detail-title.workout-day::before {
-  content: "\f4d8"; /* Іконка bi-person-arms-up */
+  content: "\f4d8"; /* Іконка bi-person-arms-up - ПРАВИЛЬНА */
 }
 
 .detail-title.rest-day::before {
   content: "\f1f6"; /* Іконка bi-calendar-check */
 }
 
-
-.detail-date-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-.detail-date-section i {
-  font-size: 1.8rem;
-  opacity: 0.7;
-}
-.detail-date-section span {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
 
 .detail-stats-list {
   list-style: none;
@@ -1008,6 +1015,7 @@ h2 {
   letter-spacing: 1px;
   color: #FFD700;
 }
+
 
 /* --- Футер з навігацією, що "прибитий" до низу --- */
 .detail-navigation {
