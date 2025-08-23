@@ -614,11 +614,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Зберігаємо оновлену історію
       localStorage.setItem('workoutHistory', JSON.stringify(otherDaysHistory));
       
-      alert('Результат збережено! Красунчик!');
+            alert('Результат збережено! Красунчик!');
       finishModal.classList.remove('active');
+      updateFabButton(); // <-- ДОДАЙ ЦЕЙ РЯДОК
       showScreen('homeScreen');
     });
   }
+
 
   // --- Функція для оновлення вигляду і логіки FAB-кнопки ---
   function updateFabButton() {
