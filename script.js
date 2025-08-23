@@ -788,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   
-  function openDayDetails(day, dayRecords) {
+    function openDayDetails(day, dayRecords) {
     if (!dayRecords) { console.error("Немає даних для відображення за цей день"); return; }
     
     // Збираємо дані
@@ -871,6 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sideMenu.classList.remove('open');
     setTimeout(() => { showScreen('dayDetailScreen'); }, 200);
   }
+
 
   function hideConfirmationPrompt() {
     if (confirmationPrompt) confirmationPrompt.classList.remove('active');
