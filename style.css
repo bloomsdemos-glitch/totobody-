@@ -848,11 +848,11 @@ h2 {
   color: #fff;
 }
 .app-header.dark-theme {
-    background: rgba(18, 18, 18, 0.5);
+    background: rgba(18, 18, 18, 0.6);
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 .goal-bar.dark-theme {
-    background: rgba(18, 18, 18, 0.5);
+    background: rgba(18, 18, 18, 0.6);
     border-top-color: rgba(255, 255, 255, 0.1);
 }
 .goal-bar.dark-theme span {
@@ -862,42 +862,36 @@ h2 {
 /* --- Стилі для самого екрану --- */
 #dayDetailScreen {
   background: #121212;
-  padding-top: 80px;
-  padding-bottom: 90px;
+  padding-top: 80px;  /* Відступ для хедера */
+  padding-bottom: 75px; /* Відступ для футера-навігації */
+  justify-content: flex-start;
   align-items: center;
-  justify-content: flex-start; /* Вирівнюємо картку по верху */
 }
 
-.day-detail-card {
+/* --- Основний блок, що скролиться --- */
+.day-detail-card-scroller {
   width: 95%;
   max-width: 500px;
-  flex-grow: 1; /* Картка займає весь доступний простір по висоті */
-  margin-bottom: -90px; /* Компенсуємо padding-bottom екрану */
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
   background: rgba(28, 28, 30, 0.7);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border-radius: 24px 24px 0 0; /* Закруглення тільки зверху */
+  border-radius: var(--border-radius-main);
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.detail-header {
-  padding: 10px 15px;
-  flex-shrink: 0; /* Хедер не стискається */
-}
-.detail-header .icon-button {
-  font-size: 1.8rem;
-  color: #fff;
-  opacity: 0.8;
-}
-
-.detail-content-area {
-  padding: 0 25px 20px 25px;
-  flex-grow: 1; /* Основний контент займає весь вільний простір */
-  overflow-y: auto; /* Вмикає скрол, коли контенту багато */
+.detail-title {
+  text-align: center;
+  font-weight: 400;
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .detail-date-section {
@@ -905,8 +899,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 10px 0 20px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 25px;
 }
 .detail-date-section i {
   font-size: 1.8rem;
@@ -915,14 +908,6 @@ h2 {
 .detail-date-section span {
   font-size: 1.2rem;
   font-weight: 600;
-}
-
-.detail-title {
-  text-align: center;
-  font-weight: 400;
-  font-size: 1rem;
-  opacity: 0.7;
-  margin: 20px 0;
 }
 
 .detail-stats-list {
@@ -959,17 +944,24 @@ h2 {
   color: #FFD700;
 }
 
+/* --- Футер з навігацією, що "прибитий" до низу --- */
 .detail-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0,0,0,0.2);
-  flex-shrink: 0; /* Навігація не стискається */
+  z-index: 100;
 }
 .detail-navigation .icon-button {
-  font-size: 2rem;
+  font-size: 1.6rem; /* Зменшили іконки */
   color: #fff;
   opacity: 0.7;
 }
@@ -978,34 +970,21 @@ h2 {
   transform: scale(0.95);
 }
 
-/* --- СКРОЛБАР для історії в меню --- */
-#historyMenu {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-.history-list {
-  flex-grow: 1;
-  overflow-y: auto;
-}
 /* --- Стилізація скролбарів --- */
-#historyList::-webkit-scrollbar,
-.detail-content-area::-webkit-scrollbar {
+.day-detail-card-scroller::-webkit-scrollbar {
   width: 6px;
 }
-#historyList::-webkit-scrollbar-track,
-.detail-content-area::-webkit-scrollbar-track {
+.day-detail-card-scroller::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
-#historyList::-webkit-scrollbar-thumb,
-.detail-content-area::-webkit-scrollbar-thumb {
+.day-detail-card-scroller::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
-#historyList::-webkit-scrollbar-thumb:hover,
-.detail-content-area::-webkit-scrollbar-thumb:hover {
+.day-detail-card-scroller::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
+}
 }
 /* ================================================= */
 /* ===== СТИЛІ ДЛЯ ВІКНА ПІДТВЕРДЖЕННЯ (PROMPT) ===== */
