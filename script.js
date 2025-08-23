@@ -788,64 +788,86 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   
-      function openDayDetails(day, dayRecords) {
+  function openDayDetails(day, dayRecords) {
     if (!dayRecords) { console.error("Немає даних для відображення за цей день"); return; }
     
     // Збираємо дані
     const dayData = {
         date: day,
         totalCalories: 0,
-        difficulty: null, energy: null, steps: 0, mood: null,
-        tags: new Set(), rating: 0, hasWorkout: false,
-        programs: []
+        totalSteps: 0,
+        mood: null,
+        hasWorkout: false,
+        sessions: [] // Тут будуть окремі сеанси тренувань
     };
 
     dayRecords.forEach(record => {
-        dayData.totalCalories += record.calories || 0;
-        dayData.steps += record.steps || 0;
-        
         if (record.type === 'workout') {
             dayData.hasWorkout = true;
-            dayData.programs.push(record.program); // Збираємо назви програм
-
-            if (record.tags) {
-                const difficultyTag = record.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t));
-                const energyTag = record.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t));
-                const ratingTag = record.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t));
-                const extraTags = record.tags.filter(t => !['😌', '🙂', '😮‍💨', '😵', '🥵', '💀', '😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥', '😟', '😕', '😐', '🙂', '🤩'].includes(t));
-                
-                if (difficultyTag) dayData.difficulty = difficultyTag;
-                if (energyTag) dayData.energy = energyTag;
-                if (ratingTag) { dayData.rating = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(ratingTag) + 1; }
-                extraTags.forEach(tag => dayData.tags.add(tag));
+            dayData.sessions.push(record); // Додаємо весь об'єкт тренування
+        } else if (record.type === 'rest') {
+            dayData.totalSteps += record.steps || 0;
+            if (record.tags && record.tags.length > 0) {
+              dayData.mood = record.tags[0];
             }
-        } else if (record.type === 'rest' && record.tags) {
-            const moodTag = record.tags.find(t => ['🤩', '😌', '🙂', '🫤', '😟', '😩', '🤬'].includes(t));
-            if (moodTag) dayData.mood = moodTag;
         }
     });
+    // Загальні калорії і кроки рахуємо з усіх записів
+    dayData.totalCalories = dayRecords.reduce((sum, rec) => sum + (rec.calories || 0), 0);
+    dayData.totalSteps = dayRecords.reduce((sum, rec) => sum + (rec.steps || 0), 0);
 
     // Заповнюємо HTML
     detailDateEl.textContent = day;
-        detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Відпочинок •';
+    detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Відпочинок •';
     detailTitleEl.className = dayData.hasWorkout ? 'detail-title workout-day' : 'detail-title rest-day';
-
     
     let statsHTML = '';
-    // Додаємо новий блок з тренуваннями
-    if (dayData.hasWorkout && dayData.programs.length > 0) {
-      statsHTML += `<li class="detail-stat-item"><i class="bi bi-activity"></i><span class="label">Тренування</span><span class="value">${dayData.programs.join(', ')}</span></li>`;
-    }
-    if (dayData.totalCalories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалені калорії</span><span class="value">${dayData.totalCalories} kcal</span></li>`;
-    if (dayData.difficulty) statsHTML += `<li class="detail-stat-item"><i class="bi bi-triangle-half"></i><span class="label">Складність</span><span class="value">${dayData.difficulty}</span></li>`;
-    if (dayData.energy) statsHTML += `<li class="detail-stat-item"><i class="bi bi-lightning-charge-fill"></i><span class="label">Енергія</span><span class="value">${dayData.energy}</span></li>`;
-    if (dayData.steps > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-person-walking"></i><span class="label">Кроки</span><span class="value">${dayData.steps}</span></li>`;
-    if (dayData.mood) statsHTML += `<li class="detail-stat-item"><i class="bi bi-emoji-smile"></i><span class="label">Настрій</span><span class="value">${dayData.mood}</span></li>`;
-    if (dayData.tags.size > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-node-plus-fill"></i><span class="label">Теґи</span><span class="value">${Array.from(dayData.tags).join(' ')}</span></li>`;
-    if (dayData.rating > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-star-fill"></i><span class="label">Оцінка</span><span class="value star-value">${'★'.repeat(dayData.rating)}</span></li>`;
 
-    detailStatsListEl.innerHTML = statsHTML;
+    // Блок тренувань (новий)
+    if (dayData.hasWorkout) {
+      const sessionsList = dayData.sessions.map(s => {
+        const difficulty = s.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t)) || '-';
+        const energy = s.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t)) || '-';
+        const ratingVal = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(s.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t))) + 1;
+        const rating = ratingVal > 0 ? `${'★'.repeat(ratingVal)}` : '-';
+        
+        return `
+          <li class="session-item">
+            <p class="session-title">${new Date(s.date).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })} • ${s.program}</p>
+            <ul class="session-details">
+              <li><i class="bi bi-fire"></i> ${s.calories} kcal</li>
+              <li><i class="bi bi-triangle-half"></i> ${difficulty}</li>
+              <li><i class="bi bi-lightning-charge-fill"></i> ${energy}</li>
+              <li><i class="bi bi-star-fill"></i> ${rating}</li>
+            </ul>
+          </li>`;
+      }).join('');
+
+      statsHTML += `
+        <li class="detail-stat-item expandable-list">
+          <i class="bi bi-activity"></i>
+          <span class="label">Тренування</span>
+          <span class="value"><i class="bi bi-caret-down-square-fill"></i></span>
+          <ul class="sub-list">${sessionsList}</ul>
+        </li>`;
+    }
+
+    if (dayData.totalCalories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалено за день</span><span class="value">${dayData.totalCalories} kcal</span></li>`;
+    if (dayData.totalSteps > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-person-walking"></i><span class="label">Кроки</span><span class="value">${dayData.totalSteps}</span></li>`;
+    if (dayData.mood) statsHTML += `<li class="detail-stat-item"><i class="bi bi-emoji-smile"></i><span class="label">Настрій</span><span class="value">${dayData.mood}</span></li>`;
     
+    detailStatsListEl.innerHTML = statsHTML;
+
+    // Додаємо логіку розкриття списку
+    const expandable = detailStatsListEl.querySelector('.expandable-list .value');
+    if(expandable) {
+      expandable.addEventListener('click', () => {
+        expandable.parentElement.classList.toggle('open');
+        const icon = expandable.querySelector('i');
+        icon.className = expandable.parentElement.classList.contains('open') ? 'bi bi-caret-up-square-fill' : 'bi bi-caret-down-square-fill';
+      });
+    }
+
     sideMenu.classList.remove('open');
     setTimeout(() => { showScreen('dayDetailScreen'); }, 200);
   }
@@ -977,3 +999,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (difficultySlider) { updateSliderEmoji(); }
   showScreen('homeScreen');
 });
+
