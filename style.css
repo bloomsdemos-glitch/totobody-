@@ -418,10 +418,24 @@ h2 {
   100% { transform: scale(1.1); opacity: 0; }
 }
 .side-menu {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 500;
-  transform: translateX(-100%); transition: transform 0.4s ease-in-out;
-  display: flex; pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ховаємо меню ПІД всіма елементами, коли воно закрите */
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  display: flex;
+  pointer-events: none;
 }
+
+.side-menu.open {
+  z-index: 500; /* Повертаємо меню НАД усіма елементами, ТІЛЬКИ коли воно відкрите */
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
 .side-menu.open { transform: translateX(0); pointer-events: auto; }
 .menu-overlay-close {
   width: 100%;
