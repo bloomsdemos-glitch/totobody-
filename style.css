@@ -423,7 +423,19 @@ h2 {
   display: flex; pointer-events: none;
 }
 .side-menu.open { transform: translateX(0); pointer-events: auto; }
-.menu-overlay-close { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+.menu-overlay-close {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Ігнорувати кліки, коли меню закрите */
+}
+
+.side-menu.open .menu-overlay-close {
+  pointer-events: auto; /* Реагувати на кліки, ТІЛЬКИ коли меню відкрите */
+}
+
 .glassmorphism-panel {
   width: 85%; max-width: 320px; height: 100%; padding: 20px; padding-top: 60px;
   background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
