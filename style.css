@@ -753,12 +753,18 @@ h2 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  gap: 15px; /* Додамо невеликий проміжок */
 }
+
 .history-item-programs {
   font-weight: 600;
   font-size: 1rem;
-  max-width: 70%;
+  flex-grow: 1; /* Дозволяємо даті зайняти весь вільний простір */
+  white-space: nowrap; /* Забороняємо перенос рядка */
+  overflow: hidden; /* Ховаємо, якщо не влазить */
+  text-overflow: ellipsis; /* Додаємо три крапки, якщо не влазить */
 }
+
 .history-item-calories {
   font-weight: 700;
   font-size: 1rem;
