@@ -594,42 +594,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     return Array.from(tags);
   }
-
-    // --- ОНОВЛЕНА ЛОГІКА ЗБЕРЕЖЕННЯ ТРЕНУВАННЯ ---
-  if (saveWorkoutLogBtn) {
-    saveWorkoutLogBtn.addEventListener('click', () => {
-      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-      const todayStr = new Date().toISOString().split('T')[0];
-      const todayRecord = history.find(r => r.date.startsWith(todayStr));
-
-      const saveWorkout = (historyData) => {
-        const calories = parseInt(caloriesInput.value, 10) || 0;
-        const allCollectedTags = collectAllTags();
-        const workoutLog = { sessionId: new Date().getTime(), date: new Date().toISOString(), type: 'workout', program: currentProgram, calories, tags: allCollectedTags, exercises: exercises.slice(0, -1) };
-        
-        const otherRecords = historyData.filter(r => !r.date.startsWith(todayStr));
-        otherRecords.push(workoutLog);
-        localStorage.setItem('workoutHistory', JSON.stringify(otherRecords));
-        
-        alert('Результат збережено! Красунчик!');
-        finishModal.classList.remove('active');
-        showScreen('homeScreen');
-      };
-
-      if (todayRecord && todayRecord.type === 'rest') {
-        // Сценарій А: Був день відпочинку, пропонуємо перезаписати
-        showConfirmationPrompt('То сьогодні все ж вирішив потренуватись? Вносимо зміни?', [
-          { text: 'Ой', class: '', onClick: () => {} },
-          { text: 'Так', class: 'primary', onClick: () => saveWorkout(history) }
-        ]);
-      } else {
-        // Якщо конфлікту немає, просто зберігаємо
-        saveWorkout(history);
-      }
-    });
-  }
-
-  }
   
   if (restDayBtn) {
     restDayBtn.addEventListener('click', () => {
