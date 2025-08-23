@@ -827,7 +827,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Заповнюємо HTML
     detailDateEl.textContent = day;
-    detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Вихідний •';
+        detailTitleEl.textContent = dayData.hasWorkout ? '• День тренування •' : '• Відпочинок •';
+    detailTitleEl.className = dayData.hasWorkout ? 'detail-title workout-day' : 'detail-title rest-day';
+
     
     let statsHTML = '';
     // Додаємо новий блок з тренуваннями
