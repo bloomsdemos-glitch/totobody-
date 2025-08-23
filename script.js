@@ -620,16 +620,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Функція для оновлення вигляду і логіки FAB-кнопки ---
+  function updateFabButton() {
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayHasWorkout = history.some(r => r.date.startsWith(todayStr) && r.type === 'workout');
+
+    const fabIcon = restDayBtn.querySelector('i');
+
+    if (todayHasWorkout) {
+      // День тренування: міняємо іконку на "додати"
+      fabIcon.className = 'bi bi-plus-circle-dotted';
+    } else {
+      // День відпочинку: стандартна іконка
+      fabIcon.className = 'bi bi-emoji-smile';
+    }
+  }
+
   if (restDayBtn) {
     restDayBtn.addEventListener('click', () => {
-      if (restDayModal) {
-        stepsInput.value = '';
-        restDayCaloriesInput.value = '';
-        if (moodRating) {
-          moodRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
-        }
-        restDayModal.classList.add('active');
+      const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayRecord = history.find(r => r.date.startsWith(todayStr));
+      const todayHasWorkout = todayRecord && todayRecord.type === 'workout';
+      
+      // Показуємо поле калорій тільки якщо це не день тренування
+      const caloriesField = restDayModal.querySelector('.input-with-icon:nth-child(2)');
+      if (caloriesField) {
+        caloriesField.style.display = todayHasWorkout ? 'none' : 'flex';
       }
+
+      // Заповнюємо модалку існуючими даними, якщо вони є
+      stepsInput.value = todayRecord?.steps || '';
+      restDayCaloriesInput.value = todayRecord?.calories || '';
+      moodRating.querySelectorAll('span').forEach(e => e.classList.remove('active'));
+      if (todayRecord?.tags && todayRecord.tags[0]) {
+        const currentMood = moodRating.querySelector(`[data-value="${todayRecord.tags[0]}"]`);
+        if (currentMood) currentMood.classList.add('active');
+      }
+      
+      restDayModal.classList.add('active');
     });
   }
 
