@@ -878,263 +878,70 @@ h2 {
   font-size: 1.6rem; /* Трохи збільшимо іконку */
   opacity: 0.7;
 }
-/* ================================================= */
+/* /* ================================================= */
 /* ===== СТИЛІ ДЛЯ НОВОГО ЕКРАНУ ДЕТАЛЕЙ ДНЯ ===== */
 /* ================================================= */
 
-/* --- Змінюємо хедер/футер на темній темі --- */
-.app-header.dark-theme,
-.detail-navigation {
+/* --- Хедер/футер на темній темі --- */
+.app-header.dark-theme, .detail-navigation {
     background: rgba(18, 18, 18, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
 }
-.app-header.dark-theme {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-.app-header.dark-theme h1, 
-.app-header.dark-theme .datetime, 
-.app-header.dark-theme .icon-button {
-  color: #fff;
-}
-.app-header.dark-theme .neumorphic-icon-btn.header-back-btn {
-  background: transparent;
-  box-shadow: none;
-}
-.app-header.dark-theme .neumorphic-icon-btn.header-back-btn:active {
-  background: rgba(50, 50, 52, 0.7);
-  transform: scale(0.95);
-}
-.goal-bar.dark-theme {
-    background: rgba(18, 18, 18, 0.7);
-    backdrop-filter: blur(10px);
-    border-top-color: rgba(255, 255, 255, 0.1);
-}
-.goal-bar.dark-theme span {
-  color: #fff;
-}
+.app-header.dark-theme { border-bottom-color: rgba(255, 255, 255, 0.1); }
+.app-header.dark-theme h1, .app-header.dark-theme .datetime, .app-header.dark-theme .icon-button { color: #fff; }
+.app-header.dark-theme .header-back-btn { background: transparent; box-shadow: none; }
+.app-header.dark-theme .header-back-btn:active { background: rgba(50, 50, 52, 0.7); transform: scale(0.95); }
+.goal-bar.dark-theme { background: rgba(18, 18, 18, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top-color: rgba(255, 255, 255, 0.1); }
+.goal-bar.dark-theme span { color: #fff; }
 
-/* --- Стилі для самого екрану --- */
-#dayDetailScreen {
-  background: #121212;
-  padding-top: 80px;
-  padding-bottom: 0;
-  justify-content: flex-start;
-  align-items: center;
-}
+/* --- Екран --- */
+#dayDetailScreen { background: #121212; padding-top: 80px; padding-bottom: 0; justify-content: flex-start; align-items: center; }
 
-/* --- Основний блок, що скролиться --- */
-.day-detail-card-scroller {
-  width: 90%;
-  max-width: 450px;
-  height: 100%;
-  overflow-y: auto;
-  padding: 25px;
-  padding-bottom: 90px;
-  background: rgba(28, 28, 30, 0.75);
-  border-radius: var(--border-radius-main);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 0 auto;
-}
+/* --- Картка --- */
+.day-detail-card-scroller { width: 85%; max-width: 420px; height: 100%; overflow-y: auto; padding: 25px; padding-bottom: 90px; background: rgba(28, 28, 30, 0.75); border-radius: var(--border-radius-main); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); margin: 0 auto; }
 
 /* --- Заголовок і дата --- */
-.detail-title {
-  display: flex; /* Вмикаємо Flexbox */
-  flex-direction: column; /* Елементи один під одним */
-  align-items: center; /* Центруємо по горизонталі */
-  justify-content: center; /* Центруємо по вертикалі */
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  position: relative;
-}
-.detail-title::before {
-  font-family: "bootstrap-icons" !important;
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 12px;
-  opacity: 0.9;
-  line-height: 1; /* Фікс розплющення іконки */
-}
-/* ... правила для .workout-day::before і .rest-day::before залишаються без змін ... */
-
-.detail-date-section {
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Вирівнює іконку і текст по центру */
-  gap: 8px; /* Зменшимо проміжок */
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.85rem; /* Ще трохи менший шрифт */
-  font-weight: 500;
-  color: #aaa;
-}
-.detail-date-section i {
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
+.detail-title { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 700; font-size: 1.6rem; margin-bottom: 15px; position: relative; }
+.detail-title::before { font-family: "bootstrap-icons" !important; font-size: 2.2rem; display: block; margin-bottom: 12px; opacity: 0.9; line-height: 1; }
+.detail-title.workout-day::before { content: "\f4d8"; color: #4CAF50; }
+.detail-title.rest-day::before { content: "\f1f6"; color: #FFC107; }
+.detail-date-section { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); font-size: 0.8rem; font-weight: 500; color: #aaa; }
+.detail-date-section i { font-size: 1rem; opacity: 0.8; color: #aaa; }
 
 /* --- Список статистики --- */
-.detail-stats-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.detail-stat-item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 12px;
-  font-size: 1rem;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  border-left: 3px solid rgba(255, 255, 255, 0.3);
-}
-.detail-stat-item i {
-  font-size: 1.2rem;
-  margin-right: 15px;
-  width: 25px;
-  text-align: center;
-  color: #aaa;
-}
-.detail-stat-item .label {
-  font-weight: 600;
-  opacity: 0.9;
-}
-.detail-stat-item .value {
-  margin-left: auto;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.detail-stats-list { list-style: none; padding: 0; margin: 0; }
+.detail-stat-item { display: flex; flex-wrap: wrap; align-items: center; margin-bottom: 12px; font-size: 1rem; padding: 15px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; border-left: 3px solid rgba(255, 255, 255, 0.3); }
+.detail-stat-item i { font-size: 1.2rem; margin-right: 15px; width: 25px; text-align: center; color: #aaa; }
+.detail-stat-item .label { font-weight: 600; opacity: 0.9; }
+.detail-stat-item .value { margin-left: auto; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.detail-stat-item .star-value { color: #FFD700; }
 
-/* --- Стилі для розкриваючого списку тренувань --- */
-.expandable-list .value {
-  cursor: pointer;
-  margin-left: auto; /* Притискаємо іконку до правого краю */
-  padding-left: 15px; /* Відступ від тексту */
-}
-.expandable-list .value i {
-  font-size: 1.1rem; /* Менша іконка */
-  color: #fff;
-  vertical-align: middle;
-}
-.expandable-list .sub-list {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
-  width: 100%;
-  margin-top: 0;
-  padding-left: 0; /* Прибираємо відступ */
-}
-.expandable-list.open .sub-list {
-  max-height: 1000px;
-  margin-top: 15px;
-}
+/* --- Розкривний список --- */
+.expandable-list { align-items: flex-start; }
+.expandable-list .value { cursor: pointer; margin-left: auto; padding-left: 15px; }
+.expandable-list .value i { font-size: 1.1rem; color: #fff; vertical-align: middle; }
+.expandable-list .sub-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; width: 100%; margin-top: 0; padding-left: 0; }
+.expandable-list.open .sub-list { max-height: 1000px; margin-top: 15px; }
+.session-item { padding: 15px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.session-item:first-child { border-top-color: rgba(255, 255, 255, 0.2); }
+.session-title { font-weight: 700; font-size: 1rem; margin-bottom: 10px; }
+.session-details { list-style: none; padding: 0; font-size: 0.9rem; opacity: 0.9; }
+.session-details li { margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.session-details li .bi-star-fill { color: #FFD700; }
 
-/* Прибираємо блоки і робимо простий список */
-.session-item {
-  padding: 15px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Лінія-розділювач */
-  background: none; /* Прибираємо фон */
-  border-radius: 0;
-  border-left: none; /* Прибираємо лінію */
-}
-.session-item:first-child {
-  border-top: 1px solid rgba(255, 255, 255, 0.2); /* Верхня лінія товстіша */
-}
-.session-title {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-.session-details {
-  list-style: none;
-  padding: 0;
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-.session-details li {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.session-details li .bi-star-fill {
-  color: #FFD700; /* Жовті зірочки */
-}
+/* --- Нотатки --- */
+.detail-notes-section { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+.detail-notes-section label { display: block; text-align: left; margin-bottom: 10px; font-size: 1.1rem; font-weight: 600; opacity: 0.9; }
+.notes-input-wrapper { position: relative; }
+#notesTextarea { width: 100%; height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 15px; padding-bottom: 40px; color: #fff; font-family: var(--font-family); font-size: 1rem; resize: vertical; line-height: 1.5; }
+.notes-actions { position: absolute; bottom: 10px; right: 10px; }
+.notes-actions .icon-button { font-size: 1.4rem; color: #777; padding: 5px; }
+.notes-actions #saveNoteBtn { color: var(--active-green); }
 
-
-/* --- Стилі для нотаток --- */
-.detail-notes-section {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-.detail-notes-section label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  opacity: 0.9;
-}
-.detail-notes-section label i {
-  font-size: 1.3rem;
-  color: #007aff;
-}
-#notesTextarea {
-  width: 100%;
-  height: 120px;
-  background: rgba(0,0,0,0.3); /* Виправляємо фон поля для нотаток */
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 12px;
-  padding: 15px;
-  color: #fff;
-  font-family: var(--font-family);
-  font-size: 1rem;
-  resize: vertical;
-  line-height: 1.5;
-}
-.notes-actions {
-  text-align: right;
-  margin-top: 10px;
-}
-.notes-actions .icon-button {
-  font-size: 1.8rem;
-}
-.notes-actions #editNoteBtn {
-  color: #aaa;
-}
-.notes-actions #saveNoteBtn {
-  color: var(--active-green);
-}
-
-/* --- Футер з навігацією --- */
-.detail-navigation {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 25px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  z-index: 100;
-}
-.detail-navigation .icon-button {
-  font-size: 1.6rem;
-  color: #fff;
-  opacity: 0.7;
-}
+/* --- Футер --- */
+.detail-navigation { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; border-top: 1px solid rgba(255, 255, 255, 0.15); z-index: 100; }
+.detail-navigation .icon-button { font-size: 1.6rem; color: #fff; opacity: 0.7; }
+.detail-navigation .icon-button:active { opacity: 1; transform: scale(0.95); }
 
 /* --- Скролбари --- */
 .day-detail-card-scroller::-webkit-scrollbar { width: 6px; }
