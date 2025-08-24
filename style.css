@@ -878,7 +878,7 @@ h2 {
   font-size: 1.6rem; /* Трохи збільшимо іконку */
   opacity: 0.7;
 }
-/* /* ================================================= */
+/* ================================================= */
 /* ===== СТИЛІ ДЛЯ НОВОГО ЕКРАНУ ДЕТАЛЕЙ ДНЯ ===== */
 /* ================================================= */
 
@@ -886,7 +886,7 @@ h2 {
 .app-header.dark-theme,
 .detail-navigation {
     background: rgba(18, 18, 18, 0.7);
-    backdrop-filter: blur(10px); /* Зменшений блюр */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 .app-header.dark-theme {
@@ -907,8 +907,7 @@ h2 {
 }
 .goal-bar.dark-theme {
     background: rgba(18, 18, 18, 0.7);
-    backdrop-filter: blur(10px); /* Зменшений блюр */
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-top-color: rgba(255, 255, 255, 0.1);
 }
 .goal-bar.dark-theme span {
@@ -919,19 +918,19 @@ h2 {
 #dayDetailScreen {
   background: #121212;
   padding-top: 80px;
-  padding-bottom: 0; /* Прибрали відступ, щоб картка йшла до низу */
+  padding-bottom: 0;
   justify-content: flex-start;
   align-items: center;
 }
 
 /* --- Основний блок, що скролиться --- */
 .day-detail-card-scroller {
-  width: 90%; /* Вужча */
+  width: 90%;
   max-width: 450px;
-  height: 100%; /* Займає всю висоту батька */
+  height: 100%;
   overflow-y: auto;
   padding: 25px;
-  padding-bottom: 90px; /* Внутрішній відступ для футера */
+  padding-bottom: 90px;
   background: rgba(28, 28, 30, 0.75);
   border-radius: var(--border-radius-main);
   color: #fff;
@@ -939,11 +938,11 @@ h2 {
   margin: 0 auto;
 }
 
-/* --- Заголовок і дата (стиль Claude) --- */
+/* --- Заголовок і дата --- */
 .detail-title {
   text-align: center;
   font-weight: 700;
-  font-size: 1.5rem; /* Ще трохи більший */
+  font-size: 1.5rem;
   margin-bottom: 15px;
   position: relative;
 }
@@ -955,11 +954,11 @@ h2 {
   opacity: 0.9;
 }
 .detail-title.workout-day::before {
-  content: "\f4d8"; /* bi-person-arms-up */
+  content: "\f4d8";
   color: #4CAF50;
 }
 .detail-title.rest-day::before {
-  content: "\f1f6"; /* bi-calendar-check */
+  content: "\f1f6";
   color: #FFC107;
 }
 
@@ -971,7 +970,7 @@ h2 {
   margin-bottom: 25px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.9rem; /* Трохи менший */
+  font-size: 0.9rem;
   font-weight: 500;
   color: #aaa;
 }
@@ -980,7 +979,7 @@ h2 {
   opacity: 0.8;
 }
 
-/* --- Список статистики (стиль Claude) --- */
+/* --- Список статистики --- */
 .detail-stats-list {
   list-style: none;
   padding: 0;
@@ -988,7 +987,7 @@ h2 {
 }
 .detail-stat-item {
   display: flex;
-  flex-wrap: wrap; /* Дозволяє перенос для підсписку */
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 12px;
   font-size: 1rem;
@@ -1016,6 +1015,108 @@ h2 {
   gap: 8px;
 }
 
+/* --- Стилі для розкриваючого списку тренувань --- */
+.expandable-list {
+  align-items: flex-start; /* Вирівнюємо по верху, щоб іконка була на рівні з текстом */
+}
+.expandable-list .value {
+  cursor: pointer;
+}
+.expandable-list .value i {
+  color: #fff; /* Робимо стрілку білою */
+  font-size: 1.3rem;
+}
+.expandable-list .sub-list {
+  /* Головний фікс: Ховаємо підсписок за замовчуванням */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
+  width: 100%; /* Розтягуємо на всю ширину */
+  margin-top: 0;
+  padding-left: 10px;
+}
+.expandable-list.open .sub-list {
+  max-height: 1000px; /* Велика висота для розкриття */
+  margin-top: 15px; /* Додаємо відступ, коли список відкритий */
+}
+
+/* Робимо сесії акуратними за допомогою Flexbox */
+.session-item {
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.session-item:last-child {
+  border-bottom: none;
+}
+.session-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.session-details {
+  list-style: none;
+  padding: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+.session-details li {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.session-details li i {
+  width: 20px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* --- Стилі для нотаток --- */
+.detail-notes-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.detail-notes-section label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.detail-notes-section label i {
+  font-size: 1.3rem;
+  color: #007aff;
+}
+#notesTextarea {
+  width: 100%;
+  height: 120px;
+  background: rgba(0,0,0,0.3); /* Виправляємо фон поля для нотаток */
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 15px;
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+.notes-actions {
+  text-align: right;
+  margin-top: 10px;
+}
+.notes-actions .icon-button {
+  font-size: 1.8rem;
+}
+.notes-actions #editNoteBtn {
+  color: #aaa;
+}
+.notes-actions #saveNoteBtn {
+  color: var(--active-green);
+}
+
 /* --- Футер з навігацією --- */
 .detail-navigation {
   position: fixed;
@@ -1039,6 +1140,7 @@ h2 {
 .day-detail-card-scroller::-webkit-scrollbar { width: 6px; }
 .day-detail-card-scroller::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
 .day-detail-card-scroller::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
+
 
 
 /* ================================================= */
