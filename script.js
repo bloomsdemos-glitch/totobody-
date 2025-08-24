@@ -84,6 +84,49 @@ document.addEventListener('DOMContentLoaded', () => {
   const confirmationPrompt = document.getElementById('confirmationPrompt');
   const promptMessage = document.getElementById('promptMessage');
   const promptActions = document.getElementById('promptActions');
+  // --- Логіка для нотаток ---
+  const notesTextarea = document.getElementById('notesTextarea');
+  const editNoteBtn = document.getElementById('editNoteBtn');
+  const saveNoteBtn = document.getElementById('saveNoteBtn');
+  let currentNoteDay = null;
+
+  if (editNoteBtn && saveNoteBtn && notesTextarea) {
+    // Редагувати
+    editNoteBtn.addEventListener('click', () => {
+      notesTextarea.removeAttribute('readonly');
+      notesTextarea.focus();
+      editNoteBtn.style.display = 'none';
+      saveNoteBtn.style.display = 'inline-block';
+    });
+
+    // Зберегти
+    saveNoteBtn.addEventListener('click', () => {
+      notesTextarea.setAttribute('readonly', true);
+      editNoteBtn.style.display = 'inline-block';
+      saveNoteBtn.style.display = 'none';
+      
+      const notes = JSON.parse(localStorage.getItem('dayNotes')) || {};
+      notes[currentNoteDay] = notesTextarea.value;
+      localStorage.setItem('dayNotes', JSON.stringify(notes));
+    });
+  }
+  
+  // Змінюємо, як завантажуються нотатки при відкритті екрану
+  const originalOpenDayDetails = openDayDetails;
+  openDayDetails = (day, dayRecords) => {
+    originalOpenDayDetails(day, dayRecords); // Викликаємо оригінальну функцію, щоб заповнити все інше
+    
+    // Нова логіка для нотаток
+    currentNoteDay = day;
+    const notes = JSON.parse(localStorage.getItem('dayNotes')) || {};
+    const savedNote = notes[currentNoteDay] || '';
+    notesTextarea.value = savedNote;
+    notesTextarea.setAttribute('readonly', true);
+
+    // Показуємо правильну кнопку
+    editNoteBtn.style.display = 'inline-block';
+    saveNoteBtn.style.display = 'none';
+  };
 
 
   let isMuted = false;
