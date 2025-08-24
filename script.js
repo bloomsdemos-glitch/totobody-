@@ -111,22 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Змінюємо, як завантажуються нотатки при відкритті екрану
-  const originalOpenDayDetails = openDayDetails;
-  openDayDetails = (day, dayRecords) => {
-    originalOpenDayDetails(day, dayRecords); // Викликаємо оригінальну функцію, щоб заповнити все інше
-    
-    // Нова логіка для нотаток
-    currentNoteDay = day;
-    const notes = JSON.parse(localStorage.getItem('dayNotes')) || {};
-    const savedNote = notes[currentNoteDay] || '';
-    notesTextarea.value = savedNote;
-    notesTextarea.setAttribute('readonly', true);
-
-    // Показуємо правильну кнопку
-    editNoteBtn.style.display = 'inline-block';
-    saveNoteBtn.style.display = 'none';
-  };
 
 
   let isMuted = false;
@@ -831,7 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   
-    function openDayDetails(day, dayRecords) {
+      function openDayDetails(day, dayRecords) {
     if (!dayRecords) { console.error("Немає даних для відображення за цей день"); return; }
     
     // Збираємо дані
@@ -841,58 +825,41 @@ document.addEventListener('DOMContentLoaded', () => {
         totalSteps: 0,
         mood: null,
         hasWorkout: false,
-        sessions: [] // Тут будуть окремі сеанси тренувань
+        sessions: dayRecords.filter(r => r.type === 'workout')
     };
-
-    dayRecords.forEach(record => {
-        if (record.type === 'workout') {
-            dayData.hasWorkout = true;
-            dayData.sessions.push(record); // Додаємо весь об'єкт тренування
-        } else if (record.type === 'rest') {
-            dayData.totalSteps += record.steps || 0;
-            if (record.tags && record.tags.length > 0) {
-              dayData.mood = record.tags[0];
-            }
-        }
-    });
-    // Загальні калорії і кроки рахуємо з усіх записів
+    dayData.hasWorkout = dayData.sessions.length > 0;
+    const restDayRecord = dayRecords.find(r => r.type === 'rest');
+    if (restDayRecord) {
+        dayData.totalSteps = restDayRecord.steps || 0;
+        if (restDayRecord.tags && restDayRecord.tags.length > 0) { dayData.mood = restDayRecord.tags[0]; }
+    }
     dayData.totalCalories = dayRecords.reduce((sum, rec) => sum + (rec.calories || 0), 0);
-    dayData.totalSteps = dayRecords.reduce((sum, rec) => sum + (rec.steps || 0), 0);
-
+    
     // Заповнюємо HTML
-    detailDateEl.textContent = day;
     detailTitleEl.textContent = dayData.hasWorkout ? 'День тренування' : 'Відпочинок';
     detailTitleEl.className = dayData.hasWorkout ? 'detail-title workout-day' : 'detail-title rest-day';
+    detailDateEl.textContent = day;
     
     let statsHTML = '';
-
-    // Блок тренувань (новий)
     if (dayData.hasWorkout) {
       const sessionsList = dayData.sessions.map(s => {
         const difficulty = s.tags.find(t => ['😌', '🙂', '😮‍💨', '😵', '🥵', '💀'].includes(t)) || '-';
         const energy = s.tags.find(t => ['😵‍💫', '🥱', '🫤', '👌🏻', '⚡️', '🔥'].includes(t)) || '-';
         const ratingVal = ['😟', '😕', '😐', '🙂', '🤩'].indexOf(s.tags.find(t => ['😟', '😕', '😐', '🙂', '🤩'].includes(t))) + 1;
-        const rating = ratingVal > 0 ? `${'★'.repeat(ratingVal)}` : '-';
+        const rating = ratingVal > 0 ? `<span class="star-value">${'★'.repeat(ratingVal)}</span>` : '-';
         
         return `
           <li class="session-item">
             <p class="session-title">${new Date(s.date).toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' })} • ${s.program}</p>
             <ul class="session-details">
-              <li><i class="bi bi-fire"></i> ${s.calories} kcal</li>
-              <li><i class="bi bi-triangle-half"></i> ${difficulty}</li>
-              <li><i class="bi bi-lightning-charge-fill"></i> ${energy}</li>
+              <li><i>🔥</i> ${s.calories} kcal</li>
+              <li><i>🔺</i> ${difficulty}</li>
+              <li><i>⚡️</i> ${energy}</li>
               <li><i class="bi bi-star-fill"></i> ${rating}</li>
             </ul>
           </li>`;
       }).join('');
-
-      statsHTML += `
-        <li class="detail-stat-item expandable-list">
-          <i class="bi bi-activity"></i>
-          <span class="label">Тренування</span>
-          <span class="value"><i class="bi bi-caret-down-square-fill"></i></span>
-          <ul class="sub-list">${sessionsList}</ul>
-        </li>`;
+      statsHTML += `<li class="detail-stat-item expandable-list"><i class="bi bi-activity"></i><span class="label">Тренування</span><span class="value"><i class="bi bi-caret-down-square-fill"></i></span><ul class="sub-list">${sessionsList}</ul></li>`;
     }
 
     if (dayData.totalCalories > 0) statsHTML += `<li class="detail-stat-item"><i class="bi bi-fire"></i><span class="label">Спалено за день</span><span class="value">${dayData.totalCalories} kcal</span></li>`;
@@ -901,7 +868,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     detailStatsListEl.innerHTML = statsHTML;
 
-    // Додаємо логіку розкриття списку
+    // Логіка розкриття списку
     const expandable = detailStatsListEl.querySelector('.expandable-list .value');
     if(expandable) {
       expandable.addEventListener('click', () => {
@@ -911,9 +878,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Логіка для нотаток
+    currentNoteDay = day;
+    const notes = JSON.parse(localStorage.getItem('dayNotes')) || {};
+    notesTextarea.value = notes[currentNoteDay] || '';
+    notesTextarea.setAttribute('readonly', true);
+    editNoteBtn.style.display = 'inline-block';
+    saveNoteBtn.style.display = 'none';
+
     sideMenu.classList.remove('open');
     setTimeout(() => { showScreen('dayDetailScreen'); }, 200);
   }
+
 
 
   function hideConfirmationPrompt() {
