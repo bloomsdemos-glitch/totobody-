@@ -940,6 +940,10 @@ h2 {
 
 /* --- Заголовок і дата --- */
 .detail-title {
+  display: flex; /* Вмикаємо Flexbox */
+  flex-direction: column; /* Елементи один під одним */
+  align-items: center; /* Центруємо по горизонталі */
+  justify-content: center; /* Центруємо по вертикалі */
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
@@ -952,32 +956,27 @@ h2 {
   display: block;
   margin-bottom: 12px;
   opacity: 0.9;
+  line-height: 1; /* Фікс розплющення іконки */
 }
-.detail-title.workout-day::before {
-  content: "\f4d8";
-  color: #4CAF50;
-}
-.detail-title.rest-day::before {
-  content: "\f1f6";
-  color: #FFC107;
-}
+/* ... правила для .workout-day::before і .rest-day::before залишаються без змін ... */
 
 .detail-date-section {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  align-items: center; /* Вирівнює іконку і текст по центру */
+  gap: 8px; /* Зменшимо проміжок */
   margin-bottom: 25px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Ще трохи менший шрифт */
   font-weight: 500;
   color: #aaa;
 }
 .detail-date-section i {
-  font-size: 1.1rem;
+  font-size: 1rem;
   opacity: 0.8;
 }
+
 
 /* --- Список статистики --- */
 .detail-stats-list {
@@ -994,14 +993,14 @@ h2 {
   padding: 15px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
-  border-left: 3px solid rgba(0, 122, 255, 0.6);
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
 }
 .detail-stat-item i {
   font-size: 1.2rem;
   margin-right: 15px;
   width: 25px;
   text-align: center;
-  color: #007aff;
+  color: #aaa;
 }
 .detail-stat-item .label {
   font-weight: 600;
@@ -1016,37 +1015,39 @@ h2 {
 }
 
 /* --- Стилі для розкриваючого списку тренувань --- */
-.expandable-list {
-  align-items: flex-start; /* Вирівнюємо по верху, щоб іконка була на рівні з текстом */
-}
 .expandable-list .value {
   cursor: pointer;
+  margin-left: auto; /* Притискаємо іконку до правого краю */
+  padding-left: 15px; /* Відступ від тексту */
 }
 .expandable-list .value i {
-  color: #fff; /* Робимо стрілку білою */
-  font-size: 1.3rem;
+  font-size: 1.1rem; /* Менша іконка */
+  color: #fff;
+  vertical-align: middle;
 }
 .expandable-list .sub-list {
-  /* Головний фікс: Ховаємо підсписок за замовчуванням */
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease-out, margin-top 0.4s ease-out;
-  width: 100%; /* Розтягуємо на всю ширину */
+  width: 100%;
   margin-top: 0;
-  padding-left: 10px;
+  padding-left: 0; /* Прибираємо відступ */
 }
 .expandable-list.open .sub-list {
-  max-height: 1000px; /* Велика висота для розкриття */
-  margin-top: 15px; /* Додаємо відступ, коли список відкритий */
+  max-height: 1000px;
+  margin-top: 15px;
 }
 
-/* Робимо сесії акуратними за допомогою Flexbox */
+/* Прибираємо блоки і робимо простий список */
 .session-item {
   padding: 15px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Лінія-розділювач */
+  background: none; /* Прибираємо фон */
+  border-radius: 0;
+  border-left: none; /* Прибираємо лінію */
 }
-.session-item:last-child {
-  border-bottom: none;
+.session-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.2); /* Верхня лінія товстіша */
 }
 .session-title {
   font-weight: 700;
@@ -1065,11 +1066,10 @@ h2 {
   align-items: center;
   gap: 12px;
 }
-.session-details li i {
-  width: 20px;
-  text-align: center;
-  opacity: 0.7;
+.session-details li .bi-star-fill {
+  color: #FFD700; /* Жовті зірочки */
 }
+
 
 /* --- Стилі для нотаток --- */
 .detail-notes-section {
