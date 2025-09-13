@@ -651,22 +651,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // --- Функція для оновлення вигляду і логіки FAB-кнопки ---
-  function updateFabButton() {
-    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-    const todayStr = new Date().toISOString().split('T')[0];
-    const todayHasWorkout = history.some(r => r.date.startsWith(todayStr) && r.type === 'workout');
+  // --- Виправлена функція для оновлення вигляду і логіки FAB-кнопки ---
+function updateFabButton() {
+  if (!restDayBtn) return; // Перевіряємо чи існує елемент
+  
+  const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayHasWorkout = history.some(r => r.date.startsWith(todayStr) && r.type === 'workout');
 
-    const fabIcon = restDayBtn.querySelector('i');
+  const fabIcon = restDayBtn.querySelector('i');
+  if (!fabIcon) return; // Перевіряємо чи існує іконка
 
-    if (todayHasWorkout) {
-      // День тренування: міняємо іконку на "додати"
-      fabIcon.className = 'bi bi-plus-circle-dotted';
-    } else {
-      // День відпочинку: стандартна іконка
-      fabIcon.className = 'bi bi-emoji-smile';
-    }
+  if (todayHasWorkout) {
+    // День тренування: міняємо іконку на "додати"
+    fabIcon.className = 'bi bi-plus-circle-dotted';
+  } else {
+    // День відпочинку: стандартна іконка
+    fabIcon.className = 'bi bi-emoji-smile';
   }
+}
 
   if (restDayBtn) {
     restDayBtn.addEventListener('click', () => {
