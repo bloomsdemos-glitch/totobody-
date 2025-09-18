@@ -374,21 +374,55 @@ document.addEventListener('DOMContentLoaded', () => {
     modalStartBtn.addEventListener('click', startFunction);
   }
   
-  workoutTiles.forEach(tile => {
-    tile.addEventListener('click', () => {
-        const programName = tile.dataset.program;
-        const action = tile.dataset.action;
+  // --- Об’єднаний обробник кліку по плитках ---
+workoutTiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const program = tile.dataset.program;
+    const action  = tile.dataset.action;
 
-        if (programName) {
-            setTimeout(() => openWorkoutModal(programName), 150);
-        } else if (action === 'show-dance') {
-            danceModal.classList.add('active');
-        } else if (action === 'add-program') {
-            sideMenu.classList.add('open');
-            openProgramEditor(null);
-        }
-    });
+    if (program) {
+      setTimeout(() => openWorkoutModal(program), 150);
+    } else if (action) {
+      handleTileAction(action);
+    }
   });
+});
+
+// --- Функція для обробки data-action ---
+function handleTileAction(action) {
+  switch (action) {
+    case 'show-dance':
+      danceModal.classList.add('active');
+      break;
+
+    case 'add-program':
+      openSideMenu('workoutSettingsMenu', 'Налаштування тренувань');
+      break;
+
+    case 'show-stats':
+      renderHistory();
+      openSideMenu('statsSettingsMenu', 'Статистика');
+      break;
+
+    case 'show-calendar':
+      openSideMenu('calendarMenu', 'Календар');
+      break;
+
+    default:
+      console.warn('Невідома дія плитки:', action);
+  }
+}
+
+// --- Універсальний метод відкриття вкладки в боковому меню ---
+function openSideMenu(screenId, titleText) {
+  sideMenu.classList.add('open');
+  sideMenu.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+  const screen = document.getElementById(screenId);
+  if (screen) screen.classList.add('active');
+  menuTitle.textContent         = titleText;
+  menuBackBtn.style.display     = 'flex';
+}
+
 
   if (closeModalBtn) closeModalBtn.addEventListener('click', () => { workoutModal.classList.remove('active'); });
   if (workoutModal) workoutModal.addEventListener('click', (event) => { if (event.target === workoutModal) { workoutModal.classList.remove('active'); } });
