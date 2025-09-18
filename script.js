@@ -8,12 +8,8 @@ const modalProgramNameEl     = document.getElementById('modalProgramName');
 const modalExerciseListEl    = document.getElementById('modalExerciseList');
 const modalStartBtn          = document.getElementById('modalStartBtn');
 const modalSettingsBtn       = document.getElementById('modalSettingsBtn');
-// якщо workoutModal не знайдено, closeModalBtn буде null
-const closeModalBtn          = workoutModal
-  ? workoutModal.querySelector('.close-button')
-  : null;
-
-  const workoutTiles = document.querySelectorAll('.neumorphic-tile');
+const closeModalBtn = document.querySelector('#workoutModal .close-button');
+const workoutTiles = document.querySelectorAll('.neumorphic-tile');
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
   const datetimeDisplayEl = document.getElementById('datetime-display');
