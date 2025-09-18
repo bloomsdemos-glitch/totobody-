@@ -1092,59 +1092,47 @@ function updateFabButton() {
   loadShuffleState();
   updateShuffleButtonUI();
   if (difficultySlider) { updateSliderEmoji(); }
-    // =================================================================
-  // Делегуємо tap на всі плитки на головному екрані (#homeScreen)
+
+  // Відразу показуємо домашній екран
+  showScreen('homeScreen');
+
   // =================================================================
-  const homeScreen = document.getElementById('homeScreen');
-  homeScreen.addEventListener('click', e => {
-    const tile = e.target.closest('.neumorphic-tile');
-    if (!tile) return;
+  // Прив’язуємо нормальні click-обробники до плиток на головному екрані
+  // =================================================================
+  workoutTiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      const program = tile.dataset.program;
+      const action  = tile.dataset.action;
 
-    const program = tile.dataset.program;
-    const action  = tile.dataset.action;
-
-    if (program) {
-      openWorkoutModal(program);
-      return;
-    }
-    if (action === 'show-dance') {
-      danceModal.classList.add('active');
-      return;
-    }
-    if (action === 'add-program') {
-      sideMenu.classList.add('open');
-      openProgramEditor(null);
-      return;
-    }
-    if (action === 'show-stats') {
-      sideMenu.classList.add('open');
-      renderHistory();
-      menuTitle.textContent = 'Статистика';
-      document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
-      document.getElementById('statsSettingsMenu').classList.add('active');
-      menuBackBtn.style.display = 'flex';
-      return;
-    }
-    if (action === 'show-calendar') {
-      sideMenu.classList.add('open');
-      menuTitle.textContent = 'Календар';
-      document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
-      document.getElementById('calendarMenu').classList.add('active');
-      menuBackBtn.style.display = 'flex';
-    }
+      if (program) {
+        // Відкрити прев’ю-модалку для програми
+        openWorkoutModal(program);
+      }
+      else if (action === 'show-dance') {
+        danceModal.classList.add('active');
+      }
+      else if (action === 'add-program') {
+        sideMenu.classList.add('open');
+        openProgramEditor(null);
+      }
+      else if (action === 'show-stats') {
+        sideMenu.classList.add('open');
+        renderHistory();
+        menuTitle.textContent = 'Статистика';
+        document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+        document.getElementById('statsSettingsMenu').classList.add('active');
+        menuBackBtn.style.display = 'flex';
+      }
+      else if (action === 'show-calendar') {
+        sideMenu.classList.add('open');
+        menuTitle.textContent = 'Календар';
+        document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+        document.getElementById('calendarMenu').classList.add('active');
+        menuBackBtn.style.display = 'flex';
+      }
+    });
   });
 
-  // =================================================================
-  // Делегуємо tap на FAB-кнопку (restDayBtn), якщо вона існує
-  // =================================================================
-  if (restDayBtn) {
-    restDayBtn.addEventListener('click', () => {
-      // просто викликаємо той же код, що в оригіналі
-      const clickEvent = new Event('click');
-      restDayBtn.dispatchEvent(clickEvent);
-    });
-  }
+});  // <-- тут закривається DOMContentLoaded
 
-  showScreen('homeScreen');
-});
 
