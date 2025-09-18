@@ -1,94 +1,105 @@
 document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('touchstart', () => {}, {passive: true});
 
-  // --- DOM-елементи ---
-  const screens = document.querySelectorAll('.screen');
-const workoutModal           = document.getElementById('workoutModal');
-const modalProgramNameEl     = document.getElementById('modalProgramName');
-const modalExerciseListEl    = document.getElementById('modalExerciseList');
-const modalStartBtn          = document.getElementById('modalStartBtn');
-const modalSettingsBtn       = document.getElementById('modalSettingsBtn');
-const closeModalBtn = document.querySelector('#workoutModal .close-button');
-const workoutTiles = document.querySelectorAll('.neumorphic-tile');
-  const burgerBtn = document.getElementById('burgerBtn');
-  const sideMenu = document.getElementById('sideMenu');
-  const datetimeDisplayEl = document.getElementById('datetime-display');
-  const trainingScreen = document.getElementById('trainingScreen');
-  const trainingBackBtn = document.getElementById('trainingBackBtn');
-  const muteBtn = document.getElementById('muteBtn');
-  const shuffleBtn = document.getElementById('shuffleBtn');
-  const trainingProgramNameEl = document.getElementById('trainingProgramName');
-  const exerciseNameEl = document.getElementById('exerciseName');
-  const timerEl = document.getElementById('timer');
-  const prevBtn = document.getElementById('prevExercise');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const stopBtn = document.getElementById('stopBtn');
-  const nextBtn = document.getElementById('nextExercise');
-  const completedListEl = document.getElementById('completedExercises');
-  const countdownScreen = document.getElementById('countdownScreen');
-  const countdownNumberEl = document.getElementById('countdownNumber');
-  const menuBackBtn = document.getElementById('menuBackBtn');
-  const menuTitle = document.getElementById('menuTitle');
-  const mainMenu = document.getElementById('mainMenu');
-  const workoutSettingsMenu = document.getElementById('workoutSettingsMenu');
-  const addProgramMenu = document.getElementById('addProgramMenu');
-  const appSettingsMenu = document.getElementById('appSettingsMenu');
-  const bgUrlInput = document.getElementById('bgUrlInput');
-  const saveBgBtn = document.getElementById('saveBgBtn');
-  const resetBgBtn = document.getElementById('resetBgBtn');
-  const programListEl = document.getElementById('program-list');
-  const addNewProgramBtn = document.getElementById('addNewProgramBtn');
-  const newProgramNameInput = document.getElementById('newProgramNameInput');
-  const saveNewProgramBtn = document.getElementById('saveNewProgramBtn');
-  const programEditMenu = document.getElementById('programEditMenu');
-  const programNameInput = document.getElementById('programNameInput');
-  const exerciseListEl = document.getElementById('exercise-list');
-  const addExerciseBtn = document.getElementById('addExerciseBtn');
-  const saveProgramBtn = document.getElementById('saveProgramBtn');
-  const deleteProgramBtn = document.getElementById('deleteProgramBtn');
-  const exerciseModal = document.getElementById('exerciseModal');
-  const exerciseModalTitle = document.getElementById('exerciseModalTitle');
-  const exerciseNameInput = document.getElementById('exerciseNameInput');
-  const exerciseDurationInput = document.getElementById('exerciseDurationInput');
-  const exerciseAudioInput = document.getElementById('exerciseAudioInput');
-  const saveExerciseBtn = document.getElementById('saveExerciseBtn');
-  const closeExerciseModalBtn = exerciseModal.querySelector('.close-button');
-  const finishModal = document.getElementById('finishModal');
-  const caloriesInput = document.getElementById('caloriesInput');
-  const difficultySlider = document.getElementById('difficultySlider');
-  const sliderEmojiBubble = document.getElementById('sliderEmojiBubble');
-  const energyRating = document.getElementById('energyRating');
-  const starRating = document.getElementById('starRating');
-  const saveWorkoutLogBtn = document.getElementById('saveWorkoutLogBtn');
-  const expandTagsBtn = document.getElementById('expandTagsBtn');
-  const extraTagsSection = document.getElementById('extraTagsSection');
-  const restDayBtn = document.getElementById('restDayBtn');
-  const restDayModal = document.getElementById('restDayModal');
-  const closeRestDayModalBtn = document.getElementById('closeRestDayModal');
-  const stepsInput = document.getElementById('stepsInput');
-  const restDayCaloriesInput = document.getElementById('restDayCaloriesInput');
-  const moodRating = document.getElementById('moodRating');
-  const saveRestDayBtn = document.getElementById('saveRestDayBtn');
-  const danceModal = document.getElementById('danceModal');
-  const closeDanceModalBtn = danceModal.querySelector('.close-button');
-  const danceOptionBtns = danceModal.querySelectorAll('.dance-option-btn');
-  const historyListEl = document.getElementById('historyList');
-  const appHeader = document.querySelector('.app-header');
-  const goalBar = document.getElementById('goalProgress');
-  const dayDetailScreen = document.getElementById('dayDetailScreen');
-  const detailBackBtn = document.getElementById('detailBackBtn');
-  const detailDateEl = document.getElementById('detailDate');
-  const detailTitleEl = document.getElementById('detailTitle');
-  const detailStatsListEl = document.getElementById('detailStatsList');
-  // --- DOM-елементи для вікна підтвердження ---
-  const confirmationPrompt = document.getElementById('confirmationPrompt');
-  const promptMessage = document.getElementById('promptMessage');
-  const promptActions = document.getElementById('promptActions');
-  // --- Логіка для нотаток ---
-  const notesTextarea = document.getElementById('notesTextarea');
-  const editNoteBtn = document.getElementById('editNoteBtn');
-  const saveNoteBtn = document.getElementById('saveNoteBtn');
-  let currentNoteDay = null;
+// --- DOM-елементи ---
+const screens                  = document.querySelectorAll('.screen');
+const workoutModal             = document.getElementById('workoutModal');
+const modalProgramNameEl       = document.getElementById('modalProgramName');
+const modalExerciseListEl      = document.getElementById('modalExerciseList');
+const modalStartBtn            = document.getElementById('modalStartBtn');
+const modalSettingsBtn         = document.getElementById('modalSettingsBtn');
+// захищений селектор, щоб не впасти, якщо модалка ще не в DOM
+const closeModalBtn            = document.querySelector('#workoutModal .close-button');
+
+const workoutTiles             = document.querySelectorAll('.neumorphic-tile');
+const burgerBtn                = document.getElementById('burgerBtn');
+const sideMenu                 = document.getElementById('sideMenu');
+const datetimeDisplayEl        = document.getElementById('datetime-display');
+const trainingScreen           = document.getElementById('trainingScreen');
+const trainingBackBtn          = document.getElementById('trainingBackBtn');
+const muteBtn                  = document.getElementById('muteBtn');
+const shuffleBtn               = document.getElementById('shuffleBtn');
+const trainingProgramNameEl    = document.getElementById('trainingProgramName');
+const exerciseNameEl           = document.getElementById('exerciseName');
+const timerEl                  = document.getElementById('timer');
+const prevBtn                  = document.getElementById('prevExercise');
+const pauseBtn                 = document.getElementById('pauseBtn');
+const stopBtn                  = document.getElementById('stopBtn');
+const nextBtn                  = document.getElementById('nextExercise');
+const completedListEl          = document.getElementById('completedExercises');
+const countdownScreen          = document.getElementById('countdownScreen');
+const countdownNumberEl        = document.getElementById('countdownNumber');
+const menuBackBtn              = document.getElementById('menuBackBtn');
+const menuTitle                = document.getElementById('menuTitle');
+const mainMenu                 = document.getElementById('mainMenu');
+const workoutSettingsMenu      = document.getElementById('workoutSettingsMenu');
+const addProgramMenu           = document.getElementById('addProgramMenu');
+const appSettingsMenu          = document.getElementById('appSettingsMenu');
+const bgUrlInput               = document.getElementById('bgUrlInput');
+const saveBgBtn                = document.getElementById('saveBgBtn');
+const resetBgBtn               = document.getElementById('resetBgBtn');
+const programListEl            = document.getElementById('program-list');
+const addNewProgramBtn         = document.getElementById('addNewProgramBtn');
+const newProgramNameInput      = document.getElementById('newProgramNameInput');
+const saveNewProgramBtn        = document.getElementById('saveNewProgramBtn');
+const programEditMenu          = document.getElementById('programEditMenu');
+const programNameInput         = document.getElementById('programNameInput');
+const exerciseListEl           = document.getElementById('exercise-list');
+const addExerciseBtn           = document.getElementById('addExerciseBtn');
+const saveProgramBtn           = document.getElementById('saveProgramBtn');
+const deleteProgramBtn         = document.getElementById('deleteProgramBtn');
+
+const exerciseModal            = document.getElementById('exerciseModal');
+const exerciseModalTitle       = document.getElementById('exerciseModalTitle');
+const exerciseNameInput        = document.getElementById('exerciseNameInput');
+const exerciseDurationInput    = document.getElementById('exerciseDurationInput');
+const exerciseAudioInput       = document.getElementById('exerciseAudioInput');
+const saveExerciseBtn          = document.getElementById('saveExerciseBtn');
+// захищений селектор, щоб уникнути помилки, якщо exerciseModal ще не в DOM
+const closeExerciseModalBtn    = document.querySelector('#exerciseModal .close-button');
+
+const finishModal              = document.getElementById('finishModal');
+const caloriesInput            = document.getElementById('caloriesInput');
+const difficultySlider         = document.getElementById('difficultySlider');
+const sliderEmojiBubble        = document.getElementById('sliderEmojiBubble');
+const energyRating             = document.getElementById('energyRating');
+const starRating               = document.getElementById('starRating');
+const saveWorkoutLogBtn        = document.getElementById('saveWorkoutLogBtn');
+const expandTagsBtn            = document.getElementById('expandTagsBtn');
+const extraTagsSection         = document.getElementById('extraTagsSection');
+
+const restDayBtn               = document.getElementById('restDayBtn');
+const restDayModal             = document.getElementById('restDayModal');
+const closeRestDayModalBtn     = document.getElementById('closeRestDayModal');
+const stepsInput               = document.getElementById('stepsInput');
+const restDayCaloriesInput     = document.getElementById('restDayCaloriesInput');
+const moodRating               = document.getElementById('moodRating');
+const saveRestDayBtn           = document.getElementById('saveRestDayBtn');
+
+const danceModal               = document.getElementById('danceModal');
+// також безпечно
+const closeDanceModalBtn       = document.querySelector('#danceModal .close-button');
+const danceOptionBtns          = danceModal.querySelectorAll('.dance-option-btn');
+
+const historyListEl            = document.getElementById('historyList');
+const appHeader                = document.querySelector('.app-header');
+const goalBar                  = document.getElementById('goalProgress');
+const dayDetailScreen          = document.getElementById('dayDetailScreen');
+const detailBackBtn            = document.getElementById('detailBackBtn');
+const detailDateEl             = document.getElementById('detailDate');
+const detailTitleEl            = document.getElementById('detailTitle');
+const detailStatsListEl        = document.getElementById('detailStatsList');
+
+// --- DOM-елементи для вікна підтвердження ---
+const confirmationPrompt       = document.getElementById('confirmationPrompt');
+const promptMessage            = document.getElementById('promptMessage');
+const promptActions            = document.getElementById('promptActions');
+
+// --- Логіка для нотаток ---
+const notesTextarea            = document.getElementById('notesTextarea');
+const editNoteBtn              = document.getElementById('editNoteBtn');
+const saveNoteBtn              = document.getElementById('saveNoteBtn');
+let currentNoteDay             = null;
 
   if (editNoteBtn && saveNoteBtn && notesTextarea) {
     // Редагувати
