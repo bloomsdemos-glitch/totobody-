@@ -320,6 +320,54 @@
   </div>
 
 <script src="script.js?v=22" defer></script>
+<script>
+  // Швидкий делегований обробник для всіх плиток і FAB
+  document.body.addEventListener('click', function(e) {
+    // спершу — плитки
+    var tile = e.target.closest('.neumorphic-tile');
+    if (tile) {
+      var program = tile.dataset.program;
+      var action  = tile.dataset.action;
+
+      if (program) {
+        openWorkoutModal(program);
+        return;
+      }
+      if (action === 'show-dance') {
+        danceModal.classList.add('active');
+        return;
+      }
+      if (action === 'add-program') {
+        sideMenu.classList.add('open');
+        openProgramEditor(null);
+        return;
+      }
+      if (action === 'show-stats') {
+        sideMenu.classList.add('open');
+        renderHistory();
+        menuTitle.textContent = 'Статистика';
+        document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+        document.getElementById('statsSettingsMenu').classList.add('active');
+        menuBackBtn.style.display = 'flex';
+        return;
+      }
+      if (action === 'show-calendar') {
+        sideMenu.classList.add('open');
+        menuTitle.textContent = 'Календар';
+        document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+        document.getElementById('calendarMenu').classList.add('active');
+        menuBackBtn.style.display = 'flex';
+        return;
+      }
+    }
+
+    // а тепер — FAB
+    var fab = e.target.closest('#restDayBtn');
+    if (fab) {
+      fab.click(); // запустити існуючу логіку
+    }
+  });
+</script>
 
 </body>
 </html>
