@@ -375,18 +375,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // --- Об’єднаний обробник кліку по плитках ---
+// ⬇ оновлений обробник плиток
 workoutTiles.forEach(tile => {
   tile.addEventListener('click', () => {
-    const program = tile.dataset.program;
-    const action  = tile.dataset.action;
+    const programName = tile.dataset.program;
+    const action      = tile.dataset.action;
 
-    if (program) {
-      setTimeout(() => openWorkoutModal(program), 150);
-    } else if (action) {
-      handleTileAction(action);
+    if (programName) {
+      // запускаємо програму
+      setTimeout(() => openWorkoutModal(programName), 150);
+
+    } else if (action === 'show-dance') {
+      danceModal.classList.add('active');
+
+    } else if (action === 'add-program') {
+      sideMenu.classList.add('open');
+      openProgramEditor(null);
+
+    } else if (action === 'show-stats') {
+      // відкриваємо Статистику
+      sideMenu.classList.add('open');
+      renderHistory();
+      menuTitle.textContent = 'Статистика';
+      document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+      document.getElementById('statsSettingsMenu').classList.add('active');
+      menuBackBtn.style.display = 'flex';
+
+    } else if (action === 'show-calendar') {
+      // відкриваємо Календар
+      sideMenu.classList.add('open');
+      menuTitle.textContent = 'Календар';
+      document.querySelectorAll('.menu-screen').forEach(m => m.classList.remove('active'));
+      document.getElementById('calendarMenu').classList.add('active');
+      menuBackBtn.style.display = 'flex';
     }
   });
 });
+
 
 // --- Функція для обробки data-action ---
 function handleTileAction(action) {
