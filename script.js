@@ -3,12 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- DOM-елементи ---
   const screens = document.querySelectorAll('.screen');
-  const workoutModal = document.getElementById('workoutModal');
-  const modalProgramNameEl = document.getElementById('modalProgramName');
-  const modalExerciseListEl = document.getElementById('modalExerciseList');
-  const modalStartBtn = document.getElementById('modalStartBtn');
-  const modalSettingsBtn = document.getElementById('modalSettingsBtn');
-  const closeModalBtn = workoutModal.querySelector('.close-button');
+const workoutModal           = document.getElementById('workoutModal');
+const modalProgramNameEl     = document.getElementById('modalProgramName');
+const modalExerciseListEl    = document.getElementById('modalExerciseList');
+const modalStartBtn          = document.getElementById('modalStartBtn');
+const modalSettingsBtn       = document.getElementById('modalSettingsBtn');
+// якщо workoutModal не знайдено, closeModalBtn буде null
+const closeModalBtn          = workoutModal
+  ? workoutModal.querySelector('.close-button')
+  : null;
+
   const workoutTiles = document.querySelectorAll('.neumorphic-tile');
   const burgerBtn = document.getElementById('burgerBtn');
   const sideMenu = document.getElementById('sideMenu');
