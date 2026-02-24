@@ -1,323 +1,663 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TOTOBODY</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="style.css?v=22">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ВАЛКИ • Графік</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --c-yellow: #fbbf24; --c-red: #d9463b; --c-dark: #060606; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--c-dark); color: #ffffff; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        .sticky-header { position: sticky; top: 0; left: 0; width: 100%; background: rgba(6, 6, 6, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 100; padding: 15px 20px; box-sizing: border-box; border-bottom: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .branding { display: flex; align-items: center; gap: 8px; }
+        .logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #ffffff; border: 1px solid #eee; padding: 2px; box-sizing: border-box; }
+        .app-title { font-size: 20px; font-weight: 900; letter-spacing: 0.5px; margin: 0; display: flex; align-items: center; gap: 6px; }
+        .app-title svg { fill: var(--c-yellow); width: 22px; height: 22px; margin-top: -2px; }
+        .date-badge { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 12px; font-weight: 800; color: var(--c-yellow); font-size: 13px; text-transform: uppercase; }
+        .dashboard { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
+        .status-box { display: flex; flex-direction: column; gap: 8px; justify-content: flex-end; }
+        .status-label { font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .status-value { display: flex; align-items: center; gap: 6px; font-size: 18px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+        .live-dot { display: inline-block; width: 8px; height: 8px; background-color: var(--c-red); border-radius: 50%; margin-right: 6px; animation: blinkFast 1.5s infinite; }
+        @keyframes blinkFast { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        .timer-box { text-align: right; }
+        .timer-label { font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+        .timer-time { font-size: 34px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+        .timer-time.off { color: var(--c-red); text-shadow: 0 0 15px rgba(217, 70, 59, 0.4); }
+        .timer-time.on { color: var(--c-yellow); text-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+        #timelineContainer { padding: 20px; display: flex; flex-direction: column; gap: 0; min-height: 60vh; position: relative; }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); } 50% { box-shadow: 0 0 20px 0 rgba(255,255,255,0.08); background: rgba(255,255,255,0.06); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); background: rgba(255,255,255,0.02); } }
+        @keyframes pulseGlowRed { 0% { box-shadow: 0 0 0 0 rgba(217,70,59,0.1); background: rgba(217,70,59,0.04); } 50% { box-shadow: 0 0 20px 0 rgba(217,70,59,0.15); background: rgba(217,70,59,0.08); } 100% { box-shadow: 0 0 0 0 rgba(217,70,59,0); background: rgba(217,70,59,0.04); } }
+        @keyframes breath { 0% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.7; } }
+        .tl-item { display: flex; flex-direction: column; z-index: 2; position: relative; padding: 10px 0; transition: 0.3s ease; border-radius: 16px; margin-bottom: -5px; }
+        .tl-item.active-now { animation: pulseGlow 2.5s infinite; padding: 15px 10px; margin: 5px -10px; border: 1px solid rgba(255,255,255,0.05); overflow: visible; }
+        .tl-item.active-now.emergency-active { animation: pulseGlowRed 2.5s infinite; border-color: rgba(217,70,59,0.15); }
+        .tl-item.past-interval { opacity: 0.35; filter: grayscale(0.8); transition: all 0.2s ease; cursor: pointer; }
+        .tl-item.past-interval:active { opacity: 1; filter: none; }
+        .tl-head { display: flex; align-items: center; min-height: 40px; position: relative; z-index: 2; padding-right: 65px; }
+        .time-col { width: 70px; text-align: right; padding-right: 15px; font-weight: 800; font-size: 20px; flex-shrink: 0; line-height: 1; margin: 0; letter-spacing: -0.5px; }
+        .time-col.off { color: var(--c-red); }
+        .time-col.on { color: var(--c-yellow); text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+        .time-col.emergency { color: var(--c-red); }
+        .icon-node { display: flex; flex-direction: column; align-items: center; width: 40px; flex-shrink: 0; }
+        .icon-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #111; border: 1px solid #222; z-index: 3; position: relative; }
+        .icon-house { width: 22px; height: 22px; }
+        .on .icon-house { fill: var(--c-yellow); filter: drop-shadow(0 0 5px var(--c-yellow)); }
+        .off .icon-house, .emergency .icon-house { fill: #555; }
+        .badge-col { padding-left: 15px; flex-grow: 1; display: flex; align-items: center; }
+        .badge { display: flex; align-items: center; justify-content: center; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; width: max-content; line-height: 1; text-transform: uppercase; gap: 6px; }
+        .badge.off { background: #1a1a1c; border: 1px solid #333; color: #a1a1aa; }
+        .badge.on { background: rgba(251, 191, 36, 0.1); color: var(--c-yellow); border: 1px solid var(--c-yellow); }
+        .badge.emergency { background: rgba(217,70,59,0.15); color: var(--c-red); border: 1px solid var(--c-red); }
+        .badge-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .badge-modifier { font-size: 12px; font-weight: 800; text-transform: uppercase; }
+        .badge-modifier.rescued { color: var(--c-yellow); }
+        .badge-modifier.emergency { color: var(--c-red); }
+        .now-badge { position: absolute; top: -4px; right: 0px; background: #fff; color: #000; padding: 2px 6px; border-radius: 5px; font-size: 8px; font-weight: 900; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255,255,255,0.4); animation: pulseBadge 2s infinite; z-index: 10; }
+        .emergency-active .now-badge { background: var(--c-red); color: #fff; box-shadow: 0 0 10px rgba(217,70,59,0.5); }
+        @keyframes pulseBadge { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .tl-body { display: flex; align-items: stretch; min-height: 50px; position: relative; z-index: 1; }
+        .line-node { display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; width: 40px; flex-shrink: 0; padding: 10px 0; margin: 0; }
+        .tl-dot-micro { width: 6px; height: 6px; border-radius: 50%; opacity: 0.9; flex-shrink: 0; margin: 3px 0; }
+        .tl-dot-micro.on { background: var(--c-yellow); box-shadow: 0 0 4px rgba(251, 191, 36, 0.5); }
+        .tl-dot-micro.off { background: #555; }
+        .tl-dot-micro.emergency { background: var(--c-red); box-shadow: 0 0 4px rgba(217,70,59,0.5); }
+        .active-now .tl-dot-micro { animation: breath 2s infinite ease-in-out; }
+        .interval-col { padding-left: 15px; flex-grow: 1; display: flex; align-items: center; }
+        .interval { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; line-height: 1; }
+        .interval-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; }
+        .interval-icon svg { width: 100%; height: 100%; display: block; }
+        .interval.off { color: var(--c-red); }
+        .interval.on { color: var(--c-yellow); }
+        .interval.emergency { color: var(--c-red); }
+        .waiting-block { text-align: center; padding: 30px 20px; color: #888; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .spinner-dots::after { content: ''; animation: dots 1.5s steps(4, end) infinite; }
+        @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } 100% { content: ''; } }
+        .fade-dots { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 15px; opacity: 0.5; }
+        .fade-dot { width: 6px; height: 6px; border-radius: 50%; background: #555; }
+        .fade-dot:nth-child(1) { opacity: 0.8; }
+        .fade-dot:nth-child(2) { opacity: 0.5; }
+        .fade-dot:nth-child(3) { opacity: 0.2; }
+        .app-footer { margin-top: 10px; padding: 25px 20px 40px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .f-link { color: #aaa; text-decoration: none; font-size: 13px; font-weight: 700; background: rgba(255,255,255,0.06); padding: 11px 18px; border-radius: 14px; transition: 0.2s; display: flex; align-items: center; gap: 7px; border: 1px solid rgba(255,255,255,0.07); }
+        .f-link:active { background: rgba(255,255,255,0.12); color: #fff; }
+        .f-link svg { flex-shrink: 0; }
+        .disclaimer-box { display: flex; align-items: flex-start; text-align: left; gap: 8px; font-size: 13px; color: #777; line-height: 1.4; font-weight: 500; background: rgba(255,255,255,0.03); padding: 12px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .source-text { font-size: 12px; color: #666; font-weight: 500; }
+        .loader { text-align: center; color: #888; margin-top: 50px; font-weight: bold; }
+    </style>
 </head>
-<body>
+<body ontouchstart="">
 
-  <header class="app-header">
-    <button id="burgerBtn" class="icon-button neumorphic-icon-btn"><i class="bi bi-list"></i></button>
-        <button id="detailBackBtn" class="icon-button header-back-btn" style="display: none;"><i class="bi bi-box-arrow-left"></i></button>
+<div id="loader" class="loader">Синхронізація...⚡</div>
 
-
-    <div class="title-container">
-      <h1>TOTOBODY ©</h1>
-      <p id="datetime-display" class="datetime"></p>
+<div id="app" style="display: none;">
+    <div class="sticky-header">
+        <div class="header-top">
+            <div class="branding">
+                <img src="./logo.png" alt="" class="logo-img" onerror="this.style.display='none'">
+                <h1 class="app-title">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    ВАЛКИ
+                </h1>
+            </div>
+            <div class="date-badge" id="dateDisplay">ОЧІКУЄМО</div>
+        </div>
+        <div class="dashboard">
+            <div class="status-box">
+                <div class="status-label"><span class="live-dot"></span>Статус</div>
+                <div class="status-value" id="timerStatus">...</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-label" id="timerLabel">Оновлення...</div>
+                <div class="timer-time" id="timerDisplay">--:--:--</div>
+            </div>
+        </div>
     </div>
-    <div class="header-placeholder"></div>
-  </header>
 
-  
-  <div id="sideMenu" class="side-menu">
-      <div class="menu-overlay-close"></div>
-      <div class="glassmorphism-panel">
-        <button class="back-btn" id="menuBackBtn"><i class="bi bi-arrow-left-circle-fill"></i></button>
-        <h3 id="menuTitle">Меню</h3>
+    <div id="timelineContainer"></div>
+
+    <div class="app-footer">
+        <div class="footer-links">
+            <a href="https://t.me/share/url?url=t.me/valkyelectrifybot/electric&text=💡%20Актуальний%20графік%20відключень%20світла%20у%20Валках" class="f-link" target="_blank">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Поділитися
+            </a>
+            <a href="https://t.me/valkychat" class="f-link" target="_blank">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Чат
+            </a>
+            <a href="https://t.me/valkybazar" class="f-link" target="_blank">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Базарчик
+            </a>
+        </div>
+        <div class="disclaimer-box">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <div>Фактичний час і тривалість відключень можуть змінюватися залежно від стану енергосистеми.</div>
+        </div>
+        <div class="source-text"><b>Джерело:</b><br>Харківобленерго</div>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand(); tg.setHeaderColor('#060606'); tg.setBackgroundColor('#060606');
+
+   
+
+    const startParam = tg.initDataUnsafe?.start_param || '';
+    
+    const isAdmin = startParam === 'godmode_valky';
+
+
+
+    const BIN_ID = '699b325fd0ea881f40cf7aaf';
+
+    const houseSvg = `<svg class="icon-house" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`;
+    const iconBan = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>`;
+    const iconLightningSVG = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`;
+    const iconBulb = `<svg class="interval-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1.2 1.5-2.5 1.5-4a6 6 0 0 0-6-6 6 6 0 0 0-6 6c0 1.4.5 2.7 1.5 4 .7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`;
+    const iconZapOff = `<svg class="interval-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M8.5 8.5L3 14h9l-1 8 5.5-5.5"></path><path d="M16 10h5l-1.5 1.5"></path><path d="M12.4 6.6L13 2l-2.6 2.6"></path></svg>`;
+    const iconWarning = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.5L20.5 19h-17L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>`;
+
+    const statusIconOn = `<svg viewBox="0 0 24 24" width="16" height="16" fill="var(--c-yellow)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`;
+    const statusIconOff = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--c-red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"></line><path d="M8.5 8.5L3 14h9l-1 8 5.5-5.5"></path><path d="M16 10h5l-1.5 1.5"></path><path d="M12.4 6.6L13 2l-2.6 2.6"></path></svg>`;
+
+    let dbDays = {};
+    let activeDates = []; 
+    let initialScrollDone = false;
+
+    function timeToMins(t) {
+        if (!t) return null;
+        let [h, m] = t.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwBt7Fi0bp113WAqSQUZQG84aXOYR33Xv-lDGGfIFvN4s6dfYbDpj1zxmuiE05Jltqgag/exec';
+
+    function openEditModal(startStr, endStr) {
+        document.getElementById('editStart').value = startStr;
+        document.getElementById('editEnd').value = (endStr === '00:00' || endStr === '24:00') ? '23:59' : endStr;
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    async function sendCustomEdit(type) {
+        let s = document.getElementById('editStart').value;
+        let e = document.getElementById('editEnd').value;
+        if (!s || !e) return alert('Вкажи обидва значення часу');
         
-        <div id="mainMenu" class="menu-screen active">
-          <ul>
-            <li><a href="#" data-target="statsSettingsMenu"><i class="bi bi-clipboard-data"></i>Статистика</a></li>
-            <li><a href="#" data-target="calendarMenu"><i class="bi bi-calendar2-date"></i>Календар</a></li>
-            <li><a href="#" data-target="goalSettingsMenu"><i class="bi bi-bullseye"></i>Мета</a></li>
-            <li><a href="#" data-target="workoutSettingsMenu"><i class="bi bi-gear-wide-connected"></i>Налаштування тренувань</a></li>
-            <li><a href="#" data-target="appSettingsMenu"><i class="bi bi-magic"></i>Налаштування додатку</a></li>
-            <li><a href="#" data-target="historyMenu"><i class="bi bi-archive"></i>Історія тренувань</a></li>
-          </ul>
+        document.getElementById('editModal').style.display = 'none';
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('loader').textContent = 'Записуємо зміни... ⚡';
+
+        const payload = {
+            source: 'miniapp', 
+            secret: tg.initDataUnsafe?.start_param || '', 
+            userId: tg.initDataUnsafe?.user?.id || 0,
+            date: activeDates[0], 
+            action: 'add_override', 
+            type: type, 
+            interval: { start: s, end: e }
+        };
+        try {
+            await fetch(GAS_WEB_APP_URL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload) 
+            });
+            setTimeout(fetchData, 1500);
+        } catch (err) { 
+            alert('❌ Помилка: ' + err.message); 
+            fetchData(); 
+        }
+    }
+
+    async function sendResetDay() {
+        if(!confirm('Стерти всі ручні зміни і повернути базовий графік на сьогодні?')) return;
+        document.getElementById('editModal').style.display = 'none';
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('loader').textContent = 'Скидаємо графік... 🔄';
+        
+        const payload = { 
+            source: 'miniapp', 
+            secret: tg.initDataUnsafe?.start_param || '', 
+            userId: tg.initDataUnsafe?.user?.id || 0, 
+            date: activeDates[0], 
+            action: 'reset_day' 
+        };
+        try {
+            await fetch(GAS_WEB_APP_URL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload) 
+            });
+            setTimeout(fetchData, 1500);
+        } catch (err) { 
+            alert('❌ Помилка: ' + err.message); 
+            fetchData(); 
+        }
+    }
+
+    async function sendCleanOld() {
+        if (!confirm('Точно видалити всі застарілі дні з бази?')) return;
+        
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('loader').textContent = 'Прибираємо сміття... 🧹';
+
+        const payload = {
+            source: 'miniapp',
+            secret: tg.initDataUnsafe?.start_param || '',
+            userId: tg.initDataUnsafe?.user?.id || 0,
+            action: 'clean_old',
+            activeDates: activeDates 
+        };
+
+        try {
+            await fetch(GAS_WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify(payload)
+            });
+            setTimeout(fetchData, 1500);
+        } catch (e) {
+            alert('❌ Помилка: ' + e.message);
+            fetchData();
+        }
+    }
+
+
+    async function fetchData() {
+        try {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${new Date().getTime()}`, { 
+                cache: 'no-store', headers: { 'Pragma': 'no-cache' } 
+            });
+            const result = await response.json();
+            const data = result.record;
+
+           
+            const months = ["СІЧНЯ", "ЛЮТОГО", "БЕРЕЗНЯ", "КВІТНЯ", "ТРАВНЯ", "ЧЕРВНЯ", "ЛИПНЯ", "СЕРПНЯ", "ВЕРЕСНЯ", "ЖОВТНЯ", "ЛИСТОПАДА", "ГРУДНЯ"];
+            const today = new Date();
+            const todayStr = `${today.getDate()} ${months[today.getMonth()]}`;
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = `${tomorrow.getDate()} ${months[tomorrow.getMonth()]}`;
+
+            dbDays = {};
+            activeDates = [];
+
+            if (data.days) {
+                // Беремо тільки актуальні дні
+                if (data.days[todayStr]) {
+                    dbDays[todayStr] = data.days[todayStr];
+                    activeDates.push(todayStr);
+                }
+                if (data.days[tomorrowStr]) {
+                    dbDays[tomorrowStr] = data.days[tomorrowStr];
+                    activeDates.push(tomorrowStr);
+                }
+            } else if (data.intervals) { 
+                const fallbackDate = data.date || "СЬОГОДНІ";
+                dbDays = { [fallbackDate]: { intervals: data.intervals, emergency: data.emergency } };
+                activeDates.push(fallbackDate);
+            }
+
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+
+            startTimerAndRender();
+        } catch (error) {
+            document.getElementById('loader').textContent = "Помилка завантаження. Спробуй пізніше.";
+        }
+    }
+
+        function minsToStr(mins) {
+        if (mins === 1440) return "00:00";
+        let h = Math.floor(mins / 60).toString().padStart(2, '0');
+        let m = (mins % 60).toString().padStart(2, '0');
+        return `${h}:${m}`;
+    }
+
+        function buildDisplayIntervals(rawIntervals, overrides) {
+        if (!rawIntervals || rawIntervals.length === 0) return [];
+        
+        // Матриця доби (кожна хвилина)
+        let minuteMap = new Array(1440).fill(null);
+        
+        // 1. Заповнюємо базовий план
+        rawIntervals.forEach(int => {
+            for (let i = int.startMin; i < int.endMin; i++) {
+                minuteMap[i] = { state: int.type, isOverride: false, info: null };
+            }
+        });
+
+        // 2. Накладаємо ручні зміни (вирізаємо шматки)
+        if (overrides && overrides.length > 0) {
+            overrides.forEach(ov => {
+                for (let i = ov.startMin; i < ov.endMin; i++) {
+                    let st = (ov.type === 'emergency') ? 'emergency' : 'on';
+                    let infoText = (ov.type === 'emergency') 
+                        ? `⚠️ Аварійне відключення з ${ov.startStr} до ${ov.endStr}` 
+                        : `💡 Відключення скасовано з ${ov.startStr} до ${ov.endStr}`;
+                    minuteMap[i] = { state: st, isOverride: true, info: infoText };
+                }
+            });
+        }
+
+        // 3. Зшиваємо однакові хвилини в кайфові суцільні блоки
+        let merged = [];
+        let current = null;
+        for (let i = 0; i <= 1440; i++) {
+            let m = minuteMap[i];
+            let isDifferent = current && (!m || m.state !== current.state || m.isOverride !== current.isOverride || m.info !== current.info);
+            
+            if (i === 1440 || isDifferent) {
+                if (current) {
+                    current.endMin = i;
+                    current.displayEndStr = minsToStr(i);
+                    merged.push(current);
+                }
+                if (i < 1440) {
+                    current = { startMin: i, startStr: minsToStr(i), state: m.state, isOverride: m.isOverride, info: m.info };
+                }
+            }
+        }
+
+        // Форматуємо для відображення
+        return merged.map(m => {
+            return {
+                startMin: m.startMin, endMin: m.endMin,
+                startStr: m.startStr, displayEndStr: m.displayEndStr,
+                type: (m.state === 'emergency' ? 'on' : m.state), // технічний хак для CSS
+                isEmergencyBlock: (m.state === 'emergency'),
+                isModified: m.isOverride,
+                info: m.info
+            };
+        });
+    }
+
+
+
+    function renderAllDays(currentMins) {
+        const container = document.getElementById('timelineContainer');
+
+        if (activeDates.length === 0) {
+            container.innerHTML = `<div class="waiting-block">⏳ Очікуємо на графік від Обленерго</div>`;
+            return;
+        }
+
+        let fullHtml = '';
+
+        activeDates.forEach((dateStr, index) => {
+            const dayData = dbDays[dateStr];
+            const isToday = (index === 0);
+
+            if (!isToday) {
+                fullHtml += `
+                    <div class="section-divider" style="margin: 40px 0 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <div style="height:1px; background:rgba(255,255,255,0.1); flex:1;"></div>
+                        <div style="font-size: 11px; font-weight: 900; color: #888; text-transform: uppercase; letter-spacing: 1px;">ГРАФІК НА ${dateStr}</div>
+                        <div style="height:1px; background:rgba(255,255,255,0.1); flex:1;"></div>
+                    </div>`;
+            }
+            fullHtml += generateDayHtml(dayData.intervals, dayData.emergency, currentMins, isToday);
+        });
+
+        if (activeDates.length === 1) {
+            fullHtml += `
+                <div class="fade-dots" style="margin-top:20px;">
+                    <div class="fade-dot"></div><div class="fade-dot"></div><div class="fade-dot"></div>
+                </div>
+                <div class="waiting-block" style="padding-top:10px;">
+                    ⚡ Очікуємо графік на завтра<span class="spinner-dots"></span>
+                </div>`;
+        }
+
+        if (typeof isAdmin !== 'undefined' && isAdmin) {
+            fullHtml += `
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 10px;">
+                <button onclick="sendCleanOld()" style="background: rgba(217, 70, 59, 0.15); color: var(--c-red); border: 1px solid rgba(217, 70, 59, 0.3); padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer;">
+                    🧹 Очистити старі дні
+                </button>
+            </div>`;
+        }
+
+        container.innerHTML = fullHtml;
+
+        if (!initialScrollDone) {
+            setTimeout(() => {
+                const activeEl = document.querySelector('.active-now');
+                if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                initialScrollDone = true;
+            }, 300);
+        }
+    }
+
+
+    function generateDayHtml(rawIntervals, emergency, currentMins, isToday) {
+        const displayIntervals = buildDisplayIntervals(rawIntervals || [], emergency);
+        let html = '';
+
+        displayIntervals.forEach((int, i) => {
+            const isEmergency = int.isEmergencyBlock;
+            const isVisuallyOn = int.type === 'on' && !isEmergency;
+            const stateClass = isEmergency ? 'emergency' : (isVisuallyOn ? 'on' : 'off');
+
+            const isActive = isToday && (currentMins >= int.startMin && currentMins < int.endMin);
+            const isPast = isToday && (currentMins >= int.endMin);
+            const isFuture = !isToday || (currentMins < int.startMin);
+
+            let classes = `tl-item ${stateClass}`;
+            if (isActive) { classes += ' active-now'; if (isEmergency) classes += ' emergency-active'; }
+            if (isPast) classes += ' past-interval';
+
+            let badgeHtml = '';
+            let intervalTextStyle = '';
+
+            if (isEmergency) {
+                badgeHtml = `<div class="badge-row"><div class="badge emergency">${iconWarning} АВАРІЙНЕ</div></div>`;
+            } else if (int.type === 'off') {
+                if (int.isModified) {
+                    let statusText = isPast ? `${iconLightningSVG} СВІТЛО БУЛО` : (isActive ? `${iconLightningSVG} Є СВІТЛО` : "СКАСОВАНО");
+                    badgeHtml = `<div class="badge-row"><div class="badge off" style="text-decoration: line-through; opacity: 0.5;">${iconBan} ВІДКЛЮЧЕННЯ</div><span class="badge-modifier rescued" style="display: flex; align-items: center; gap: 4px;">${statusText}</span></div>`;
+                    intervalTextStyle = `color: rgba(251, 191, 36, 0.7); text-decoration: line-through;`;
+                } else {
+                    badgeHtml = `<div class="badge-row"><div class="badge off"><span style="color:var(--c-red); display:flex;">${iconBan}</span> ВІДКЛЮЧЕННЯ</div></div>`;
+                }
+            } else if (int.type === 'on') {
+                if (int.isModified) {
+                    let statusText = isPast ? "ВІДКЛЮЧАЛИ" : (isActive ? "НЕМА СВІТЛА" : "СКАСОВАНО");
+                    badgeHtml = `<div class="badge-row"><div class="badge on" style="text-decoration: line-through; opacity: 0.5;">${iconLightningSVG} СВІТЛО</div><span class="badge-modifier emergency">${statusText}</span></div>`;
+                    intervalTextStyle = `color: rgba(217, 70, 59, 0.7); text-decoration: line-through;`;
+                } else {
+                    let lightText = isFuture ? "СВІТЛО" : "СВІТЛО Є";
+                    badgeHtml = `<div class="badge-row"><div class="badge on">${iconLightningSVG} ${lightText}</div></div>`;
+                }
+            }
+
+            const intIcon = isEmergency ? iconZapOff : (isVisuallyOn ? iconBulb : iconZapOff);
+
+            let dotsHtml = '';
+            if (i < displayIntervals.length - 1) {
+                let durationMins = int.endMin - int.startMin;
+                let numDots = Math.max(1, Math.floor(durationMins / 60));
+                for (let d = 0; d < numDots; d++) dotsHtml += `<div class="tl-dot-micro ${stateClass}"></div>`;
+            }
+
+            const timeColClass = isEmergency ? 'emergency' : stateClass;
+            let nowIndicator = isActive ? `<div class="now-badge">ЗАРАЗ</div>` : '';
+
+           
+                      
+                        let adminControls = '';
+            if (typeof isAdmin !== 'undefined' && isAdmin) {
+                adminControls = `
+                <div style="margin-top: 12px; display: flex; gap: 8px; z-index: 10; position: relative;">
+                    <button onclick="openEditModal('${int.startStr}', '${int.displayEndStr}')" 
+                            style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer;">
+                        ✏️ Редагувати
+                    </button>
+                </div>`;
+            }
+
+
+
+            html += `
+            <div class="${classes}">
+                <div class="tl-head">
+                    <div class="time-col ${timeColClass}">${int.startStr}</div>
+                    <div class="icon-node"><div class="icon-circle">${houseSvg}</div></div>
+                    <div class="badge-col">${badgeHtml}</div>
+                    ${nowIndicator}
+                </div>
+                <div class="tl-body">
+                    <div class="time-col"></div>
+                    <div class="line-node">${dotsHtml}</div>
+                    <div class="interval-col" style="flex-direction: column; align-items: flex-start; justify-content: center;">
+                        <div class="interval ${stateClass}">
+                            <div class="interval-icon">${intIcon}</div>
+                            <span class="interval-text" style="${intervalTextStyle}">${int.startStr} – ${int.displayEndStr}</span>
+                            ${int.info ? <span onclick="alert('${int.info}')" style="margin-left:8px; cursor:pointer; opacity:0.9; font-size:16px;">ℹ️</span> : ''}
+
+                        </div>
+                        ${adminControls}
+                    </div>
+                </div>
+            </div>`;
+        });
+        return html;
+    }
+
+    function startTimerAndRender() {
+        let lastRenderedIntervalIndex = -1;
+
+        setInterval(() => {
+            const now = new Date();
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+            const currentSecs = now.getSeconds();
+
+            const dateDisplay = document.getElementById('dateDisplay');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerLabel = document.getElementById('timerLabel');
+            const timerStatus = document.getElementById('timerStatus');
+
+            if (activeDates.length === 0) {
+                dateDisplay.textContent = "ОЧІКУЄМО";
+                timerDisplay.textContent = "--:--:--";
+                timerLabel.textContent = "Очікування";
+                timerStatus.innerHTML = `${iconBulb} Немає даних`;
+                timerStatus.style.color = '#888';
+                return;
+            }
+
+            dateDisplay.textContent = activeDates[0];
+
+            let combinedIntervals = [];
+            activeDates.forEach((dateStr, dayIndex) => {
+                const dayData = dbDays[dateStr];
+                const offset = dayIndex * 1440; 
+                const displayInts = buildDisplayIntervals(dayData.intervals || [], dayData.emergency || {active:false});
+                
+                displayInts.forEach(int => {
+                    let realState = 'on';
+                    if (int.isEmergencyBlock) realState = 'off';
+                    else if (int.type === 'off' && !int.isModified) realState = 'off';
+                    else if (int.type === 'on' && int.isModified) realState = 'off';
+
+                    combinedIntervals.push({
+                        startMinAbs: int.startMin + offset,
+                        endMinAbs: int.endMin + offset,
+                        realState: realState
+                    });
+                });
+            });
+
+            let currentIntIndex = combinedIntervals.findIndex(int => currentMins >= int.startMinAbs && currentMins < int.endMinAbs);
+            let currentState = 'on';
+            let nextEventMinsAbs = null;
+
+            if (currentIntIndex !== -1) {
+                currentState = combinedIntervals[currentIntIndex].realState;
+                for (let i = currentIntIndex + 1; i < combinedIntervals.length; i++) {
+                    if (combinedIntervals[i].realState !== currentState) {
+                        nextEventMinsAbs = combinedIntervals[i].startMinAbs;
+                        break;
+                    }
+                }
+            }
+
+            if (currentIntIndex !== lastRenderedIntervalIndex || lastRenderedIntervalIndex === -1) {
+                renderAllDays(currentMins);
+                lastRenderedIntervalIndex = currentIntIndex;
+            }
+
+            if (currentState === 'off') {
+                timerStatus.innerHTML = `${statusIconOff} Світла немає`;
+                timerStatus.style.color = 'var(--c-red)';
+                timerDisplay.className = 'timer-time off';
+                timerLabel.textContent = 'До включення:';
+            } else {
+                timerStatus.innerHTML = `${statusIconOn} Світло є`;
+                timerStatus.style.color = 'var(--c-yellow)';
+                timerDisplay.className = 'timer-time on';
+                timerLabel.textContent = 'До відключення:';
+            }
+
+            if (nextEventMinsAbs !== null) {
+                let diffMins = nextEventMinsAbs - currentMins - 1;
+                let diffSecs = 60 - currentSecs;
+                if (diffSecs === 60) { diffSecs = 0; diffMins++; }
+
+                let h = Math.floor(diffMins / 60).toString().padStart(2, '0');
+                let m = (diffMins % 60).toString().padStart(2, '0');
+                let s = diffSecs.toString().padStart(2, '0');
+                timerDisplay.textContent = `${h}:${m}:${s}`;
+            } else {
+                timerDisplay.textContent = "--:--:--";
+                if (activeDates.length === 1) timerLabel.textContent = "Очікуємо графік на завтра";
+                else timerLabel.textContent = "До кінця доби";
+            }
+        }, 1000);
+    }
+
+    fetchData();
+</script>
+
+<div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+    <div style="background: #111; border: 1px solid #333; border-radius: 20px; padding: 25px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+        <h3 style="margin: 0 0 15px 0; font-weight: 900; font-size: 18px; letter-spacing: 0.5px;">Вкажи час (Години:Хвилини)</h3>
+        
+        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+            <input type="time" id="editStart" style="background: #222; color: #fff; border: 1px solid #444; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; width: 100px; text-align: center;">
+            <span style="color: #666; align-self: center; font-weight: bold;">—</span>
+            <input type="time" id="editEnd" style="background: #222; color: #fff; border: 1px solid #444; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; width: 100px; text-align: center;">
         </div>
-        <div id="workoutSettingsMenu" class="menu-screen">
-            <ul id="program-list" class="program-list"></ul>
-            <button id="addNewProgramBtn" class="menu-button">Додати нову програму</button>
-        </div>
-
-        <div id="programEditMenu" class="menu-screen">
-          <div class="setting-item"><label for="programNameInput">Назва програми:</label><input type="text" id="programNameInput"></div>
-          <div class="setting-item"><label>Вправи:</label><ul id="exercise-list" class="exercise-list"></ul><button id="addExerciseBtn" class="menu-button secondary">Додати вправу</button></div>
-          <div class="setting-actions"><button id="saveProgramBtn" class="menu-button">Зберегти зміни</button><button id="deleteProgramBtn" class="menu-button danger">Видалити програму</button></div>
-        </div>
-
-        <div id="statsSettingsMenu" class="menu-screen">
-            </div>
-
-        <div id="goalSettingsMenu" class="menu-screen">
-            </div>
-
-        <div id="appSettingsMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="bgUrlInput">URL фонового зображення:</label><input type="text" id="bgUrlInput" placeholder="Встав сюди посилання...">
-            <div class="setting-actions"><button id="saveBgBtn" class="menu-button">Зберегти</button><button id="resetBgBtn" class="menu-button secondary">Скинути</button></div>
-          </div>
-        </div>
-
-        <div id="calendarMenu" class="menu-screen">
-            </div>
-
-                <div id="historyMenu" class="menu-screen">
-            <ul id="historyList" class="history-list"></ul>
-        </div>
-
-
-        <div id="addProgramMenu" class="menu-screen">
-          <div class="setting-item">
-            <label for="newProgramNameInput">Назва нової програми:</label><input type="text" id="newProgramNameInput" placeholder="Наприклад, HIIT ULTIMATE...">
-            <div class="setting-actions"><button id="saveNewProgramBtn" class="menu-button">Зберегти</button></div>
-          </div>
-        </div>
-      </div>
-  </div>
-
-
-
-  <main id="homeScreen" class="screen active">
-    <section class="carousel-section">
-      <h2>HIIT</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="HIIT BASIC"><div class="tile-icon">🤸‍♂️</div><div class="tile-label"><strong>HIIT</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT ULTRA"><div class="tile-icon">🔥</div><div class="tile-label"><strong>HIIT</strong><span>ULTRA</span></div></button>
-        <button class="neumorphic-tile" data-program="HIIT PRO"><div class="tile-icon">🏆</div><div class="tile-label"><strong>HIIT PRO</strong></div></button>
-        <button class="neumorphic-tile add-new" data-action="add-program"><div class="tile-icon">+</div><div class="tile-label"><strong>Нова</strong><span>програма</span></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-      <h2>Різне</h2>
-      <div class="carousel-track">
-        <button class="neumorphic-tile" data-program="MIXED BASIC"><div class="tile-icon">💪</div><div class="tile-label"><strong>MIXED</strong><span>BASIC</span></div></button>
-        <button class="neumorphic-tile" data-program="DUMBBELL"><div class="tile-icon">🏋️‍♂️</div><div class="tile-label"><strong>ГАНТЕЛЬ</strong></div></button>
-        <button class="neumorphic-tile" data-program="BODYWEIGHT"><div class="tile-icon">🧘‍♂️</div><div class="tile-label"><strong>ФІЗИЧНЕ</strong></div></button>
-        <button class="neumorphic-tile" data-action="show-dance"><div class="tile-icon">🕺</div><div class="tile-label"><strong>DANCE</strong></div></button>
-        <button class="neumorphic-tile" data-program="Біг"><div class="tile-icon">🏃🏻‍♂️</div><div class="tile-label"><strong>БІГ</strong></div></button>
-      </div>
-    </section>
-    <section class="carousel-section">
-        <h2>Інструменти</h2>
-        <div class="carousel-track">
-          <button class="neumorphic-tile" data-action="show-stats"><div class="tile-icon">📊</div><div class="tile-label"><strong>STATS</strong></div></button>
-          <button class="neumorphic-tile" data-action="show-calendar"><div class="tile-icon">🗓️</div><div class="tile-label"><strong>КАЛЕНДАР</strong></div></button>
-        </div>
-    </section>
-    <button id="restDayBtn" class="fab"><i class="bi bi-emoji-smile"></i></button>
-    <div id="goalProgress" class="goal-bar">
-        <span>Мета: Схуднути до 65 кг</span>
-        <div class="progress-line-bg"><div class="progress-line-fg" style="width: 75%;"></div></div>
-    </div>
-  </main>
-  
-  <div id="trainingScreen" class="screen">
-    <button id="trainingBackBtn" class="back-button"><i class="bi bi-box-arrow-left"></i></button>
-    <h2 id="trainingProgramName">HIIT BASIC</h2>
-    <div class="exercise-display"><div class="marquee"><span id="exerciseName">Присідання</span></div></div>
-    <div id="timer" class="timer-display">00:30</div>
-    <div class="controls">
-      <button id="prevExercise" class="icon-button"><i class="bi bi-arrow-counterclockwise"></i></button>
-      <button id="pauseBtn" class="icon-button pause-button"><i class="bi bi-play-circle-fill"></i></button>
-      <button id="stopBtn" class="icon-button"><i class="bi bi-sign-stop-fill"></i></button>
-      <button id="nextExercise" class="icon-button"><i class="bi bi-arrow-clockwise"></i></button>
-      <button id="shuffleBtn" class="icon-button"><i class="bi bi-shuffle"></i></button>
-      <button id="muteBtn" class="icon-button"><i class="bi bi-volume-up-fill"></i></button>
-    </div>
-    <div id="completedExercises"></div>
-  </div>
-  <div id="dayDetailScreen" class="screen">
-    <div class="day-detail-card-scroller">
-      
-      <h3 id="detailTitle" class="detail-title"></h3>
-
-      <div class="detail-date-section">
-        <i class="bi bi-calendar-event"></i>
-        <span id="detailDate"></span>
-      </div>
-      
-      <ul id="detailStatsList" class="detail-stats-list">
-        </ul>
-
-              <div class="detail-notes-section">
-        <label for="notesTextarea">Швидкі нотатки</label>
-        <div class="notes-input-wrapper">
-          <textarea id="notesTextarea" placeholder="Додай щось про цей день..." readonly></textarea>
-          <div class="notes-actions">
-            <button id="saveNoteBtn" class="icon-button"><i class="bi bi-check-circle"></i></button>
-            <button id="editNoteBtn" class="icon-button"><i class="bi bi-pencil-square"></i></button>
-          </div>
-        </div>
-      </div>
-
-
-
-
-    <div class="detail-navigation">
-      <button id="prevDayBtn" class="icon-button"><i class="bi bi-chevron-left"></i></button>
-      <button id="editDayBtn" class="icon-button"><i class="bi bi-pencil-square"></i></button>
-      <button id="nextDayBtn" class="icon-button"><i class="bi bi-chevron-right"></i></button>
-    </div>
-  </div>
-
-
-  <div id="workoutModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="modalProgramName"></h2>
-      <div class="modal-info">
-        <p>Програма включає:</p>
-        <ul id="modalExerciseList"></ul>
-      </div>
-      <div class="modal-actions">
-        <button id="modalSettingsBtn" class="settings-btn"><i class="bi bi-magic"></i></button>
-        <button id="modalStartBtn" class="start-btn btn-with-icon">
-          <i class="bi bi-play-fill"></i>
-          <span>Почати</span>
+        
+        <button class="f-link" onclick="sendCustomEdit('cancel')" style="width: 100%; justify-content: center; margin-bottom: 10px; background: rgba(251, 191, 36, 0.1); color: var(--c-yellow); border-color: var(--c-yellow); font-size: 14px;">
+            💡 Світло є (Скасувати)
         </button>
-      </div>
+        <button class="f-link" onclick="sendCustomEdit('emergency')" style="width: 100%; justify-content: center; margin-bottom: 10px; background: rgba(217, 70, 59, 0.1); color: var(--c-red); border-color: var(--c-red); font-size: 14px;">
+            ⚠️ Аварійне (Нема світла)
+        </button>
+        <button class="f-link" onclick="sendResetDay()" style="width: 100%; justify-content: center; margin-bottom: 20px; background: rgba(255, 255, 255, 0.05); color: #aaa; border: 1px dashed #555; font-size: 14px;">
+            🔄 Скинути всі зміни за добу
+        </button>
+        
+        <div style="color: #666; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 1px;" onclick="document.getElementById('editModal').style.display='none'">
+            Закрити
+        </div>
     </div>
-  </div>
+</div>
 
-  <div id="countdownScreen" class="countdown-overlay"><div id="countdownNumber" class="countdown-number">3</div></div>
-  
-  <div id="exerciseModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2 id="exerciseModalTitle">Нова вправа</h2>
-      <div class="setting-item">
-        <label for="exerciseNameInput">Назва вправи:</label>
-        <input type="text" id="exerciseNameInput" placeholder="Наприклад, Берпі...">
-      </div>
-      <div class="setting-item">
-        <label for="exerciseDurationInput">Тривалість (хх:сс):</label>
-        <input type="text" id="exerciseDurationInput" placeholder="00:45">
-      </div>
-      <div class="setting-item">
-        <label for="exerciseAudioInput">Назва аудіофайлу (напр., burpee.m4a):</label>
-        <input type="text" id="exerciseAudioInput" placeholder="Введи точну назву файлу...">
-      </div>
-      <div class="setting-actions">
-        <button id="saveExerciseBtn" class="menu-button">Зберегти вправу</button>
-      </div>
-    </div>
-  </div>
-  
-  <div id="finishModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <h2 id="finishModalTitle">Чудова робота!</h2>
-      <div class="setting-item">
-        <label for="caloriesInput">Спалені калорії:</label>
-        <input type="number" id="caloriesInput" placeholder="kcal">
-      </div>
-      <div class="setting-item">
-        <label for="difficultySlider">Наскільки було складно?</label>
-        <div class="difficulty-slider-container">
-          <div id="sliderEmojiBubble" class="slider-emoji-bubble">🙂</div>
-          <input type="range" id="difficultySlider" min="1" max="6" value="3" class="difficulty-slider">
-        </div>
-      </div>
-      <div class="setting-item"><label>Рівень енергії:</label><div id="energyRating" class="emoji-rating"><span data-value="0">😵‍💫</span><span data-value="1">🥱</span><span data-value="2">🫤</span><span data-value="3">👌🏻</span><span data-value="4">⚡️</span><span data-value="5" class="active">🔥</span></div></div>
-      <div class="setting-item"><label>Твоя оцінка тренування:</label><div id="starRating" class="star-rating"><span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span></div></div>
-      
-      <div class="expand-section">
-        <button id="expandTagsBtn" class="menu-button"><i class="bi bi-plus-circle-dotted"></i></button>
-      </div>
-      <div id="extraTagsSection" class="extra-tags-section">
-        <div class="tags-rating">
-          <span data-tag="coffee">☕️</span>
-          <span data-tag="battery">🔋</span>
-          <span data-tag="banana">🍌</span>
-          <span data-tag="cookie">🍪</span>
-          <span data-tag="sleepy">😴</span>
-          <span data-tag="fire">💥</span>
-        </div>
-      </div>
-      
-      <div class="setting-actions">
-        <button id="saveWorkoutLogBtn" class="menu-button btn-with-icon">
-          <i class="bi bi-check-circle-fill"></i>
-          <span>Зберегти</span>
-        </button>
-      </div>
-    </div>
-  </div>
 
-  <div id="restDayModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button id="closeRestDayModal" class="close-button">&times;</button>
-      <h2>Як пройшов твій день?</h2>
-      <div class="setting-item">
-        <label>Загальна активність:</label>
-        <div class="input-with-icon">
-          <i class="bi bi-person-walking"></i>
-          <input type="number" id="stepsInput" placeholder="Кроки">
-        </div>
-        <div class="input-with-icon">
-          <i class="bi bi-fire"></i>
-          <input type="number" id="restDayCaloriesInput" placeholder="Калорії">
-        </div>
-      </div>
-      <div class="setting-item">
-        <label>Який сьогодні настрій?</label>
-        <div id="moodRating" class="emoji-rating">
-          <span data-value="🤩">🤩</span>
-          <span data-value="😌">😌</span>
-          <span data-value="🙂">🙂</span>
-          <span data-value="🫤">🫤</span>
-          <span data-value="😟">😟</span>
-          <span data-value="😩">😩</span>
-          <span data-value="🤬">🤬</span>
-        </div>
-      </div>
-      <div class="setting-actions">
-        <button id="saveRestDayBtn" class="menu-button btn-with-icon">
-          <i class="bi bi-check-circle-fill"></i>
-          <span>Зберегти</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="danceModal" class="modal-overlay">
-    <div class="modal-content glassmorphism">
-      <button class="close-button">&times;</button>
-      <h2>Вибери тривалість</h2>
-      <div class="dance-options">
-        <button class="dance-option-btn" data-duration="300">
-          <span class="time">5</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="600">
-          <span class="time">10</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="900">
-          <span class="time">15</span>
-          <span class="unit">хв</span>
-        </button>
-        <button class="dance-option-btn" data-duration="1800">
-          <span class="time">30</span>
-          <span class="unit">хв</span>
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <div id="confirmationPrompt" class="prompt-overlay">
-    <div class="prompt-content neumorphic-prompt">
-      <p id="promptMessage" class="prompt-message"></p>
-      <div id="promptActions" class="prompt-actions">
-        </div>
-    </div>
-  </div>
-<script src="script.js?v=22" defer></script>
 </body>
 </html>
